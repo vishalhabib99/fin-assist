@@ -29,8 +29,26 @@ Design implication: the demo must show the streaming case (buffer, or check afte
 
 **Bar 3: not triggered.** No maintained open-source finance Q&A agent with a figure-verification gate against a sourced table was found. Closest: FinGuard-RAG (0★, checks numbers against retrieved source text, not an agent), money-track (1★, checks against the user's own data), NeMo Guardrails and Guardrails AI (generic fact-checking, no finance figure-table demo). GitHub search was rate-limited partway, so vendor org searches are incomplete.
 
-**Bar 1:** pending.
+**Bar 1: pass (8 of 8 ship examples, 7 of 8 engaged; bars were 5 and 3).** Read-only `gh` research, 2026-10-17:
+
+| Repo | Examples | Outside engagement with examples |
+|---|---|---|
+| promptfoo (26.1K★) | ~237 folders; quick start runs `promptfoo init --example` | ~9 issues, 22+ PRs |
+| deepeval (18.9K★) | 13 files + per-framework integration pages linked at the top | ~18 |
+| Presidio (11.4K★) | ~62 samples, near the top of the README | ~18 |
+| Guardrails AI (7.5K★) | ~30 notebooks, buried | 4 |
+| NeMo Guardrails (7.3K★) | ~60 example folders | 16 |
+| Giskard (5.9K★) | thin now (cut down) | 6 |
+| PurpleLlama / Llama Guard (4.4K★) | 12 LlamaFirewall scripts, notebooks | 2 (not engaged) |
+| llm-guard (3.2K★) | 6 scripts incl. OpenAI streaming and LangChain | 5 |
+
+Caveat: this shows examples are where users start and where they hit breakage, not that examples cause adoption (Guardrails AI has 7.5K★ with its notebooks buried; many outside example PRs are vendors adding their own integrations).
 
 ## Decision
 
-(filled in after the checks)
+**BUILD**, scoped by the evidence:
+
+1. **A copyable gate, not an advisor.** `examples/` with the ~10-line pre-send hook for a plain Python agent, a LangChain agent, and the streaming case (hold the text, or check after and correct), since 3 of the 4 hookable finance agents stream.
+2. **Example first in the quick start,** the promptfoo pattern.
+3. **A free demo:** runs on a local model (Ollama) or canned drafts, so no API cost to the maintainer or to someone trying it. Education-only answers; anything advice-like goes to REVIEW.
+4. **Success check after launch:** outside issues or PRs that reference the example, the same signal used for bar 1.
