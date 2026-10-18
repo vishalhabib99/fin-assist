@@ -19,3 +19,4 @@ packages = ["src/retirement_answer_check"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "data/facts.json" = "retirement_answer_check/facts.json"
+"registry" = "retirement_answer_check/registry_data"

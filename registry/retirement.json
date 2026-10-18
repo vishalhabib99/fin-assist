@@ -1,0 +1,211 @@
+{
+  "domain": "retirement",
+  "about": "US retirement-account figures. Mirrors data/facts.json (a test enforces parity).",
+  "sources": {
+    "irs_2026_limits": {
+      "url": "https://www.irs.gov/newsroom/401k-limit-increases-to-24500-for-2026-ira-limit-increases-to-7500",
+      "title": "IRS IR-2025-111: 401(k) limit increases to $24,500 for 2026, IRA limit increases to $7,500",
+      "read_on": "2026-09-26"
+    },
+    "irs_ira_limits": {
+      "url": "https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits",
+      "title": "IRS Retirement topics - IRA contribution limits",
+      "read_on": "2026-09-26"
+    },
+    "irs_rmd_faq": {
+      "url": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
+      "title": "IRS RMD FAQs",
+      "read_on": "2026-09-26"
+    },
+    "irs_early_dist": {
+      "url": "https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-tax-on-early-distributions",
+      "title": "IRS Retirement topics - Tax on early distributions",
+      "read_on": "2026-09-26"
+    },
+    "irs_rollovers": {
+      "url": "https://www.irs.gov/retirement-plans/plan-participant-employee/rollovers-of-retirement-plan-and-ira-distributions",
+      "title": "IRS Rollovers of retirement plan and IRA distributions",
+      "read_on": "2026-09-26"
+    }
+  },
+  "facts": [
+    {
+      "id": "plan.elective_deferral",
+      "label": "401(k)/403(b)/457/TSP employee deferral limit",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 23500,
+        "2026": 24500
+      },
+      "source": "irs_2026_limits",
+      "aliases": [
+        "401(k) limit",
+        "403(b) limit",
+        "TSP limit",
+        "elective deferral limit"
+      ]
+    },
+    {
+      "id": "plan.catch_up_50_plus",
+      "label": "401(k)/403(b)/457/TSP catch-up, age 50+",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 7500,
+        "2026": 8000
+      },
+      "source": "irs_2026_limits",
+      "aliases": [
+        "401(k) catch-up"
+      ]
+    },
+    {
+      "id": "plan.catch_up_60_to_63",
+      "label": "401(k)/403(b)/457/TSP catch-up, ages 60-63",
+      "unit": "usd_per_year",
+      "values": {
+        "2026": 11250
+      },
+      "source": "irs_2026_limits",
+      "aliases": [
+        "super catch-up"
+      ]
+    },
+    {
+      "id": "ira.limit",
+      "label": "IRA contribution limit (traditional + Roth combined)",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 7000,
+        "2026": 7500
+      },
+      "source": "irs_ira_limits",
+      "aliases": [
+        "IRA limit",
+        "Roth IRA limit"
+      ]
+    },
+    {
+      "id": "ira.limit_50_plus_total",
+      "label": "IRA limit including catch-up, age 50+",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 8000,
+        "2026": 8600
+      },
+      "source": "irs_ira_limits",
+      "aliases": []
+    },
+    {
+      "id": "ira.catch_up_50_plus",
+      "label": "IRA catch-up, age 50+",
+      "unit": "usd_per_year",
+      "values": {
+        "2026": 1100
+      },
+      "source": "irs_2026_limits",
+      "aliases": [
+        "IRA catch-up"
+      ]
+    },
+    {
+      "id": "simple.limit",
+      "label": "SIMPLE IRA / SIMPLE 401(k) deferral limit",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 16500,
+        "2026": 17000
+      },
+      "source": "irs_2026_limits",
+      "aliases": [
+        "SIMPLE limit"
+      ]
+    },
+    {
+      "id": "simple.catch_up_50_plus",
+      "label": "SIMPLE catch-up, age 50+",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 3500,
+        "2026": 4000
+      },
+      "source": "irs_2026_limits",
+      "aliases": []
+    },
+    {
+      "id": "rmd.start_age",
+      "label": "Required minimum distribution start age",
+      "unit": "age_years",
+      "values": {
+        "any": 73
+      },
+      "source": "irs_rmd_faq",
+      "aliases": [
+        "RMD age"
+      ]
+    },
+    {
+      "id": "rmd.missed_excise_pct",
+      "label": "Excise tax on a missed RMD",
+      "unit": "percent",
+      "values": {
+        "any": 25
+      },
+      "source": "irs_rmd_faq",
+      "aliases": []
+    },
+    {
+      "id": "rmd.missed_excise_corrected_pct",
+      "label": "Excise tax on a missed RMD corrected within 2 years",
+      "unit": "percent",
+      "values": {
+        "any": 10
+      },
+      "source": "irs_rmd_faq",
+      "aliases": []
+    },
+    {
+      "id": "early.additional_tax_pct",
+      "label": "Additional tax on early distributions",
+      "unit": "percent",
+      "values": {
+        "any": 10
+      },
+      "source": "irs_early_dist",
+      "aliases": [
+        "early withdrawal penalty"
+      ]
+    },
+    {
+      "id": "early.simple_first_2_years_pct",
+      "label": "Additional tax on SIMPLE IRA early distributions in the first 2 years",
+      "unit": "percent",
+      "values": {
+        "any": 25
+      },
+      "source": "irs_early_dist",
+      "aliases": []
+    },
+    {
+      "id": "rollover.window_days",
+      "label": "Indirect rollover window",
+      "unit": "days",
+      "values": {
+        "any": 60
+      },
+      "source": "irs_rollovers",
+      "aliases": [
+        "60-day rollover"
+      ]
+    },
+    {
+      "id": "rollover.plan_withholding_pct",
+      "label": "Mandatory withholding on plan distributions paid to the participant",
+      "unit": "percent",
+      "values": {
+        "any": 20
+      },
+      "source": "irs_rollovers",
+      "aliases": []
+    }
+  ]
+}
