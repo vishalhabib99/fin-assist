@@ -58,7 +58,7 @@
           "Social Security|OASDI|payroll tax"
         ],
         [
-          "taxable max|wage base|maximum taxable|earnings (up to|cap)|taxed up to|capped|subject to"
+          "taxable max|wage base|maximum taxable|earnings (up to|cap)|taxed up to|capped|subject to|wages up to|applies to (wages|earnings|pay) up to|up to the (cap|limit|maximum)|\\bcap\\b"
         ]
       ]
     },

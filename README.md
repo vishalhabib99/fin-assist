@@ -32,14 +32,13 @@ Give your agent the tool (Claude Code; any MCP client works the same way):
 claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor-mcp
 ```
 
-Call it from Python, for example as the last step before your bot sends an answer:
+Gate your agent: one call before the answer reaches the customer ([examples](examples/README.md) for plain Python, streaming and LangChain, runnable with no model or API key):
 
 ```python
-from fin_doctor.numcheck import check_numbers
+from fin_doctor.gate import gate
 
-result = check_numbers(draft, year=2026)
-if result["decision"] == "REVIEW":
-    send_to_human(draft, result["claims"])   # each claim: span, status, expected, source
+verdict = gate(question, draft, year=2026)
+reply = verdict.text   # "send": unchanged · "fixed": stale figures replaced, each logged with its source · "review": held for a person
 ```
 
 ## What it checks

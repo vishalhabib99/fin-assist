@@ -10,7 +10,8 @@ jobs:
           python-version: "3.12"
       - run: pip install -e .
       # Deterministic layer only; the judge layers run inside Claude Code, not in CI.
-      - run: pip install pytest && pytest -q tests
+      - run: pip install pytest langchain-core && pytest -q tests
+      - run: python examples/plain_agent.py
       - run: python -m fin_doctor.registry
       - run: python evals/run.py evals/cases.jsonl --strict
   trust:
