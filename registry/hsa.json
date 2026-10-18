@@ -2,26 +2,194 @@
   "domain": "hsa",
   "about": "Health savings account and HDHP figures.",
   "sources": {
-    "irs_p969_2025": {"url": "https://www.irs.gov/publications/p969", "title": "IRS Publication 969 (2025)", "read_on": "2026-10-17"},
-    "irs_rp_2025_19": {"url": "https://www.irs.gov/irb/2025-21_IRB", "title": "Rev. Proc. 2025-19 (IRB 2025-21): 2026 HSA amounts", "read_on": "2026-10-17"},
-    "irs_rp_2026_24": {"url": "https://www.irs.gov/pub/irs-drop/rp-26-24.pdf", "title": "Rev. Proc. 2026-24: 2027 HSA amounts", "read_on": "2026-10-17"}
+    "irs_p969_2025": {
+      "url": "https://www.irs.gov/publications/p969",
+      "title": "IRS Publication 969 (2025)",
+      "read_on": "2026-10-17"
+    },
+    "irs_rp_2025_19": {
+      "url": "https://www.irs.gov/irb/2025-21_IRB",
+      "title": "Rev. Proc. 2025-19 (IRB 2025-21): 2026 HSA amounts",
+      "read_on": "2026-10-17"
+    },
+    "irs_rp_2026_24": {
+      "url": "https://www.irs.gov/pub/irs-drop/rp-26-24.pdf",
+      "title": "Rev. Proc. 2026-24: 2027 HSA amounts",
+      "read_on": "2026-10-17"
+    }
   },
   "facts": [
-    {"id": "hsa.limit_self_only", "label": "HSA contribution limit, self-only HDHP coverage", "unit": "usd_per_year",
-     "values": {"2025": 4300, "2026": 4400, "2027": 4500},
-     "source": {"2025": "irs_p969_2025", "2026": "irs_rp_2025_19", "2027": "irs_rp_2026_24"}, "aliases": ["HSA limit"]},
-    {"id": "hsa.limit_family", "label": "HSA contribution limit, family HDHP coverage", "unit": "usd_per_year",
-     "values": {"2025": 8550, "2026": 8750, "2027": 9000},
-     "source": {"2025": "irs_p969_2025", "2026": "irs_rp_2025_19", "2027": "irs_rp_2026_24"}, "aliases": ["family HSA limit"]},
-    {"id": "hsa.catch_up_55_plus", "label": "HSA additional contribution, age 55+", "unit": "usd_per_year",
-     "values": {"any": 1000}, "source": "irs_p969_2025", "aliases": ["HSA catch-up"]},
-    {"id": "hdhp.min_deductible_self_only", "label": "HDHP minimum annual deductible, self-only", "unit": "usd_per_year",
-     "values": {"2026": 1700, "2027": 1750}, "source": {"2026": "irs_rp_2025_19", "2027": "irs_rp_2026_24"}, "aliases": []},
-    {"id": "hdhp.min_deductible_family", "label": "HDHP minimum annual deductible, family", "unit": "usd_per_year",
-     "values": {"2026": 3400, "2027": 3500}, "source": {"2026": "irs_rp_2025_19", "2027": "irs_rp_2026_24"}, "aliases": []},
-    {"id": "hdhp.max_out_of_pocket_self_only", "label": "HDHP maximum out-of-pocket, self-only", "unit": "usd_per_year",
-     "values": {"2026": 8500, "2027": 8700}, "source": {"2026": "irs_rp_2025_19", "2027": "irs_rp_2026_24"}, "aliases": []},
-    {"id": "hdhp.max_out_of_pocket_family", "label": "HDHP maximum out-of-pocket, family", "unit": "usd_per_year",
-     "values": {"2026": 17000, "2027": 17400}, "source": {"2026": "irs_rp_2025_19", "2027": "irs_rp_2026_24"}, "aliases": []}
+    {
+      "id": "hsa.limit_self_only",
+      "label": "HSA contribution limit, self-only HDHP coverage",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 4300,
+        "2026": 4400,
+        "2027": 4500
+      },
+      "source": {
+        "2025": "irs_p969_2025",
+        "2026": "irs_rp_2025_19",
+        "2027": "irs_rp_2026_24"
+      },
+      "aliases": [
+        "HSA limit"
+      ],
+      "cues": [
+        [
+          "\\bHSAs?\\b|health savings"
+        ],
+        [
+          "self[- ]only|individual|single"
+        ]
+      ]
+    },
+    {
+      "id": "hsa.limit_family",
+      "label": "HSA contribution limit, family HDHP coverage",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 8550,
+        "2026": 8750,
+        "2027": 9000
+      },
+      "source": {
+        "2025": "irs_p969_2025",
+        "2026": "irs_rp_2025_19",
+        "2027": "irs_rp_2026_24"
+      },
+      "aliases": [
+        "family HSA limit"
+      ],
+      "cues": [
+        [
+          "\\bHSAs?\\b|health savings"
+        ],
+        [
+          "family|families"
+        ]
+      ]
+    },
+    {
+      "id": "hsa.catch_up_55_plus",
+      "label": "HSA additional contribution, age 55+",
+      "unit": "usd_per_year",
+      "values": {
+        "any": 1000
+      },
+      "source": "irs_p969_2025",
+      "aliases": [
+        "HSA catch-up"
+      ],
+      "cues": [
+        [
+          "\\bHSAs?\\b|health savings"
+        ],
+        [
+          "\\b55\\b|catch[- ]?up"
+        ]
+      ]
+    },
+    {
+      "id": "hdhp.min_deductible_self_only",
+      "label": "HDHP minimum annual deductible, self-only",
+      "unit": "usd_per_year",
+      "values": {
+        "2026": 1700,
+        "2027": 1750
+      },
+      "source": {
+        "2026": "irs_rp_2025_19",
+        "2027": "irs_rp_2026_24"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bHDHPs?\\b|high[- ]deductible"
+        ],
+        [
+          "deductible"
+        ],
+        [
+          "self[- ]only|individual|single"
+        ]
+      ]
+    },
+    {
+      "id": "hdhp.min_deductible_family",
+      "label": "HDHP minimum annual deductible, family",
+      "unit": "usd_per_year",
+      "values": {
+        "2026": 3400,
+        "2027": 3500
+      },
+      "source": {
+        "2026": "irs_rp_2025_19",
+        "2027": "irs_rp_2026_24"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bHDHPs?\\b|high[- ]deductible"
+        ],
+        [
+          "deductible"
+        ],
+        [
+          "family|families"
+        ]
+      ]
+    },
+    {
+      "id": "hdhp.max_out_of_pocket_self_only",
+      "label": "HDHP maximum out-of-pocket, self-only",
+      "unit": "usd_per_year",
+      "values": {
+        "2026": 8500,
+        "2027": 8700
+      },
+      "source": {
+        "2026": "irs_rp_2025_19",
+        "2027": "irs_rp_2026_24"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bHDHPs?\\b|high[- ]deductible"
+        ],
+        [
+          "out[- ]of[- ]pocket"
+        ],
+        [
+          "self[- ]only|individual|single"
+        ]
+      ]
+    },
+    {
+      "id": "hdhp.max_out_of_pocket_family",
+      "label": "HDHP maximum out-of-pocket, family",
+      "unit": "usd_per_year",
+      "values": {
+        "2026": 17000,
+        "2027": 17400
+      },
+      "source": {
+        "2026": "irs_rp_2025_19",
+        "2027": "irs_rp_2026_24"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bHDHPs?\\b|high[- ]deductible"
+        ],
+        [
+          "out[- ]of[- ]pocket"
+        ],
+        [
+          "family|families"
+        ]
+      ]
+    }
   ]
 }

@@ -6,6 +6,7 @@ from mcp.server.mcpserver.exceptions import ToolError
 from mcp.types import ToolAnnotations
 
 from .checker import FACTS, check
+from .numcheck import check_numbers as _check_numbers
 from .room import contribution_room as _room
 
 mcp = MCPServer("retirement-answer-check")
@@ -87,6 +88,30 @@ def contribution_room(
                      traditional_ira_so_far, roth_ira_so_far, magi, filing_status, lived_with_spouse)
     except ValueError as exc:
         raise ToolError(f"{exc}. Fix the input and call again.") from exc
+
+
+@mcp.tool(annotations=READ_ONLY)
+def check_numbers(answer: str, year: int | None = None) -> dict:
+    """Check every official financial figure in an AI-drafted answer against a verified registry
+    of IRS and SSA figures: retirement-plan and IRA limits, RMD age, HSA/HDHP limits, Social
+    Security wage base, COLA and earnings test, federal tax brackets, standard deduction, gift exclusion.
+
+    Catches stale figures (last year's limit quoted as this year's), next year's figure quoted
+    early, and plainly wrong figures. Customer-specific amounts (salaries, balances) are not judged.
+    Returns {"decision": "PASS" | "REVIEW", "year", "claims": [{"span", "value", "year", "status",
+    "fact", "label", "expected", "figure_year", "source", "sentence"}]}. status is one of match,
+    stale, wrong_year, wrong, unknown_year (registry has no figure for that year yet) or unverified.
+    PASS means no recognized figure is wrong, not that the answer is correct.
+
+    Args:
+        answer: The AI-drafted answer, verbatim.
+        year: Tax year the answer is about when a sentence doesn't say. Default: the current year.
+    """
+    try:
+        return _check_numbers(answer, year)
+    except Exception as exc:  # never let a checker bug turn into a silent PASS
+        return {"decision": "REVIEW", "year": year, "claims": [], "error":
+                f"number check failed ({type(exc).__name__}: {exc}); route this answer to a human"}
 
 
 def main() -> None:

@@ -1,10 +1,23 @@
-# retirement-answer-check
+# fin-doctor
 
-Checks an AI assistant's draft answer to a US retirement-account question **before it reaches a customer**, and returns **SEND** or **REVIEW** with an IRS or FINRA source for every flag.
+**Checks the money facts in AI agents' answers before customers see them.** Every finance AI repeats last year's figures: last year's 401(k) limit, the old RMD age, an HSA limit from two years ago. fin-doctor compares each official figure in a draft answer to a registry of IRS and SSA figures, verified against primary sources and keyed by year, and returns **PASS** or **REVIEW** with the right figure and its source.
+
+```
+"For 2026 you can put up to $23,500 in your 401(k)."
+→ REVIEW  $23,500 is the 2025 figure; 2026 is $24,500  (irs.gov)
+```
 
 It is a checker, not an advisor. It never writes answers and never gives financial advice.
 
-> Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS and FINRA sources only. Not financial or tax advice.
+> Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS, SSA and FINRA sources only. Not financial or tax advice. Formerly `retirement-answer-check`; the Python package and MCP server still use that name.
+
+## Number check (new)
+
+`check_numbers(answer, year)` (Python and MCP tool) finds every dollar amount, percentage, age and day count, works out which tax year each sentence means, and checks it against the [facts registry](registry/README.md): 58 figures across retirement plans and IRAs, HSA/HDHP, Social Security and 2026 federal tax, each with its source and the date it was read. Statuses: `match`, `stale` (an earlier year's figure), `wrong_year` (a later year's), `wrong`, `unknown_year` (not published yet: never guessed) and `unverified`. Customer amounts like salaries and balances are not judged.
+
+## Retirement answer check
+
+The original checker, still the deepest pack: an AI assistant's draft answer to a US retirement-account question gets **SEND** or **REVIEW** with an IRS or FINRA source for every flag.
 
 ## What it flags
 
@@ -30,7 +43,7 @@ Every number in `facts.json` was read from the cited IRS page on 2026-09-26: [20
 
 ## Contribution room calculator
 
-**[How much more can I put in this year?](https://vishalhabib99.github.io/retirement-answer-check/room/)** Enter your age, income and what you've contributed so far. It shows the 2026 room left in your 401(k)/403(b)/TSP or SIMPLE IRA, traditional IRA and Roth IRA, with an IRS link on every number. It runs in your browser, with no account and no tracking.
+**[How much more can I put in this year?](https://vishalhabib99.github.io/fin-doctor/room/)** Enter your age, income and what you've contributed so far. It shows the 2026 room left in your 401(k)/403(b)/TSP or SIMPLE IRA, traditional IRA and Roth IRA, with an IRS link on every number. It runs in your browser, with no account and no tracking.
 
 The same logic is the `contribution_room` MCP tool, so an AI assistant can compute the numbers instead of quoting last year's limits from memory. It's deterministic (no model) and uses the same facts table:
 
@@ -124,7 +137,7 @@ python review/build_queue.py            # -> review/out/review.html (for the rev
 python review/score.py review-decisions-<name>.json review/out/key.json
 ```
 
-**Try it:** [the demo queue](https://vishalhabib99.github.io/retirement-answer-check/review-demo/) (source: [`docs/review-demo/`](docs/review-demo/index.html)) has 29 items, 6 of them checks, built with the default seed 7. Its key isn't committed, but anyone can rebuild it from this public repo, so for real reviews build with your own private `--seed`.
+**Try it:** [the demo queue](https://vishalhabib99.github.io/fin-doctor/review-demo/) (source: [`docs/review-demo/`](docs/review-demo/index.html)) has 29 items, 6 of them checks, built with the default seed 7. Its key isn't committed, but anyone can rebuild it from this public repo, so for real reviews build with your own private `--seed`.
 
 The page is one self-contained file with no server and no tracking. Progress is saved in the reviewer's browser. The answer key is never in the page, and a test enforces that.
 
@@ -141,7 +154,7 @@ Scripted reviewers on the demo queue (**policies, not people**; `python review/s
 ## Use it in Claude Code
 
 ```bash
-claude mcp add retirement-answer-check -- uvx --from git+https://github.com/vishalhabib99/retirement-answer-check retirement-answer-check
+claude mcp add retirement-answer-check -- uvx --from git+https://github.com/vishalhabib99/fin-doctor retirement-answer-check
 cp -r skills/fact-judge skills/advice-judge ~/.claude/skills/
 ```
 

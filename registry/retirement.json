@@ -43,6 +43,11 @@
         "403(b) limit",
         "TSP limit",
         "elective deferral limit"
+      ],
+      "cues": [
+        [
+          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan"
+        ]
       ]
     },
     {
@@ -56,6 +61,14 @@
       "source": "irs_2026_limits",
       "aliases": [
         "401(k) catch-up"
+      ],
+      "cues": [
+        [
+          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan"
+        ],
+        [
+          "catch[- ]?up"
+        ]
       ]
     },
     {
@@ -68,6 +81,17 @@
       "source": "irs_2026_limits",
       "aliases": [
         "super catch-up"
+      ],
+      "cues": [
+        [
+          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan"
+        ],
+        [
+          "catch[- ]?up"
+        ],
+        [
+          "\\b6[03]\\b"
+        ]
       ]
     },
     {
@@ -82,6 +106,11 @@
       "aliases": [
         "IRA limit",
         "Roth IRA limit"
+      ],
+      "cues": [
+        [
+          "\\bIRAs?\\b"
+        ]
       ]
     },
     {
@@ -93,7 +122,15 @@
         "2026": 8600
       },
       "source": "irs_ira_limits",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "\\bIRAs?\\b"
+        ],
+        [
+          "\\b50\\b|catch[- ]?up"
+        ]
+      ]
     },
     {
       "id": "ira.catch_up_50_plus",
@@ -105,6 +142,14 @@
       "source": "irs_2026_limits",
       "aliases": [
         "IRA catch-up"
+      ],
+      "cues": [
+        [
+          "\\bIRAs?\\b"
+        ],
+        [
+          "catch[- ]?up"
+        ]
       ]
     },
     {
@@ -118,6 +163,11 @@
       "source": "irs_2026_limits",
       "aliases": [
         "SIMPLE limit"
+      ],
+      "cues": [
+        [
+          "\\bSIMPLE\\b"
+        ]
       ]
     },
     {
@@ -129,7 +179,15 @@
         "2026": 4000
       },
       "source": "irs_2026_limits",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSIMPLE\\b"
+        ],
+        [
+          "catch[- ]?up"
+        ]
+      ]
     },
     {
       "id": "rmd.start_age",
@@ -141,6 +199,14 @@
       "source": "irs_rmd_faq",
       "aliases": [
         "RMD age"
+      ],
+      "cues": [
+        [
+          "\\bRMDs?\\b|required minimum distribution|minimum distributions?"
+        ]
+      ],
+      "unverified_values": [
+        75
       ]
     },
     {
@@ -151,7 +217,15 @@
         "any": 25
       },
       "source": "irs_rmd_faq",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "\\bRMDs?\\b|required minimum distribution|minimum distributions?"
+        ],
+        [
+          "miss|fail|excise|penalt"
+        ]
+      ]
     },
     {
       "id": "rmd.missed_excise_corrected_pct",
@@ -161,7 +235,15 @@
         "any": 10
       },
       "source": "irs_rmd_faq",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "\\bRMDs?\\b|required minimum distribution|minimum distributions?"
+        ],
+        [
+          "correct|fix|two years|2 years"
+        ]
+      ]
     },
     {
       "id": "early.additional_tax_pct",
@@ -173,6 +255,14 @@
       "source": "irs_early_dist",
       "aliases": [
         "early withdrawal penalty"
+      ],
+      "cues": [
+        [
+          "early|before (age )?59|under 59"
+        ],
+        [
+          "withdraw|distribution|penalt|additional tax"
+        ]
       ]
     },
     {
@@ -183,7 +273,15 @@
         "any": 25
       },
       "source": "irs_early_dist",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSIMPLE\\b"
+        ],
+        [
+          "two years|2 years|first.{0,10}years"
+        ]
+      ]
     },
     {
       "id": "rollover.window_days",
@@ -195,6 +293,11 @@
       "source": "irs_rollovers",
       "aliases": [
         "60-day rollover"
+      ],
+      "cues": [
+        [
+          "roll ?over"
+        ]
       ]
     },
     {
@@ -205,7 +308,12 @@
         "any": 20
       },
       "source": "irs_rollovers",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "withh[eo]ld"
+        ]
+      ]
     }
   ]
 }

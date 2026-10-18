@@ -17,7 +17,15 @@
         "2026": 12400
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.single.12_pct_top",
@@ -27,7 +35,15 @@
         "2026": 50400
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.single.22_pct_top",
@@ -37,7 +53,15 @@
         "2026": 105700
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.single.24_pct_top",
@@ -47,7 +71,15 @@
         "2026": 201775
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.single.32_pct_top",
@@ -57,7 +89,15 @@
         "2026": 256225
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.single.35_pct_top",
@@ -67,7 +107,15 @@
         "2026": 640600
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.married_joint.10_pct_top",
@@ -77,7 +125,15 @@
         "2026": 24800
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.married_joint.12_pct_top",
@@ -87,7 +143,15 @@
         "2026": 100800
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.married_joint.22_pct_top",
@@ -97,7 +161,15 @@
         "2026": 211400
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.married_joint.24_pct_top",
@@ -107,7 +179,15 @@
         "2026": 403550
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.married_joint.32_pct_top",
@@ -117,7 +197,15 @@
         "2026": 512450
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.married_joint.35_pct_top",
@@ -127,7 +215,15 @@
         "2026": 768700
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.head_of_household.10_pct_top",
@@ -137,7 +233,15 @@
         "2026": 17700
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "head of household"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.head_of_household.12_pct_top",
@@ -147,7 +251,15 @@
         "2026": 67450
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "head of household"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.head_of_household.22_pct_top",
@@ -157,7 +269,15 @@
         "2026": 105700
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "head of household"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.head_of_household.24_pct_top",
@@ -167,7 +287,15 @@
         "2026": 201750
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "head of household"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.head_of_household.32_pct_top",
@@ -177,7 +305,15 @@
         "2026": 256200
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "head of household"
+        ]
+      ]
     },
     {
       "id": "tax.bracket.head_of_household.35_pct_top",
@@ -187,7 +323,15 @@
         "2026": 640600
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "bracket|taxed at|tax rate|\\d\\d% rate"
+        ],
+        [
+          "head of household"
+        ]
+      ]
     },
     {
       "id": "tax.standard_deduction.married_joint",
@@ -199,6 +343,14 @@
       "source": "irs_rp_2025_32",
       "aliases": [
         "standard deduction"
+      ],
+      "cues": [
+        [
+          "standard deduction"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
       ]
     },
     {
@@ -211,6 +363,14 @@
       "source": "irs_rp_2025_32",
       "aliases": [
         "standard deduction"
+      ],
+      "cues": [
+        [
+          "standard deduction"
+        ],
+        [
+          "head of household"
+        ]
       ]
     },
     {
@@ -223,6 +383,14 @@
       "source": "irs_rp_2025_32",
       "aliases": [
         "standard deduction"
+      ],
+      "cues": [
+        [
+          "standard deduction"
+        ],
+        [
+          "single|unmarried"
+        ]
       ]
     },
     {
@@ -235,6 +403,14 @@
       "source": "irs_rp_2025_32",
       "aliases": [
         "standard deduction"
+      ],
+      "cues": [
+        [
+          "standard deduction"
+        ],
+        [
+          "married filing separately|separate"
+        ]
       ]
     },
     {
@@ -245,7 +421,18 @@
         "2026": 1650
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "standard deduction"
+        ],
+        [
+          "65|aged|blind|older"
+        ],
+        [
+          "married|each spouse"
+        ]
+      ]
     },
     {
       "id": "tax.additional_std_deduction_aged_blind_unmarried",
@@ -255,7 +442,18 @@
         "2026": 2050
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "standard deduction"
+        ],
+        [
+          "65|aged|blind|older"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
     },
     {
       "id": "gift.annual_exclusion",
@@ -268,6 +466,14 @@
       "aliases": [
         "gift tax exclusion",
         "annual exclusion"
+      ],
+      "cues": [
+        [
+          "gift"
+        ],
+        [
+          "exclu|per (person|recipient)|without (filing|paying)|annual"
+        ]
       ]
     },
     {
@@ -280,6 +486,11 @@
       "source": "irs_rp_2025_32",
       "aliases": [
         "FSA limit"
+      ],
+      "cues": [
+        [
+          "\\bFSAs?\\b|flexible spending"
+        ]
       ]
     },
     {
@@ -290,7 +501,15 @@
         "2026": 680
       },
       "source": "irs_rp_2025_32",
-      "aliases": []
+      "aliases": [],
+      "cues": [
+        [
+          "\\bFSAs?\\b|flexible spending"
+        ],
+        [
+          "carry ?over|roll ?over"
+        ]
+      ]
     }
   ]
 }

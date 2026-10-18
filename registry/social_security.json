@@ -2,35 +2,235 @@
   "domain": "social_security",
   "about": "Social Security figures from SSA's yearly COLA fact sheets.",
   "sources": {
-    "ssa_cola_2026": {"url": "https://www.ssa.gov/news/en/cola/factsheets/2026.html", "title": "SSA 2026 COLA Fact Sheet (shows 2025 and 2026)", "read_on": "2026-10-17"},
-    "ssa_cola_2027": {"url": "https://www.ssa.gov/news/en/cola/factsheets/2027.html", "title": "SSA 2027 COLA Fact Sheet (shows 2026 and 2027)", "read_on": "2026-10-17"}
+    "ssa_cola_2026": {
+      "url": "https://www.ssa.gov/news/en/cola/factsheets/2026.html",
+      "title": "SSA 2026 COLA Fact Sheet (shows 2025 and 2026)",
+      "read_on": "2026-10-17"
+    },
+    "ssa_cola_2027": {
+      "url": "https://www.ssa.gov/news/en/cola/factsheets/2027.html",
+      "title": "SSA 2027 COLA Fact Sheet (shows 2026 and 2027)",
+      "read_on": "2026-10-17"
+    }
   },
   "facts": [
-    {"id": "ss.cola_pct", "label": "Social Security cost-of-living adjustment", "unit": "percent",
-     "values": {"2026": 2.8, "2027": 3.6}, "source": {"2026": "ssa_cola_2026", "2027": "ssa_cola_2027"}, "aliases": ["COLA"]},
-    {"id": "ss.taxable_maximum", "label": "Maximum taxable earnings (OASDI)", "unit": "usd_per_year",
-     "values": {"2025": 176100, "2026": 184500, "2027": 192300},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": ["wage base", "taxable max"]},
-    {"id": "ss.quarter_of_coverage", "label": "Earnings needed for one quarter of coverage", "unit": "usd",
-     "values": {"2025": 1810, "2026": 1890, "2027": 1970},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": ["work credit"]},
-    {"id": "ss.earnings_test_under_fra", "label": "Retirement earnings test exempt amount, under full retirement age", "unit": "usd_per_year",
-     "values": {"2025": 23400, "2026": 24480, "2027": 25560},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": ["earnings limit"]},
-    {"id": "ss.earnings_test_year_of_fra", "label": "Retirement earnings test exempt amount, year reaching full retirement age", "unit": "usd_per_year",
-     "values": {"2025": 62160, "2026": 65160, "2027": 67920},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": []},
-    {"id": "ss.max_benefit_at_fra", "label": "Maximum benefit, worker retiring at full retirement age", "unit": "usd_per_month",
-     "values": {"2025": 4018, "2026": 4152, "2027": 4188},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": ["maximum Social Security benefit"]},
-    {"id": "ss.sga_non_blind", "label": "Substantial gainful activity, non-blind", "unit": "usd_per_month",
-     "values": {"2025": 1620, "2026": 1690, "2027": 1770},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": ["SGA"]},
-    {"id": "ssi.federal_payment_individual", "label": "SSI federal payment standard, individual", "unit": "usd_per_month",
-     "values": {"2025": 967, "2026": 994, "2027": 1029},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": []},
-    {"id": "ssi.federal_payment_couple", "label": "SSI federal payment standard, couple", "unit": "usd_per_month",
-     "values": {"2025": 1450, "2026": 1491, "2027": 1544},
-     "source": {"2025": "ssa_cola_2026", "2026": "ssa_cola_2027", "2027": "ssa_cola_2027"}, "aliases": []}
+    {
+      "id": "ss.cola_pct",
+      "label": "Social Security cost-of-living adjustment",
+      "unit": "percent",
+      "values": {
+        "2026": 2.8,
+        "2027": 3.6
+      },
+      "source": {
+        "2026": "ssa_cola_2026",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [
+        "COLA"
+      ],
+      "cues": [
+        [
+          "\\bCOLA\\b|cost[- ]of[- ]living"
+        ]
+      ]
+    },
+    {
+      "id": "ss.taxable_maximum",
+      "label": "Maximum taxable earnings (OASDI)",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 176100,
+        "2026": 184500,
+        "2027": 192300
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [
+        "wage base",
+        "taxable max"
+      ],
+      "cues": [
+        [
+          "Social Security|OASDI|payroll tax"
+        ],
+        [
+          "taxable max|wage base|maximum taxable|earnings (up to|cap)|taxed up to|capped|subject to"
+        ]
+      ]
+    },
+    {
+      "id": "ss.quarter_of_coverage",
+      "label": "Earnings needed for one quarter of coverage",
+      "unit": "usd",
+      "values": {
+        "2025": 1810,
+        "2026": 1890,
+        "2027": 1970
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [
+        "work credit"
+      ],
+      "cues": [
+        [
+          "credit|quarter of coverage"
+        ],
+        [
+          "Social Security|earn"
+        ]
+      ]
+    },
+    {
+      "id": "ss.earnings_test_under_fra",
+      "label": "Retirement earnings test exempt amount, under full retirement age",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 23400,
+        "2026": 24480,
+        "2027": 25560
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [
+        "earnings limit"
+      ],
+      "cues": [
+        [
+          "earnings (test|limit)|withh[eo]ld|earn"
+        ],
+        [
+          "Social Security|benefit"
+        ]
+      ]
+    },
+    {
+      "id": "ss.earnings_test_year_of_fra",
+      "label": "Retirement earnings test exempt amount, year reaching full retirement age",
+      "unit": "usd_per_year",
+      "values": {
+        "2025": 62160,
+        "2026": 65160,
+        "2027": 67920
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "earnings (test|limit)|withh[eo]ld|earn"
+        ],
+        [
+          "full retirement age|\\bFRA\\b"
+        ]
+      ]
+    },
+    {
+      "id": "ss.max_benefit_at_fra",
+      "label": "Maximum benefit, worker retiring at full retirement age",
+      "unit": "usd_per_month",
+      "values": {
+        "2025": 4018,
+        "2026": 4152,
+        "2027": 4188
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [
+        "maximum Social Security benefit"
+      ],
+      "cues": [
+        [
+          "max(imum)? (Social Security )?benefit|most you can (get|receive)"
+        ]
+      ]
+    },
+    {
+      "id": "ss.sga_non_blind",
+      "label": "Substantial gainful activity, non-blind",
+      "unit": "usd_per_month",
+      "values": {
+        "2025": 1620,
+        "2026": 1690,
+        "2027": 1770
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [
+        "SGA"
+      ],
+      "cues": [
+        [
+          "substantial gainful|\\bSGA\\b"
+        ]
+      ]
+    },
+    {
+      "id": "ssi.federal_payment_individual",
+      "label": "SSI federal payment standard, individual",
+      "unit": "usd_per_month",
+      "values": {
+        "2025": 967,
+        "2026": 994,
+        "2027": 1029
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSSI\\b|Supplemental Security Income"
+        ],
+        [
+          "individual|single|person"
+        ]
+      ]
+    },
+    {
+      "id": "ssi.federal_payment_couple",
+      "label": "SSI federal payment standard, couple",
+      "unit": "usd_per_month",
+      "values": {
+        "2025": 1450,
+        "2026": 1491,
+        "2027": 1544
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSSI\\b|Supplemental Security Income"
+        ],
+        [
+          "couple"
+        ]
+      ]
+    }
   ]
 }
