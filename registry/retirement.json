@@ -46,7 +46,7 @@
       ],
       "cues": [
         [
-          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan"
+          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan|elective deferral|deferral limit|salary deferral"
         ]
       ]
     },
@@ -296,7 +296,7 @@
       ],
       "cues": [
         [
-          "roll ?over"
+          "roll ?over|roll(?:ed|ing)? (?:it |them |the money |this )?over|indirect rollover|deposit it"
         ]
       ]
     },
@@ -310,6 +310,9 @@
       "source": "irs_rollovers",
       "aliases": [],
       "cues": [
+        [
+          "distribution|paid to you|cash(?:ed|ing)? out|check|rollover|plan"
+        ],
         [
           "withh[eo]ld"
         ]

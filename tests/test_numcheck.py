@@ -122,3 +122,35 @@ def test_from_to_pairs_take_the_years_in_order():
 
 def test_gift_splitting():
     assert statuses("In 2026 a married couple splitting gifts can give each grandchild up to $38,000 without filing.") == [("$38,000", "match")]
+
+
+def test_topic_from_first_line_and_headings():
+    text = "Here's a summary of the 2026 limits for your 401(k):\n\n- Employee deferral limit: $24,500\n- Super catch-up (ages 60-63): $10,000"
+    assert statuses(text) == [("$24,500", "match"), ("$10,000", "wrong")]
+    faq = "**IRAs at Pioneer**\n\n**How much can I contribute in 2026?**\nThe limit is $7,500.\n\n**I'm over 50. Can I contribute more?**\nYes, a catch-up contribution of $1,000."
+    assert statuses(faq) == [("$7,500", "match"), ("$1,000", "wrong")]
+
+
+def test_exact_official_figure_after_you_earn():
+    assert statuses("In 2026, Social Security will withhold $1 for every $2 you earn above $23,400.") == [("$23,400", "stale")]
+
+
+def test_running_totals_and_our_plan_are_skipped():
+    assert statuses("For 2026 the IRA limit is $7,500.\n- Remaining room including the catch-up: $5,400") == [("$7,500", "match")]
+    assert statuses("**HSA (family)**\n- IRS limit: $8,750\n\n**Our plan's numbers**\n- Family out-of-pocket max: $9,000") == [("$8,750", "match")]
+
+
+def test_percentages_need_their_topic_in_the_sentence():
+    text = "Your plan must withhold 20% when the distribution is paid to you. Your plan allows loans up to 50% of your vested balance at prime + 1%."
+    assert statuses(text) == [("20%", "match")]
+    assert statuses("Social Security tax is withheld at 6.2% up to the 2026 taxable maximum of $184,500; Medicare tax is 1.45%.") == [
+        ("6.2%", "match"), ("$184,500", "match"), ("1.45%", "match")]
+
+
+def test_carryover_into_next_year_is_this_years_figure():
+    assert statuses("Health Care FSA for 2026: $3,400. Carryover into 2027: up to $680.") == [("$3,400", "match"), ("$680", "match")]
+
+
+def test_range_continues_a_list():
+    assert statuses("**2026 Head of Household**\n- 12% bracket: taxable income from $17,700 to $66,200") == [
+        ("$17,700", "match"), ("$66,200", "wrong")]

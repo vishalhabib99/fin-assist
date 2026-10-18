@@ -44,13 +44,13 @@ if result["decision"] == "REVIEW":
 
 ## What it checks
 
-59 figures in [`registry/`](registry/README.md), each read on a primary IRS or SSA page, with the date it was read:
+64 figures in [`registry/`](registry/README.md), each read on a primary IRS or SSA page, with the date it was read:
 
 | Area | Figures | Years |
 |---|---|---|
 | Retirement plans and IRAs | 401(k)/403(b)/457/TSP, IRA and SIMPLE limits and catch-ups, RMD age and penalties, early-withdrawal tax, rollover window and withholding | 2025–2026 |
 | HSA and HDHP | Contribution limits, catch-up, minimum deductibles, out-of-pocket maximums | 2025–2027 |
-| Social Security and SSI | Taxable maximum, COLA, earnings test, maximum benefit, SGA, SSI payment standard | 2025–2027 |
+| Social Security and SSI | Taxable maximum, payroll tax rates, COLA, earnings test, maximum benefit, SGA, SSI payment standard and resource limits | 2025–2027 |
 | Federal tax | 2026 brackets (single, joint, head of household), standard deduction, gift exclusion and gift splitting, health FSA | 2024–2026 |
 
 Each figure in an answer gets one status:

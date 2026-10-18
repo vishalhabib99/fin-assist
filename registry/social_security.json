@@ -228,6 +228,131 @@
           "couple"
         ]
       ]
+    },
+    {
+      "id": "ssi.resource_limit_individual",
+      "label": "SSI resource limit, individual",
+      "unit": "usd",
+      "values": {
+        "2025": 2000,
+        "2026": 2000,
+        "2027": 2000
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSSI\\b|Supplemental Security Income"
+        ],
+        [
+          "resources?|assets?"
+        ]
+      ]
+    },
+    {
+      "id": "ssi.resource_limit_couple",
+      "label": "SSI resource limit, couple",
+      "unit": "usd",
+      "values": {
+        "2025": 3000,
+        "2026": 3000,
+        "2027": 3000
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSSI\\b|Supplemental Security Income"
+        ],
+        [
+          "resources?|assets?"
+        ],
+        [
+          "couple"
+        ]
+      ]
+    },
+    {
+      "id": "ss.oasdi_tax_rate_employee",
+      "label": "Social Security (OASDI) tax rate, employee",
+      "unit": "percent",
+      "values": {
+        "2025": 6.2,
+        "2026": 6.2,
+        "2027": 6.2
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "Social Security|OASDI|payroll"
+        ],
+        [
+          "tax|withh[eo]ld"
+        ]
+      ]
+    },
+    {
+      "id": "ss.medicare_tax_rate_employee",
+      "label": "Medicare (HI) tax rate, employee",
+      "unit": "percent",
+      "values": {
+        "2025": 1.45,
+        "2026": 1.45,
+        "2027": 1.45
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "Medicare|\\bHI\\b"
+        ],
+        [
+          "tax|withh[eo]ld"
+        ]
+      ]
+    },
+    {
+      "id": "ss.combined_fica_rate_employee",
+      "label": "Combined Social Security and Medicare tax rate, employee",
+      "unit": "percent",
+      "values": {
+        "2025": 7.65,
+        "2026": 7.65,
+        "2027": 7.65
+      },
+      "source": {
+        "2025": "ssa_cola_2026",
+        "2026": "ssa_cola_2027",
+        "2027": "ssa_cola_2027"
+      },
+      "aliases": [
+        "FICA"
+      ],
+      "cues": [
+        [
+          "FICA|Social Security and Medicare|payroll tax"
+        ],
+        [
+          "tax|rate|withh[eo]ld"
+        ]
+      ]
     }
   ]
 }

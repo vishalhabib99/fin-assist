@@ -36,18 +36,25 @@ _GATE = {"usd": (0.4, 2.5), "age": None, "percent": None, "days": None}
 # equals some year's figure exactly. "That's $6,000 for the year" is arithmetic, not a claim.
 _STATED = re.compile(r"\b(?:limits?|max(?:imum)?|caps?|ceiling|catch[- ]?up|exclusion|deduction|deductible|out[- ]of[- ]pocket|threshold|wage base|taxable max(?:imum)?|up to|at least|no more than|bracket|earnings (?:test|limit)|exempt amount|benefit|standard)\b", re.I)
 _STATED_AFTER = re.compile(r"^\s*(?:annual |yearly |contribution |deferral )?(?:limit|cap|maximum|catch[- ]?up)\b|^\s*(?:can|may)\s+(?:be\s+)?(?:carr(?:y|ied)|roll(?:ed)?)\s?over|^[^.;$]{0,25}\b(?:on top of|in addition to|above|beyond) the\b[^.;$]{0,25}\blimit", re.I)
-_LIST_JOIN = re.compile(r"\b(?:and|or|while|vs\.?|versus)\b|/", re.I)
+_LIST_JOIN = re.compile(r"\b(?:and|or|while|vs\.?|versus|to|through)\b|/|–|-", re.I)
 _NOT_LIST = re.compile(r"\b(?:so|but|your|you|which|leaves?)\b", re.I)
 # The business's or customer's own numbers, and arithmetic on official figures: "your estimated
 # benefit is $2,880", "our plan has a $7,250 out-of-pocket max", "combined ... up to $35,750".
 # Judged only if they equal a known figure exactly.
-_OWN = re.compile(r"\b(?:your (?:estimated|projected|current|personal|own|total|employer|cap|household|combined)|our\b|my\b|estimated|projected|would be|could (?:contribute|put|save|give) up to|combined|in total|altogether|employer match|matches)", re.I)
-_OURS = re.compile(r"\b(?:our|my)\b", re.I)
+_OWN = re.compile(r"\b(?:your (?:estimated|projected|current|personal|own|total|employer|cap|household|combined)|our\b|my\b|estimated|projected|would be|could (?:contribute|put|save|give) up to|combined|in total|altogether|employer match|matches|remaining|room|so far|year-to-date|max(?:ing)? out|reduced|you'd receive|would you like|do you want|you can (?:choose|elect))", re.I)
+_OURS = re.compile(r"\b(?:our|my|with your|based on your|on your|would be(?: reduced)?|reduced)\b|\byour\s*$", re.I)
+_OURS_HEADING = re.compile(r"\b(?:our|my)\b", re.I)
 # "That's $10,000" right after a sentence about a limit refers back to it.
 _REFER = re.compile(r"\b(?:that's|that is|it's|it is|which is)\s*$", re.I)
 # The customer's own amounts ("your salary is $210,000", "on pace for $16,800") are not official figures.
 _CUSTOMER = re.compile(r"\b(?:your (?:salary|income|wages|pay|balance|savings|benefit|portfolio|personal|own|total|planned)\b|you(?:'re| are|'ve| have)? ?(?:planning to|plan to|earn|earned|make|made|saved|contributed|put in|on pace)|on pace for|currently)\b[^.;:$]{0,40}$", re.I)
 _AFTER = re.compile(r"^[^.;$%\d]{0,30}?\b(?:in|for|of)\s+(?:tax year\s*)?(20[2-3]\d)\b|^\s*,?\s*(20[2-3]\d)\b")
+# "Carryover into 2027", "until 2028": a destination year, not the year the figure applies to
+_YEAR_ANY = re.compile(r"(?<!until )(?<!through )\b(20[2-3]\d)\b")
+# "Carryover into 2027: up to $680" is the 2026 plan year's carryover
+_CARRY_INTO = re.compile(r"carr(?:y|ies|ied)?\s?over\s+into\s+(20[2-3]\d)", re.I)
+# Markdown headings and bold lines name the topic for the lines under them
+_HEADING = re.compile(r"^\s*(?:#{1,6}\s+.+|\*\*[^*]+\*\*:?|[^.!?]{3,80}:)\s*$")
 
 
 def _kind(unit: str) -> str:
@@ -76,17 +83,20 @@ _TO = re.compile(r"\bto\s*$", re.I)
 
 
 def _year_for(sentence: str, m: re.Match, context_year: int, default_year: int) -> int:
+    carry = _CARRY_INTO.search(sentence)
+    if carry and carry.start() < m.start():
+        return int(carry.group(1)) - 1
     after = _AFTER.match(sentence[m.end():])
     if after:
         return int(after.group(1) or after.group(2))
     # "goes from $8,750 to $9,000" after "from $4,400 in 2026 to $4,500 in 2027": earliest / latest year
-    span_years = sorted({int(y) for y in _YEAR.findall(sentence)})
+    span_years = sorted({int(y) for y in _YEAR_ANY.findall(sentence)})
     if len(span_years) >= 2:
         if _FROM.search(sentence[:m.start()]):
             return span_years[0]
         if _TO.search(sentence[:m.start()]):
             return span_years[-1]
-    years = [(y.start(), int(y.group(1))) for y in _YEAR.finditer(sentence)]
+    years = [(y.start(), int(y.group(1))) for y in _YEAR_ANY.finditer(sentence)]
     before = [y for pos, y in years if pos < m.start()]
     if before:
         return before[-1]
@@ -111,6 +121,26 @@ def _candidates(sentence: str, kind: str, n: float) -> list[str]:
             continue
         out.append(fid)
     return out
+
+
+def _carried(sentence: str, context: str, kind: str, n: float) -> list[str]:
+    """Candidates whose topic was named earlier (previous sentences, a heading, the first line).
+
+    For percentages, ages and day counts, the fact's specific cues (all but its first group)
+    must still be in the sentence itself: "loans up to 50%" two lines after a sentence about
+    withholding is not a withholding rate.
+    """
+    out = _candidates(context + " " + sentence, kind, n)
+    if kind == "usd":
+        return out
+    if kind == "age":
+        return out
+    return [fid for fid in out if len(_CUES[fid]) > 1 and all(c.search(sentence) for c in _CUES[fid][1:])]
+
+
+def _exact_any(sentence: str, context: str, kind: str, n: float) -> bool:
+    cands = _candidates(sentence, kind, n) or _carried(sentence, context, kind, n)
+    return any(_same(v, n) for fid in cands for v in FACTS[fid]["values"].values())
 
 
 def _same(a: float, b: float) -> bool:
@@ -188,16 +218,27 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
     default_year = year or _dt.date.today().year
     context_year, claims, recent = default_year, [], []
     text, table_cells = _tables_to_sentences(answer or "")
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    title = lines[0] if lines else ""          # "Here's a summary of the 2026 limits for your 401(k):"
+    headings: list[str] = []
     for sentence in filter(None, (s.strip() for s in _SENT.split(text))):
-        years = _YEAR.findall(sentence)
+        years = _YEAR_ANY.findall(_CARRY_INTO.sub("", sentence))
         found = sorted(_numbers(sentence), key=lambda t: t[2].start())
         prev_usd, prev_stated = None, False
+        context = " ".join([title] + headings[-2:] + recent)
+        if headings and _OURS_HEADING.search(headings[-1]) and not _HEADING.match(sentence):
+            recent = (recent + [sentence])[-2:]
+            continue   # "Our plan's numbers": the company's own figures
         for kind, n, m in found:
-            if _CUSTOMER.search(sentence[:m.start()]):
+            # The customer's own amounts are skipped, unless the amount is exactly an official
+            # figure ("you earn above $23,400" is the earnings test, not their pay).
+            if _CUSTOMER.search(sentence[:m.start()]) and not _exact_any(sentence, context, kind, n):
                 if kind == "usd":
                     prev_usd, prev_stated = m, False
                 continue
             stated = True
+            if kind != "usd" and _OWN.search(sentence[:m.start()]):
+                continue
             if kind == "usd" and sentence not in table_cells:
                 window = sentence[(prev_usd.end() if prev_usd else 0):m.start()]
                 stated = bool(_STATED.search(window) or _STATED_AFTER.match(sentence[m.end():])
@@ -210,13 +251,17 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                 prev_usd, prev_stated = m, stated
             y = _year_for(sentence, m, context_year, default_year)
             # The topic is often named one sentence earlier ("The HSA family limit... For 2026 it's $8,550.")
-            cands = _candidates(sentence, kind, n) or _candidates(" ".join(recent + [sentence]), kind, n)
+            cands = _candidates(sentence, kind, n) or _carried(sentence, context, kind, n)
             if not cands:
                 continue
             exact = any(_same(v, n) for fid in cands for v in FACTS[fid]["values"].values())
             if not (stated or exact):
                 continue
             verdict = _judge(n, y, cands)
+            if verdict["status"] != "match":
+                more = [f for f in _carried(sentence, context, kind, n) if f not in cands]
+                if more and _judge(n, y, more)["status"] == "match":
+                    verdict = _judge(n, y, more)
             fid = verdict.get("fact")
             claims.append({"span": m.group(0).strip(), "value": n, "year": y, **verdict,
                            "label": FACTS[fid]["label"] if fid else None, "source": _source(fid, y),
@@ -225,5 +270,7 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
             ys = [int(y) for y in years]
             context_year = context_year if context_year in ys and len(set(ys)) > 1 else ys[-1]
         recent = (recent + [sentence])[-2:]
+        if _HEADING.match(sentence):
+            headings.append(sentence)
     bad = [c for c in claims if c["status"] != "match"]
     return {"decision": "REVIEW" if bad else "PASS", "year": default_year, "claims": claims}
