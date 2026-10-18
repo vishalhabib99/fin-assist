@@ -11,6 +11,7 @@ jobs:
       - run: pip install -e .
       # Deterministic layer only; the judge layers run inside Claude Code, not in CI.
       - run: pip install pytest && pytest -q tests
+      - run: python -m retirement_answer_check.registry
       - run: python evals/run.py evals/cases.jsonl --strict
   trust:
     runs-on: ubuntu-latest

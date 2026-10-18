@@ -1,19 +1,92 @@
 # fin-doctor
 
-**Checks the money facts in AI agents' answers before customers see them.** Every finance AI repeats last year's figures: last year's 401(k) limit, the old RMD age, an HSA limit from two years ago. fin-doctor compares each official figure in a draft answer to a registry of IRS and SSA figures, verified against primary sources and keyed by year, and returns **PASS** or **REVIEW** with the right figure and its source.
+[![ci](https://github.com/vishalhabib99/fin-doctor/actions/workflows/ci.yml/badge.svg)](https://github.com/vishalhabib99/fin-doctor/actions/workflows/ci.yml) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![MCP server](https://img.shields.io/badge/MCP-server-6E56CF)
 
-```
-"For 2026 you can put up to $23,500 in your 401(k)."
-→ REVIEW  $23,500 is the 2025 figure; 2026 is $24,500  (irs.gov)
+**Catch the stale and wrong money figures in an AI agent's answer before a customer sees them.**
+
+Every finance AI repeats last year's numbers: last year's 401(k) limit, the old RMD age, an HSA limit from two years ago, a Social Security wage base that changed in January. Models learn figures from training data that is a year or more out of date, and the IRS and SSA change them every year. fin-doctor checks every official figure in a draft answer against a registry of IRS and SSA figures, each tied to its year and the primary source it was read from.
+
+```console
+$ fin-doctor check "For 2026 you can put up to $23,500 in your 401(k), plus an $8,000 catch-up. RMDs start at age 72."
+REVIEW
+  STALE        $23,500        (2026) that's the 2025 figure; 2026 is 24,500
+               source: https://www.irs.gov/newsroom/401k-limit-increases-to-24500-for-2026-ira-limit-increases-to-7500
+  ok           $8,000         (2026) 401(k)/403(b)/457/TSP catch-up, age 50+
+  WRONG        age 72         (2026) expected 73 (Required minimum distribution start age)
+               source: https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs
 ```
 
 It is a checker, not an advisor. It never writes answers and never gives financial advice.
 
-> Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS, SSA and FINRA sources only. Not financial or tax advice. Formerly `retirement-answer-check`; the Python package and MCP server still use that name.
+## Quick start
 
-## Number check (new)
+Try it with no install (needs [uv](https://docs.astral.sh/uv/)):
 
-`check_numbers(answer, year)` (Python and MCP tool) finds every dollar amount, percentage, age and day count, works out which tax year each sentence means, and checks it against the [facts registry](registry/README.md): 58 figures across retirement plans and IRAs, HSA/HDHP, Social Security and 2026 federal tax, each with its source and the date it was read. Statuses: `match`, `stale` (an earlier year's figure), `wrong_year` (a later year's), `wrong`, `unknown_year` (not published yet: never guessed) and `unverified`. Customer amounts like salaries and balances are not judged.
+```bash
+uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor check "The 2026 HSA family limit is $8,550."
+```
+
+Give your agent the tool (Claude Code; any MCP client works the same way):
+
+```bash
+claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor retirement-answer-check
+```
+
+Call it from Python, for example as the last step before your bot sends an answer:
+
+```python
+from retirement_answer_check.numcheck import check_numbers
+
+result = check_numbers(draft, year=2026)
+if result["decision"] == "REVIEW":
+    send_to_human(draft, result["claims"])   # each claim: span, status, expected, source
+```
+
+## What it checks
+
+59 figures in [`registry/`](registry/README.md), each read on a primary IRS or SSA page, with the date it was read:
+
+| Area | Figures | Years |
+|---|---|---|
+| Retirement plans and IRAs | 401(k)/403(b)/457/TSP, IRA and SIMPLE limits and catch-ups, RMD age and penalties, early-withdrawal tax, rollover window and withholding | 2025–2026 |
+| HSA and HDHP | Contribution limits, catch-up, minimum deductibles, out-of-pocket maximums | 2025–2027 |
+| Social Security and SSI | Taxable maximum, COLA, earnings test, maximum benefit, SGA, SSI payment standard | 2025–2027 |
+| Federal tax | 2026 brackets (single, joint, head of household), standard deduction, gift exclusion and gift splitting, health FSA | 2024–2026 |
+
+Each figure in an answer gets one status:
+
+| Status | Meaning | Decision |
+|---|---|---|
+| `match` | Right for the year the sentence means | PASS |
+| `stale` | Right for an earlier year, quoted as current | REVIEW |
+| `wrong_year` | Next year's figure quoted early | REVIEW |
+| `wrong` | The topic is recognized and the figure matches no year | REVIEW |
+| `unknown_year` | No verified figure for that year yet (e.g. a 2027 401(k) limit before the IRS publishes it). Never guessed | REVIEW |
+| `unverified` | A real rule the registry doesn't cover yet (e.g. RMD age 75 for later birth years) | REVIEW |
+
+Customer amounts (salaries, balances, planned contributions, arithmetic) are not judged. A dollar amount is checked only when the answer states it as an official figure (a limit, catch-up, deductible, "up to"), or when it equals a known figure exactly. PASS means no recognized figure is wrong, not that the whole answer is right. For the rest of the answer, see the [retirement answer check](#retirement-answer-check) below.
+
+## Results
+
+Every test set was written by a separate agent that never saw the code or the earlier sets: realistic answers in the voices of bank bots, robo-advisors, tax and HR assistants, with stale, wrong and correct figures planted next to customer numbers. **Only each set's first run is reported.** After a run, its misses are fixed and become regression tests, so that set no longer measures anything, and the next fresh set does.
+
+| Blind set (first run) | Answers | Bad figures caught | Correct figures wrongly flagged | Answers with a bad figure → REVIEW | Clean answers → PASS |
+|---|---|---|---|---|---|
+| 1 | 40 | 19 / 22 | 1 / 37 | 18 / 21 | 17 / 19 |
+| 2 (harder: tables, back-references, customer numbers) | 40 | 19 / 25 | 4 / 62 | 18 / 21 | 14 / 19 |
+| 3 (60 answers, all four areas, figures a year early, unpublished 2027 limits) | 60 | **38 / 43** | **5 / 87** | **32 / 33** | **21 / 27** |
+
+Read set 3 this way: 1 answer in 33 with a bad figure would have gone out unflagged, and 6 clean answers in 27 went to a person who didn't need to see them. The misses and false flags are in [`evals/numcheck_blind3_first_run.txt`](evals/numcheck_blind3_first_run.txt). Caveat: these are synthetic answers, not production traffic. Score any labeled set with `python evals/numcheck_score.py <file.jsonl>`.
+
+## Keeping it current
+
+Figures change every year, so the registry is built to be updated, not trusted forever:
+
+- A missing year is unknown, never last year's number. The check can't create the bug it's meant to catch.
+- Every value carries its source URL and the date it was read. `python -m retirement_answer_check.registry` validates the files, and CI runs it.
+- A scheduled routine opens an issue when the IRS publishes next year's limits (each November). [CONTRIBUTING.md](CONTRIBUTING.md) explains how to add or update a figure.
+
+> Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS, SSA and FINRA sources only. Not financial or tax advice. Formerly `retirement-answer-check`; the Python package and MCP server command still use that name.
 
 ## Retirement answer check
 
@@ -154,7 +227,7 @@ Scripted reviewers on the demo queue (**policies, not people**; `python review/s
 ## Use it in Claude Code
 
 ```bash
-claude mcp add retirement-answer-check -- uvx --from git+https://github.com/vishalhabib99/fin-doctor retirement-answer-check
+claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor retirement-answer-check
 cp -r skills/fact-judge skills/advice-judge ~/.claude/skills/
 ```
 

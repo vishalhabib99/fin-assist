@@ -1,0 +1,20 @@
+bad figures caught: 38/43
+good figures falsely flagged: 5/87
+answers with a bad figure -> REVIEW: 32/33
+clean answers -> PASS: 21/27
+   d01 clean answer sent to REVIEW ['$2,880']
+   d14 missed bad $8,550
+   d25 missed bad 70½
+   d29 false flag $1,750
+   d29 false flag $8,700
+   d29 clean answer sent to REVIEW ['$1,750', '$8,700']
+   d35 false flag $1,100
+   d35 clean answer sent to REVIEW ['$1,100', '$8,600']
+   d40 missed bad $25.5k
+   d40 false flag $24,500
+   d40 false flag $4,400
+   d41 clean answer sent to REVIEW ['$35,750']
+   d43 missed bad $4,018
+   d45 clean answer sent to REVIEW ['$7,250']
+   d47 clean answer sent to REVIEW ['$1,950']
+   d54 missed bad $500
