@@ -1,0 +1,14 @@
+bad figures caught: 45/55
+good figures falsely flagged: 0/82
+answers with a bad figure -> REVIEW: 36/42
+clean answers -> PASS: 38/38
+   f33 missed bad $7,500
+   f44 missed bad $176,100
+   f57 missed bad $25,500
+   f61 missed bad 70½
+   f63 missed bad 2.9%
+   f63 missed bad 9.1%
+   f65 missed bad 30 days
+   f68 missed bad $640
+   f69 missed bad $3,000
+   f69 missed bad $2,000

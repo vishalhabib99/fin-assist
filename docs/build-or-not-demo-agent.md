@@ -14,7 +14,22 @@ Decision rule: build only if bars 1 and 2 pass and bar 3 does not trigger.
 
 ## Evidence
 
-(filled in after the checks)
+**Bar 2: pass (4 of 6 hookable; bar was 3).** Code read, nothing run (2026-10-17):
+
+| Repo | Stack | Where a check goes | Streaming | Verdict |
+|---|---|---|---|---|
+| virattt/dexter (27.7K★) | TypeScript, LangChain | `src/agent/agent.ts` `handleDirectResponse`, before the `done` event | Answer is fully accumulated first | Hookable, ~5 lines |
+| we-promise/sure (10.6K★) | Rails, Turbo | `assistant_message.rb` `append_text!` (both assistant paths) | Chunks broadcast as they arrive: buffer in `Builtin#respond_to`, or check after and correct | Hookable, needs buffering |
+| calderbuild/WeFinance | Python, Streamlit | `chat_manager.py` `generate_response` (4 branches, one function) | Placeholder redrawn per chunk; can overwrite after the check | Hookable; a second app path needs its own hook |
+| badhope/xiaoman | FastAPI, LangGraph | `/api/ask` handler, before the `final` event | Tokens stream, but the UI replaces them with `final.answer` | Hookable (check-after corrects the screen) |
+| googlarz/finance-assistant | Claude Code skill | None: Claude Code writes the answer | n/a | Not hookable |
+| calef/us-federal-tax-assistant-skill | Claude Code skill | None | n/a | Not hookable |
+
+Design implication: the demo must show the streaming case (buffer, or check after and correct), since 3 of the 4 hookable agents stream.
+
+**Bar 3: not triggered.** No maintained open-source finance Q&A agent with a figure-verification gate against a sourced table was found. Closest: FinGuard-RAG (0★, checks numbers against retrieved source text, not an agent), money-track (1★, checks against the user's own data), NeMo Guardrails and Guardrails AI (generic fact-checking, no finance figure-table demo). GitHub search was rate-limited partway, so vendor org searches are incomplete.
+
+**Bar 1:** pending.
 
 ## Decision
 
