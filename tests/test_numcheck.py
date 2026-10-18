@@ -100,7 +100,18 @@ def test_one_topic_word_covers_a_list():
 def test_old_rmd_rules():
     assert statuses("You need to start RMDs at age 70½.") == [("age 70½", "wrong")]
     assert statuses("Required minimum distributions begin at 73. If you miss one, the IRS penalty is 50% of the shortfall.") == [
-        ("50%", "wrong")]
+        ("begin at 73", "match"), ("50%", "wrong")]
+    assert statuses("Traditional IRA owners must begin RMDs at 70½.") == [("RMDs at 70½", "wrong")]
+
+
+def test_markdown_table_takes_topic_and_year_from_headers():
+    table = "| Account | 2026 | 2027 |\n|---|---|---|\n| 401(k) deferral | $24,500 | $25.5k |\n| HSA (self-only) | $4,400 | $4,500 |"
+    assert statuses(table) == [("$24,500", "match"), ("$25.5k", "unknown_year"), ("$4,400", "match"), ("$4,500", "match")]
+
+
+def test_our_plan_and_estimates_are_not_judged():
+    assert statuses("Our Bronze HSA plan has a $2,000 individual deductible and a $7,250 out-of-pocket max.") == []
+    assert statuses("Your estimated benefit at 67, based on your earnings record, is $2,880/month.") == []
 
 
 def test_from_to_pairs_take_the_years_in_order():

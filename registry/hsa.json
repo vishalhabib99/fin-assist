@@ -41,7 +41,7 @@
           "\\bHSAs?\\b|health savings"
         ],
         [
-          "self[- ]only|individual|single"
+          "self[- ]only|\\bself\\b|individual|single"
         ]
       ]
     },
@@ -112,7 +112,7 @@
           "deductible"
         ],
         [
-          "self[- ]only|individual|single"
+          "self[- ]only|\\bself\\b|individual|single"
         ]
       ]
     },
@@ -162,7 +162,7 @@
           "out[- ]of[- ]pocket"
         ],
         [
-          "self[- ]only|individual|single"
+          "self[- ]only|\\bself\\b|individual|single"
         ]
       ]
     },

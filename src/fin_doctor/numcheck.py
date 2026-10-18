@@ -29,15 +29,20 @@ _YEAR = re.compile(r"\b(20[2-3]\d)\b")
 _REL = re.compile(r"\b(this|next|last) (tax )?year\b", re.I)
 _USD = re.compile(r"\$\s?(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s*(k\b|K\b|thousand|million)?|\b(\d{1,3}(?:,\d{3})+)\s*dollars", re.I)
 _PCT = re.compile(r"\b(\d{1,2}(?:\.\d+)?)\s?(%|percent\b)", re.I)
-_AGE = re.compile(r"\b(?:age|aged|turns?|turning|reach(?:es|ing)?)\s+(\d{2})(½|\s?1/2)?(?!\d)|\b(\d{2})(½|\s?1/2)?\s*(?:years? old|or older|and older)", re.I)
+_AGE = re.compile(r"\b(?:age|aged|turns?|turning|reach(?:es|ing)?|(?:begin|start|starts|must|until|by|RMDs?)\s+at)\s+(\d{2})(½|\s?1/2)?(?!\d)|\b(\d{2})(½|\s?1/2)?\s*(?:years? old|or older|and older)", re.I)
 _DAYS = re.compile(r"\b(\d{1,3})[\s-]days?\b", re.I)
 _GATE = {"usd": (0.4, 2.5), "age": None, "percent": None, "days": None}
 # A dollar amount is judged only when the wording states it as an official figure, or when it
 # equals some year's figure exactly. "That's $6,000 for the year" is arithmetic, not a claim.
 _STATED = re.compile(r"\b(?:limits?|max(?:imum)?|caps?|ceiling|catch[- ]?up|exclusion|deduction|deductible|out[- ]of[- ]pocket|threshold|wage base|taxable max(?:imum)?|up to|at least|no more than|bracket|earnings (?:test|limit)|exempt amount|benefit|standard)\b", re.I)
-_STATED_AFTER = re.compile(r"^\s*(?:annual |yearly |contribution |deferral )?(?:limit|cap|maximum|catch[- ]?up)\b|^[^.;$]{0,25}\b(?:on top of|in addition to|above|beyond) the\b[^.;$]{0,25}\blimit", re.I)
+_STATED_AFTER = re.compile(r"^\s*(?:annual |yearly |contribution |deferral )?(?:limit|cap|maximum|catch[- ]?up)\b|^\s*(?:can|may)\s+(?:be\s+)?(?:carr(?:y|ied)|roll(?:ed)?)\s?over|^[^.;$]{0,25}\b(?:on top of|in addition to|above|beyond) the\b[^.;$]{0,25}\blimit", re.I)
 _LIST_JOIN = re.compile(r"\b(?:and|or|while|vs\.?|versus)\b|/", re.I)
 _NOT_LIST = re.compile(r"\b(?:so|but|your|you|which|leaves?)\b", re.I)
+# The business's or customer's own numbers, and arithmetic on official figures: "your estimated
+# benefit is $2,880", "our plan has a $7,250 out-of-pocket max", "combined ... up to $35,750".
+# Judged only if they equal a known figure exactly.
+_OWN = re.compile(r"\b(?:your (?:estimated|projected|current|personal|own|total|employer|cap|household|combined)|our\b|my\b|estimated|projected|would be|could (?:contribute|put|save|give) up to|combined|in total|altogether|employer match|matches)", re.I)
+_OURS = re.compile(r"\b(?:our|my)\b", re.I)
 # "That's $10,000" right after a sentence about a limit refers back to it.
 _REFER = re.compile(r"\b(?:that's|that is|it's|it is|which is)\s*$", re.I)
 # The customer's own amounts ("your salary is $210,000", "on pace for $16,800") are not official figures.
@@ -143,6 +148,36 @@ def _source(fid: str | None, year: int):
     return src["url"]
 
 
+_ROW = re.compile(r"^\s*\|(.+)\|\s*$")
+_RULE = re.compile(r"^\s*\|?[\s:|-]+\|?\s*$")
+
+
+def _tables_to_sentences(text: str) -> tuple[str, set[str]]:
+    """Turn each markdown table cell into "<row label> <column header> <table header>: <cell>."
+
+    A table of figures states each one, so its cells are marked as stated claims.
+    """
+    out, header, stated = [], None, set()
+    for line in text.splitlines():
+        row = _ROW.match(line)
+        if not row:
+            header = None
+            out.append(line)
+            continue
+        if _RULE.match(line):
+            continue
+        cells = [c.strip() for c in row.group(1).split("|")]
+        if header is None:
+            header = cells
+            continue
+        for i, cell in enumerate(cells[1:], start=1):
+            col = header[i] if i < len(header) else ""
+            sentence = f"{cells[0]} {col} {header[0]}: {cell}."
+            stated.add(sentence)
+            out.append(sentence)
+    return "\n".join(out), stated
+
+
 def check_numbers(answer: str, year: int | None = None) -> dict:
     """Return {"decision": "PASS" | "REVIEW", "year": default year, "claims": [...]}.
 
@@ -152,7 +187,8 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
     """
     default_year = year or _dt.date.today().year
     context_year, claims, recent = default_year, [], []
-    for sentence in filter(None, (s.strip() for s in _SENT.split(answer or ""))):
+    text, table_cells = _tables_to_sentences(answer or "")
+    for sentence in filter(None, (s.strip() for s in _SENT.split(text))):
         years = _YEAR.findall(sentence)
         found = sorted(_numbers(sentence), key=lambda t: t[2].start())
         prev_usd, prev_stated = None, False
@@ -162,13 +198,15 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                     prev_usd, prev_stated = m, False
                 continue
             stated = True
-            if kind == "usd":
+            if kind == "usd" and sentence not in table_cells:
                 window = sentence[(prev_usd.end() if prev_usd else 0):m.start()]
                 stated = bool(_STATED.search(window) or _STATED_AFTER.match(sentence[m.end():])
                               # a list under one topic word: "$16,100 for single filers and $31,500 for joint"
                               or (prev_stated and len(window) <= 40 and _LIST_JOIN.search(window)
                                   and not _NOT_LIST.search(window))
                               or (_REFER.search(window) and any(_STATED.search(r) for r in recent)))
+                if _OWN.search(window) or _OURS.search(sentence[:m.start()]):
+                    stated = False
                 prev_usd, prev_stated = m, stated
             y = _year_for(sentence, m, context_year, default_year)
             # The topic is often named one sentence earlier ("The HSA family limit... For 2026 it's $8,550.")
@@ -184,7 +222,8 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                            "label": FACTS[fid]["label"] if fid else None, "source": _source(fid, y),
                            "sentence": sentence})
         if years:
-            context_year = int(years[-1])
+            ys = [int(y) for y in years]
+            context_year = context_year if context_year in ys and len(set(ys)) > 1 else ys[-1]
         recent = (recent + [sentence])[-2:]
     bad = [c for c in claims if c["status"] != "match"]
     return {"decision": "REVIEW" if bad else "PASS", "year": default_year, "claims": claims}
