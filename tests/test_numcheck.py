@@ -85,3 +85,29 @@ def test_customer_amounts_near_a_limit_are_skipped():
     assert statuses("The 2026 401(k) limit is $24,500, and you're on pace for about $16,800.") == [("$24,500", "match")]
     assert statuses("You can give $19,000 per recipient in 2026 without filing a gift tax return. Since you're planning to give your daughter $25,000, you'd file Form 709.") == [
         ("$19,000", "match")]
+
+
+def test_arithmetic_and_plans_are_not_judged():
+    assert statuses("You said you're saving $500 a month into your Roth IRA. That's $6,000 for the year.") == []
+    assert statuses("The 2026 IRA limit is $7,500, so the $5,000 you planned to put in this year is fine.") == [("$7,500", "match")]
+
+
+def test_one_topic_word_covers_a_list():
+    assert statuses("For 2026, the standard deduction is $16,100 for single filers and $31,500 for married couples filing jointly.") == [
+        ("$16,100", "match"), ("$31,500", "wrong")]
+
+
+def test_old_rmd_rules():
+    assert statuses("You need to start RMDs at age 70½.") == [("age 70½", "wrong")]
+    assert statuses("Required minimum distributions begin at 73. If you miss one, the IRS penalty is 50% of the shortfall.") == [
+        ("50%", "wrong")]
+
+
+def test_from_to_pairs_take_the_years_in_order():
+    r = check_numbers("The self-only HSA limit rises from $4,400 in 2026 to $4,500 in 2027, and the family limit goes from $8,750 to $9,000.", 2026)
+    assert [(c["span"], c["year"], c["status"]) for c in r["claims"]] == [
+        ("$4,400", 2026, "match"), ("$4,500", 2027, "match"), ("$8,750", 2026, "match"), ("$9,000", 2027, "match")]
+
+
+def test_gift_splitting():
+    assert statuses("In 2026 a married couple splitting gifts can give each grandchild up to $38,000 without filing.") == [("$38,000", "match")]

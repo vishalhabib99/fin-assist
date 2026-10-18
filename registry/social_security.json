@@ -107,10 +107,7 @@
       ],
       "cues": [
         [
-          "earnings (test|limit)|withh[eo]ld|earn"
-        ],
-        [
-          "Social Security|\\bSSA\\b|benefit"
+          "earnings (test|limit)|exempt amount|Social Security.{0,60}\\bearn|\\bearn.{0,60}(Social Security|\\bSSA\\b|benefits?)"
         ]
       ]
     },
@@ -131,7 +128,7 @@
       "aliases": [],
       "cues": [
         [
-          "earnings (test|limit)|withh[eo]ld|earn"
+          "earnings (test|limit)|exempt amount|\\bearn"
         ],
         [
           "full retirement age|\\bFRA\\b"

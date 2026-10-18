@@ -106,7 +106,7 @@
       "aliases": [],
       "cues": [
         [
-          "\\bHDHPs?\\b|high[- ]deductible"
+          "\\bHDHPs?\\b|high[- ]deductible|\\bHSA"
         ],
         [
           "deductible"
@@ -131,7 +131,7 @@
       "aliases": [],
       "cues": [
         [
-          "\\bHDHPs?\\b|high[- ]deductible"
+          "\\bHDHPs?\\b|high[- ]deductible|\\bHSA"
         ],
         [
           "deductible"
@@ -156,7 +156,7 @@
       "aliases": [],
       "cues": [
         [
-          "\\bHDHPs?\\b|high[- ]deductible"
+          "\\bHDHPs?\\b|high[- ]deductible|\\bHSA"
         ],
         [
           "out[- ]of[- ]pocket"
@@ -181,7 +181,7 @@
       "aliases": [],
       "cues": [
         [
-          "\\bHDHPs?\\b|high[- ]deductible"
+          "\\bHDHPs?\\b|high[- ]deductible|\\bHSA"
         ],
         [
           "out[- ]of[- ]pocket"

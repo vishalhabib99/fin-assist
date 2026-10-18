@@ -6,6 +6,11 @@
       "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
       "title": "Rev. Proc. 2025-32: 2026 inflation-adjusted items",
       "read_on": "2026-10-17"
+    },
+    "irs_gift_faq": {
+      "url": "https://www.irs.gov/businesses/small-businesses-self-employed/frequently-asked-questions-on-gift-taxes",
+      "title": "IRS Frequently asked questions on gift taxes (annual exclusion table by year)",
+      "read_on": "2026-10-17"
     }
   },
   "facts": [
@@ -460,9 +465,15 @@
       "label": "Annual gift tax exclusion per recipient",
       "unit": "usd_per_year",
       "values": {
+        "2024": 18000,
+        "2025": 19000,
         "2026": 19000
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2024": "irs_gift_faq",
+        "2025": "irs_gift_faq",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [
         "gift tax exclusion",
         "annual exclusion"
@@ -472,7 +483,29 @@
           "gift"
         ],
         [
-          "exclu|per (person|recipient)|without (filing|paying)|annual"
+          "exclu|per (person|recipient|donee)|each (person|recipient|child|grandchild)|without (filing|paying)|annual"
+        ]
+      ]
+    },
+    {
+      "id": "gift.annual_exclusion_split_spouses",
+      "label": "Annual gift tax exclusion per recipient for a married couple splitting gifts",
+      "unit": "usd_per_year",
+      "values": {
+        "2024": 36000,
+        "2025": 38000,
+        "2026": 38000
+      },
+      "source": "irs_gift_faq",
+      "aliases": [
+        "gift splitting"
+      ],
+      "cues": [
+        [
+          "gift"
+        ],
+        [
+          "spouse|split|married|couple|two of you|both of you"
         ]
       ]
     },
