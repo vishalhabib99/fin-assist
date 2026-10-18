@@ -1,4 +1,4 @@
-# Eval plan: retirement-answer-check
+# Eval plan: fin-doctor
 
 **Template:** [agentic-product-playbook / eval-plan](https://github.com/vishalhabib99/agentic-product-playbook/blob/main/templates/eval-plan.md)
 **Cases:** [`evals/cases.jsonl`](evals/cases.jsonl) (43, synthetic)
@@ -6,7 +6,7 @@
 
 ## 1. What we're deciding
 
-"This eval decides whether we publish **retirement-answer-check v1** as a public reference build."
+"This eval decides whether we publish **fin-doctor v1** as a public reference build."
 
 - **Decision owner:** Vishal Habib
 - **Thresholds:** signed off 2026-09-26, before the first run. Vishal delegated the call ("you recommend") and they were approved as written. They are now frozen; any change goes in the changelog with a reason.

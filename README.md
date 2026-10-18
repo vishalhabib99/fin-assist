@@ -29,13 +29,13 @@ uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor check "The
 Give your agent the tool (Claude Code; any MCP client works the same way):
 
 ```bash
-claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor retirement-answer-check
+claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor-mcp
 ```
 
 Call it from Python, for example as the last step before your bot sends an answer:
 
 ```python
-from retirement_answer_check.numcheck import check_numbers
+from fin_doctor.numcheck import check_numbers
 
 result = check_numbers(draft, year=2026)
 if result["decision"] == "REVIEW":
@@ -64,7 +64,7 @@ Each figure in an answer gets one status:
 | `unknown_year` | No verified figure for that year yet (e.g. a 2027 401(k) limit before the IRS publishes it). Never guessed | REVIEW |
 | `unverified` | A real rule the registry doesn't cover yet (e.g. RMD age 75 for later birth years) | REVIEW |
 
-Customer amounts (salaries, balances, planned contributions, arithmetic) are not judged. A dollar amount is checked only when the answer states it as an official figure (a limit, catch-up, deductible, "up to"), or when it equals a known figure exactly. PASS means no recognized figure is wrong, not that the whole answer is right. For the rest of the answer, see the [retirement answer check](#retirement-answer-check) below.
+Customer amounts (salaries, balances, planned contributions, arithmetic) are not judged. A dollar amount is checked only when the answer states it as an official figure (a limit, catch-up, deductible, "up to"), or when it equals a known figure exactly. PASS means no recognized figure is wrong, not that the whole answer is right. For the rest of the answer, see the [retirement answer check](#fin-doctor) below.
 
 ## Results
 
@@ -83,10 +83,10 @@ Read set 3 this way: 1 answer in 33 with a bad figure would have gone out unflag
 Figures change every year, so the registry is built to be updated, not trusted forever:
 
 - A missing year is unknown, never last year's number. The check can't create the bug it's meant to catch.
-- Every value carries its source URL and the date it was read. `python -m retirement_answer_check.registry` validates the files, and CI runs it.
+- Every value carries its source URL and the date it was read. `python -m fin_doctor.registry` validates the files, and CI runs it.
 - A scheduled routine opens an issue when the IRS publishes next year's limits (each November). [CONTRIBUTING.md](CONTRIBUTING.md) explains how to add or update a figure.
 
-> Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS, SSA and FINRA sources only. Not financial or tax advice. Formerly `retirement-answer-check`; the Python package and MCP server command still use that name.
+> Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS, SSA and FINRA sources only. Not financial or tax advice.
 
 ## Retirement answer check
 
@@ -121,7 +121,7 @@ Every number in `facts.json` was read from the cited IRS page on 2026-09-26: [20
 The same logic is the `contribution_room` MCP tool, so an AI assistant can compute the numbers instead of quoting last year's limits from memory. It's deterministic (no model) and uses the same facts table:
 
 - The age 60–63 catch-up ($11,250) and the Roth income phase-out, using the exact IRS Pub 590-A Worksheet 2-2 method. It's tested against the IRS's own worked example ($6,540).
-- The page ([`docs/room/room.js`](docs/room/room.js)) and the tool ([`room.py`](src/retirement_answer_check/room.py)) are checked against each other on 400 inputs in [`tests/test_room_parity.py`](tests/test_room_parity.py).
+- The page ([`docs/room/room.js`](docs/room/room.js)) and the tool ([`room.py`](src/fin_doctor/room.py)) are checked against each other on 400 inputs in [`tests/test_room_parity.py`](tests/test_room_parity.py).
 - Anything the table doesn't cover (spousal IRAs, IRA deductibility, the Roth catch-up rule for high earners, employer contributions) is listed as **not covered** rather than guessed.
 
 ## Results
@@ -227,7 +227,7 @@ Scripted reviewers on the demo queue (**policies, not people**; `python review/s
 ## Use it in Claude Code
 
 ```bash
-claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor retirement-answer-check
+claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor-mcp
 cp -r skills/fact-judge skills/advice-judge ~/.claude/skills/
 ```
 
@@ -236,7 +236,7 @@ Then: *"Check this draft answer: …"*. Claude calls `check_answer`, then runs b
 Deterministic layer from Python:
 
 ```python
-from retirement_answer_check import check
+from fin_doctor import check
 check("What's the IRA limit for 2026?", "It's $7,000.")
 # {'decision': 'REVIEW', 'flags': [{'type': 'wrong_fact', 'span': '$7,000',
 #   'reason': 'not a 2026 ira limit (that is the 2025 figure)', 'source': 'https://www.irs.gov/...'}]}

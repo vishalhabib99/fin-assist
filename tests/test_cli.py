@@ -1,4 +1,4 @@
-from retirement_answer_check.cli import main
+from fin_doctor.cli import main
 
 
 def test_check_exit_codes_and_output(capsys):

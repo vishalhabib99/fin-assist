@@ -19,16 +19,16 @@ mcp-doctor report
 Quality:  100%  Grade: A  (3 tool(s) found)
 Security: 100%  Grade: A
 
-  [OK] check_answer (src/retirement_answer_check/server.py:16)
-  [OK] get_facts (src/retirement_answer_check/server.py:38)
-  [OK] contribution_room (src/retirement_answer_check/server.py:52)
+  [OK] check_answer (src/fin_doctor/server.py:16)
+  [OK] get_facts (src/fin_doctor/server.py:38)
+  [OK] contribution_room (src/fin_doctor/server.py:52)
 
 
 ```
 
 ### mcp-fuzz (runtime crash resilience) — 100.0% (A)
 ```
-mcp-fuzz: retirement-answer-check
+mcp-fuzz: fin-doctor
 
 Crash resilience: 100% (A) — 0 crash(es), 0 timeout(s) across 15 bad-input calls
 Tested 3 tool(s), skipped 0 (not read-only)
@@ -45,7 +45,7 @@ Estimated token cost: ~2,120 tokens total across 3 tool(s) (~707 avg/call) — o
 
 ### mcp-reality-check (runtime output fidelity) — 100.0% (A)
 ```
-mcp-reality-check: retirement-answer-check
+mcp-reality-check: fin-doctor
 
 Response sanity: 100% (A) — 0 flagged of 3 checkable response(s)
 Tested 3 tool(s), skipped 0 (not read-only)

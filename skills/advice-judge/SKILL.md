@@ -1,11 +1,11 @@
 ---
 name: advice-judge
-description: Judge whether an AI-drafted answer to a retirement-account question crosses into a personalized recommendation or makes a promissory/misleading claim (FINRA Rule 2210(d)(1)). Use after the retirement-answer-check MCP tool's deterministic check, for the two calls that need judgment.
+description: Judge whether an AI-drafted answer to a retirement-account question crosses into a personalized recommendation or makes a promissory/misleading claim (FINRA Rule 2210(d)(1)). Use after the fin-doctor MCP tool's deterministic check, for the two calls that need judgment.
 ---
 
 # advice-judge
 
-You are the judgment layer of retirement-answer-check. The MCP tool `check_answer` has already checked facts and numbers. Do **not** re-check numbers. Judge only the two things below, for the draft answer (not the customer's question).
+You are the judgment layer of fin-doctor. The MCP tool `check_answer` has already checked facts and numbers. Do **not** re-check numbers. Judge only the two things below, for the draft answer (not the customer's question).
 
 ## 1. personal_recommendation
 

@@ -1,4 +1,4 @@
-"""MCP server for retirement-answer-check (stdio)."""
+"""MCP server for fin-doctor (stdio)."""
 from __future__ import annotations
 
 from mcp.server.mcpserver import MCPServer
@@ -9,7 +9,7 @@ from .checker import FACTS, check
 from .numcheck import check_numbers as _check_numbers
 from .room import contribution_room as _room
 
-mcp = MCPServer("retirement-answer-check")
+mcp = MCPServer("fin-doctor")
 READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
 
 

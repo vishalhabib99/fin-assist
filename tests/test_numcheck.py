@@ -1,6 +1,6 @@
 import pytest
 
-from retirement_answer_check.numcheck import check_numbers
+from fin_doctor.numcheck import check_numbers
 
 
 def statuses(text, year=2026):

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from retirement_answer_check import apply_judges, check
+from fin_doctor import apply_judges, check
 
 EVALS = Path(__file__).resolve().parents[1] / "evals"
 DEV = [json.loads(line) for line in (EVALS / "cases.jsonl").read_text().splitlines() if line.strip()]

@@ -1,4 +1,4 @@
-# Model card: retirement-answer-check v0.2.0
+# Model card: fin-doctor v0.2.0
 
 ## Intended use
 

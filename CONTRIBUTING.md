@@ -7,7 +7,7 @@ The most useful contribution is a figure: a new one, or next year's value for on
 1. Find the figure on a **primary source**: an IRS newsroom release, revenue procedure, notice or publication, or an SSA fact sheet. Not a news article, blog or summary site.
 2. Edit the domain file in [`registry/`](registry/README.md). Add the year to `values` and its source key to `source`. If the source is new, add it under `sources` with its `url`, `title` and the `read_on` date.
 3. A new fact also needs `cues`: groups of regex alternatives that must all appear in a sentence for the figure to be about this fact (see existing facts).
-4. Run `python -m retirement_answer_check.registry` and `pytest -q`.
+4. Run `python -m fin_doctor.registry` and `pytest -q`.
 5. In the pull request, quote the sentence or table row from the source that gives the value.
 
 Rules: never fill a year from a projection or from last year's value. A year that isn't published stays missing, so the checker reports `unknown_year` instead of guessing.

@@ -1,7 +1,7 @@
 import pytest
 
-from retirement_answer_check.checker import FACTS
-from retirement_answer_check.room import contribution_room, roth_limit
+from fin_doctor.checker import FACTS
+from fin_doctor.room import contribution_room, roth_limit
 
 
 def line(result, label):

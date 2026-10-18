@@ -1,4 +1,4 @@
-# PRD: retirement-answer-check
+# PRD: fin-doctor
 
 **Status:** v0.2 (2026-09-26). v0.2 changed the design after blind evals; see §1 "Why an agent".
 **Author:** Vishal Habib

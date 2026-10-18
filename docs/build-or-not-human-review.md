@@ -1,4 +1,4 @@
-## Build or not: a measured human-review layer for retirement-answer-check
+## Build or not: a measured human-review layer for fin-doctor
 
 *Method: [/build-or-not](https://github.com/vishalhabib99/ai-pm-skills). Sections 1–3 were written and saved before any example was checked.*
 
@@ -71,7 +71,7 @@ Selection rule: the best-known human-review features in each category that an AI
 **Decision: Build**, narrowed.
 **Why, in one sentence:** people who review AI output measurably miss its errors, and 7 of the 10 review tools that could be checked across both rounds give no way to test whether reviewers catch them. The general labeling tools that do (Label Studio Enterprise, Argilla v1) aren't where production LLM answers get reviewed.
 
-**Smallest version to build:** a review queue for retirement-answer-check that mixes in **known-answer items**, cases whose correct verdict is already known, drawn from the existing 83 labeled eval cases. It reports, per reviewer:
+**Smallest version to build:** a review queue for fin-doctor that mixes in **known-answer items**, cases whose correct verdict is already known, drawn from the existing 83 labeled eval cases. It reports, per reviewer:
 - the catch rate on known-bad answers (rubber-stamping shows up here),
 - the false-reject rate on known-good answers,
 - time per item.

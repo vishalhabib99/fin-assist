@@ -1,4 +1,4 @@
-"""Deterministic layer of retirement-answer-check.
+"""Deterministic layer of fin-doctor.
 
 Checks an AI-drafted answer against data/facts.json and a few text rules.
 Anything it can't verify goes to REVIEW; nothing unverified is ever SEND.

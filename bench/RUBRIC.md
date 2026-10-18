@@ -19,7 +19,7 @@ Each answer gets exactly one grade. A person grades against the key in [`questio
 
 ## Second signal: would the checker have caught it?
 
-Every collected answer is also run through `retirement_answer_check.check()` (rules layer only, which is deterministic and free). This gives the checker's first **non-synthetic** test data:
+Every collected answer is also run through `fin_doctor.check()` (rules layer only, which is deterministic and free). This gives the checker's first **non-synthetic** test data:
 
 - **Checker recall on real mistakes:** of the WRONG answers, how many got REVIEW
 - **Checker false-REVIEW on real answers:** of the CORRECT answers, how many got REVIEW

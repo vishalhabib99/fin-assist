@@ -1,4 +1,4 @@
-// Contribution room, same rules as src/retirement_answer_check/room.py.
+// Contribution room, same rules as src/fin_doctor/room.py.
 // tests/test_room_parity.py runs both on the same inputs and fails on any difference.
 (function (root) {
   "use strict";

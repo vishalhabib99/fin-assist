@@ -2,7 +2,7 @@
 import json
 import sys
 
-from retirement_answer_check.numcheck import check_numbers
+from fin_doctor.numcheck import check_numbers
 
 
 def main(path: str, year: int = 2026) -> None:

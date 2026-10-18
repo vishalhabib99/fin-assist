@@ -16,4 +16,4 @@ Rules:
 - `retirement.json` mirrors `data/facts.json`, and a test enforces parity.
 - Tax bracket thresholds are cross-checked by rebuilding the IRS's printed base-tax amounts.
 
-Check it: `python -m retirement_answer_check.registry`
+Check it: `python -m fin_doctor.registry`

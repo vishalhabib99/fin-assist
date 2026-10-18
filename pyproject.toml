@@ -1,5 +1,5 @@
 [project]
-name = "retirement-answer-check"
+name = "fin-doctor"
 version = "0.3.0"
 description = "Checks AI-drafted answers to US retirement-account questions before they reach a customer: SEND or REVIEW, with an IRS or FINRA source for every flag."
 readme = "README.md"
@@ -8,16 +8,16 @@ license = "MIT"
 dependencies = ["mcp>=2.0"]
 
 [project.scripts]
-retirement-answer-check = "retirement_answer_check.server:main"
-fin-doctor = "retirement_answer_check.cli:main"
+fin-doctor-mcp = "fin_doctor.server:main"
+fin-doctor = "fin_doctor.cli:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/retirement_answer_check"]
+packages = ["src/fin_doctor"]
 
 [tool.hatch.build.targets.wheel.force-include]
-"data/facts.json" = "retirement_answer_check/facts.json"
-"registry" = "retirement_answer_check/registry_data"
+"data/facts.json" = "fin_doctor/facts.json"
+"registry" = "fin_doctor/registry_data"
