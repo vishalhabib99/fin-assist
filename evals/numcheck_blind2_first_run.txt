@@ -1,0 +1,19 @@
+bad figures caught: 19/25
+good figures falsely flagged: 4/62
+answers with a bad figure -> REVIEW: 18/21
+clean answers -> PASS: 14/19
+   c01 false flag $32,500
+   c01 clean answer sent to REVIEW ['$32,500']
+   c03 missed bad 50%
+   c07 clean answer sent to REVIEW ['$6,000']
+   c12 false flag $8,750
+   c12 clean answer sent to REVIEW ['$8,750']
+   c32 missed bad $23,400 in 2026
+   c32 missed bad $24,480 in 2027
+   c33 missed bad 70½
+   c34 missed bad $1,650
+   c34 false flag $3,400
+   c38 false flag $7.5K
+   c38 clean answer sent to REVIEW ['$7.5K', '$20K', '$4.5K']
+   c39 missed bad $2,000
+   c40 clean answer sent to REVIEW ['$5,000']
