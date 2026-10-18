@@ -1,0 +1,22 @@
+bad figures caught: 44/52
+good figures falsely flagged: 3/99
+answers with a bad figure -> REVIEW: 28/32
+clean answers -> PASS: 21/28
+   e01 clean answer sent to REVIEW ['$4,300', '$5,400']
+   e02 missed bad $23,500
+   e03 clean answer sent to REVIEW ['6.2%', '1.45%']
+   e09 missed bad $25,000
+   e11 missed bad $23,400
+   e15 missed bad $66,200
+   e19 clean answer sent to REVIEW ['50%', '1%']
+   e25 missed bad $1,810
+   e26 clean answer sent to REVIEW ['$634', '$2,000']
+   e29 false flag drops to 10%
+   e29 clean answer sent to REVIEW ['10%']
+   e31 missed bad $1,000
+   e36 missed bad $10,000
+   e44 missed bad 90 days
+   e50 false flag $680
+   e50 false flag $8,750
+   e50 clean answer sent to REVIEW ['$680', '$8,750']
+   e57 clean answer sent to REVIEW ['$44,400']

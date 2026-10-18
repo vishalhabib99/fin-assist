@@ -74,9 +74,10 @@ Every test set was written by a separate agent that never saw the code or the ea
 |---|---|---|---|---|---|
 | 1 | 40 | 19 / 22 | 1 / 37 | 18 / 21 | 17 / 19 |
 | 2 (harder: tables, back-references, customer numbers) | 40 | 19 / 25 | 4 / 62 | 18 / 21 | 14 / 19 |
-| 3 (60 answers, all four areas, figures a year early, unpublished 2027 limits) | 60 | **38 / 43** | **5 / 87** | **32 / 33** | **21 / 27** |
+| 3 (60 answers, all four areas, figures a year early, unpublished 2027 limits) | 60 | 38 / 43 | 5 / 87 | 32 / 33 | 21 / 27 |
+| 4 (60 answers written to trip a number checker: company plan figures, estimates, tables, tax rates) | 60 | **44 / 52** | **3 / 99** | **28 / 32** | **21 / 28** |
 
-Read set 3 this way: 1 answer in 33 with a bad figure would have gone out unflagged, and 6 clean answers in 27 went to a person who didn't need to see them. The misses and false flags are in [`evals/numcheck_blind3_first_run.txt`](evals/numcheck_blind3_first_run.txt). Caveat: these are synthetic answers, not production traffic. Score any labeled set with `python evals/numcheck_score.py <file.jsonl>`.
+Read set 4, the latest, this way: 4 answers in 32 with a bad figure would have gone out unflagged, and 7 clean answers in 28 went to a person who didn't need to see them. It scored lower than set 3 because it was written to be harder, and that is the number to quote. The misses and false flags are in [`evals/numcheck_blind4_first_run.txt`](evals/numcheck_blind4_first_run.txt) and will be fixed and measured on a fresh set 5. Caveat: these are synthetic answers, not production traffic. Score any labeled set with `python evals/numcheck_score.py <file.jsonl>`.
 
 ## Keeping it current
 
