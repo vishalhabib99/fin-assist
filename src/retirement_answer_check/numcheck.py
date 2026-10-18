@@ -32,7 +32,9 @@ _PCT = re.compile(r"\b(\d{1,2}(?:\.\d+)?)\s?(%|percent\b)", re.I)
 _AGE = re.compile(r"\b(?:age|aged|turns?|turning|reach(?:es|ing)?)\s+(\d{2})\b|\b(\d{2})(?:½|\s*1/2)?\s*(?:years? old|or older|and older)", re.I)
 _DAYS = re.compile(r"\b(\d{1,3})[\s-]days?\b", re.I)
 _GATE = {"usd": (0.6, 1.6), "age": None, "percent": None, "days": None}
-_AFTER = re.compile(r"^\s*(?:in|for|of|,)?\s*(?:tax year\s*)?(20[2-3]\d)\b")
+# The customer's own amounts ("your salary is $210,000", "on pace for $16,800") are not official figures.
+_CUSTOMER = re.compile(r"\b(?:your (?:salary|income|wages|pay|balance|savings|benefit|portfolio)\b|you(?:'re| are|'ve| have)? ?(?:planning to|plan to|earn|earned|make|made|saved|contributed|put in|on pace)|on pace for|currently)\b[^.;:$]{0,40}$", re.I)
+_AFTER = re.compile(r"^[^.;$%\d]{0,30}?\b(?:in|for|of)\s+(?:tax year\s*)?(20[2-3]\d)\b|^\s*,?\s*(20[2-3]\d)\b")
 
 
 def _kind(unit: str) -> str:
@@ -59,7 +61,7 @@ def _numbers(sentence: str):
 def _year_for(sentence: str, m: re.Match, context_year: int, default_year: int) -> int:
     after = _AFTER.match(sentence[m.end():])
     if after:
-        return int(after.group(1))
+        return int(after.group(1) or after.group(2))
     years = [(y.start(), int(y.group(1))) for y in _YEAR.finditer(sentence)]
     before = [y for pos, y in years if pos < m.start()]
     if before:
@@ -130,12 +132,15 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
     recognized figure is wrong, not that the answer is correct.
     """
     default_year = year or _dt.date.today().year
-    context_year, claims = default_year, []
+    context_year, claims, previous = default_year, [], ""
     for sentence in filter(None, (s.strip() for s in _SENT.split(answer or ""))):
         years = _YEAR.findall(sentence)
         for kind, n, m in _numbers(sentence):
+            if _CUSTOMER.search(sentence[:m.start()]):
+                continue
             y = _year_for(sentence, m, context_year, default_year)
-            cands = _candidates(sentence, kind, n)
+            # The topic is often named one sentence earlier ("The HSA family limit... For 2026 it's $8,550.")
+            cands = _candidates(sentence, kind, n) or _candidates(previous + " " + sentence, kind, n)
             if not cands:
                 continue
             verdict = _judge(n, y, cands)
@@ -145,5 +150,6 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                            "sentence": sentence})
         if years:
             context_year = int(years[-1])
+        previous = sentence
     bad = [c for c in claims if c["status"] != "match"]
     return {"decision": "REVIEW" if bad else "PASS", "year": default_year, "claims": claims}

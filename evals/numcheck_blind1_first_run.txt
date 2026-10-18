@@ -1,0 +1,10 @@
+bad figures caught: 19/22
+good figures falsely flagged: 1/37
+answers with a bad figure -> REVIEW: 18/21
+clean answers -> PASS: 17/19
+   b11 false flag 3.6%
+   b11 clean answer sent to REVIEW ['3.6%']
+   b13 missed bad $23,400
+   b26 clean answer sent to REVIEW ['$16,800']
+   b28 missed bad $10,000
+   b37 missed bad $1,000

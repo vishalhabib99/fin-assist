@@ -110,7 +110,7 @@
           "earnings (test|limit)|withh[eo]ld|earn"
         ],
         [
-          "Social Security|benefit"
+          "Social Security|\\bSSA\\b|benefit"
         ]
       ]
     },

@@ -70,3 +70,18 @@ def test_every_flag_carries_a_source():
 
 def test_empty_answer_passes_with_no_claims():
     assert check_numbers("", 2026) == {"decision": "PASS", "year": 2026, "claims": []}
+
+
+def test_topic_named_in_the_previous_sentence():
+    assert statuses("TSP participants aged 60-63 get a super catch-up. For 2026 that's $10,000 on top of the regular limit.") == [
+        ("$10,000", "wrong")]
+
+
+def test_year_after_the_topic_word():
+    assert statuses("SSA has announced a 3.6% COLA for 2027.") == [("3.6%", "match")]
+
+
+def test_customer_amounts_near_a_limit_are_skipped():
+    assert statuses("The 2026 401(k) limit is $24,500, and you're on pace for about $16,800.") == [("$24,500", "match")]
+    assert statuses("You can give $19,000 per recipient in 2026 without filing a gift tax return. Since you're planning to give your daughter $25,000, you'd file Form 709.") == [
+        ("$19,000", "match")]
