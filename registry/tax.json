@@ -615,9 +615,13 @@
       "label": "Health FSA salary reduction limit",
       "unit": "usd_per_year",
       "values": {
+        "2025": 3300,
         "2026": 3400
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [
         "FSA limit"
       ],
@@ -632,9 +636,13 @@
       "label": "Health FSA maximum carryover",
       "unit": "usd_per_year",
       "values": {
+        "2025": 660,
         "2026": 680
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [

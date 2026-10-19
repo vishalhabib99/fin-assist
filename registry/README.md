@@ -18,3 +18,14 @@ Rules:
 - Tax bracket thresholds are cross-checked by rebuilding the IRS's printed base-tax amounts.
 
 Check it: `python -m fin_assist.registry`
+
+## New year's tax figures
+
+The IRS publishes next year's tax figures in one Rev. Proc. each fall. `scripts/revproc.py` reads it and proposes every tax, gift and health FSA figure the registry tracks:
+
+```bash
+pip install pypdf
+python scripts/revproc.py rp-26-XX.pdf     # the year is read from the document
+```
+
+It prints each figure with "same as registry", "new year (was X)" or "CHANGE", rebuilds every bracket table's printed base-tax amounts, and lists anything it couldn't find. It writes nothing: copy the reviewed values into `tax.json` with the new source, then run the tests. `tests/test_revproc.py` holds it to the two Rev. Procs already in the registry (2024-40 and 2025-32): it must reproduce every figure, so a change in the IRS's layout shows up as a failing test, not a wrong number.
