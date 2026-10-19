@@ -89,7 +89,7 @@ Figures change every year, so the registry is built to be updated, not trusted f
 
 - A missing year is unknown, never last year's number. The check can't create the bug it's meant to catch.
 - Every value carries its source URL and the date it was read. `python -m fin_assist.registry` validates the files, and CI runs it.
-- A scheduled routine opens an issue when the IRS publishes next year's limits (each November). For the tax figures, [`scripts/revproc.py`](registry/README.md#new-years-tax-figures) reads the new Rev. Proc. and proposes all 44 tracked values with checks. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to add or update a figure.
+- A scheduled routine opens an issue when the IRS publishes next year's limits (each November). For the tax figures and the retirement limits, [`scripts/revproc.py`](registry/README.md#new-years-tax-figures) and [`scripts/retirement_notice.py`](registry/README.md#new-years-retirement-limits) read the IRS release and propose every tracked value with checks. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to add or update a figure.
 
 > Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS, SSA and FINRA sources only. Not financial or tax advice.
 

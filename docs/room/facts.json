@@ -12,10 +12,10 @@
   "contribution_limits": {
     "401k_403b_457_tsp_elective_deferral": {"2025": 23500, "2026": 24500, "source": "irs_2026_limits"},
     "401k_catch_up_50_plus":               {"2025": 7500,  "2026": 8000,  "source": "irs_2026_limits"},
-    "401k_catch_up_60_to_63":              {"2026": 11250, "source": "irs_2026_limits"},
+    "401k_catch_up_60_to_63":              {"2025": 11250, "2026": 11250, "source": "irs_2026_limits"},
     "ira_limit":                           {"2025": 7000,  "2026": 7500,  "source": "irs_ira_limits"},
     "ira_limit_50_plus_total":             {"2025": 8000,  "2026": 8600,  "source": "irs_ira_limits"},
-    "ira_catch_up_50_plus":                {"2026": 1100,  "source": "irs_2026_limits"},
+    "ira_catch_up_50_plus":                {"2025": 1000,  "2026": 1100,  "source": "irs_2026_limits"},
     "simple_limit":                        {"2025": 16500, "2026": 17000, "source": "irs_2026_limits"},
     "simple_catch_up_50_plus":             {"2025": 3500,  "2026": 4000,  "source": "irs_2026_limits"},
     "_rule": "IRA contributions can't exceed the dollar limit or taxable compensation for the year, whichever is smaller (irs_ira_limits).",

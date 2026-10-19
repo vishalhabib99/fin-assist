@@ -128,7 +128,7 @@ def test_topic_from_first_line_and_headings():
     text = "Here's a summary of the 2026 limits for your 401(k):\n\n- Employee deferral limit: $24,500\n- Super catch-up (ages 60-63): $10,000"
     assert statuses(text) == [("$24,500", "match"), ("$10,000", "wrong")]
     faq = "**IRAs at Pioneer**\n\n**How much can I contribute in 2026?**\nThe limit is $7,500.\n\n**I'm over 50. Can I contribute more?**\nYes, a catch-up contribution of $1,000."
-    assert statuses(faq) == [("$7,500", "match"), ("$1,000", "wrong")]
+    assert statuses(faq) == [("$7,500", "match"), ("$1,000", "stale")]  # the 2025 IRA catch-up
 
 
 def test_exact_official_figure_after_you_earn():
@@ -234,7 +234,7 @@ def test_medicare_part_b_premium_deductible_and_irmaa():
 
 
 def test_roth_catch_up_wage_threshold():
-    assert statuses("Starting in 2026, the Roth catch-up wage threshold is $145,000.") == [("$145,000", "wrong")]
+    assert statuses("Starting in 2026, the Roth catch-up wage threshold is $145,000.") == [("$145,000", "stale")]  # the 2025 figure
 
 
 def test_wrong_thresholds_stated_with_a_figure_word():

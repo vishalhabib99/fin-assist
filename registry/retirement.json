@@ -31,6 +31,11 @@
       "url": "https://www.irs.gov/pub/irs-drop/n-25-67.pdf",
       "title": "Notice 2025-67: 2026 amounts relating to retirement plans and IRAs",
       "read_on": "2026-10-19"
+    },
+    "irs_n_2024_80": {
+      "url": "https://www.irs.gov/pub/irs-drop/n-24-80.pdf",
+      "title": "Notice 2024-80: 2025 amounts relating to retirement plans and IRAs",
+      "read_on": "2026-10-19"
     }
   },
   "facts": [
@@ -81,9 +86,13 @@
       "label": "401(k)/403(b)/457/TSP catch-up, ages 60-63",
       "unit": "usd_per_year",
       "values": {
+        "2025": 11250,
         "2026": 11250
       },
-      "source": "irs_2026_limits",
+      "source": {
+        "2025": "irs_n_2024_80",
+        "2026": "irs_2026_limits"
+      },
       "aliases": [
         "super catch-up"
       ],
@@ -142,9 +151,13 @@
       "label": "IRA catch-up, age 50+",
       "unit": "usd_per_year",
       "values": {
+        "2025": 1000,
         "2026": 1100
       },
-      "source": "irs_2026_limits",
+      "source": {
+        "2025": "irs_n_2024_80",
+        "2026": "irs_2026_limits"
+      },
       "aliases": [
         "IRA catch-up"
       ],
@@ -328,9 +341,13 @@
       "label": "Wage threshold above which 401(k)/403(b)/457 catch-ups must be Roth (prior-year FICA wages)",
       "unit": "usd",
       "values": {
+        "2025": 145000,
         "2026": 150000
       },
-      "source": "irs_n_2025_67",
+      "source": {
+        "2025": "irs_n_2024_80",
+        "2026": "irs_n_2025_67"
+      },
       "aliases": [
         "Roth catch-up rule"
       ],

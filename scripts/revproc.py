@@ -163,32 +163,37 @@ def figures(text: str, year: int) -> tuple[dict, list[str]]:
     return out, problems
 
 
+def report(name: str, found: dict, problems: list[str], year: int, prefixes: tuple[str, ...]) -> int:
+    """Print each figure against the registry; return 1 if anything needs a look."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+    from fin_assist.registry import load
+    reg = load()
+    print(f"{name}: {len(found)} figures for {year}")
+    for fid, v in found.items():
+        old = reg.get(fid, {}).get("values", {})
+        now, prev = old.get(str(year)), old.get(str(year - 1))
+        note = "same as registry" if now == v else (f"CHANGE registry has {now:,}" if now is not None else
+                                                    f"new year (was {prev:,} for {year - 1})" if prev is not None else "new")
+        print(f"  {fid:52} {v:>14,}  {note}")
+    problems = problems + [f"{fid}: tracked but not extracted" for fid in reg
+                           if fid.startswith(prefixes) and "any" not in reg[fid]["values"] and fid not in found]
+    for p in problems:
+        print("  PROBLEM", p)
+    return 1 if problems else 0
+
+
+TRACKED = ("tax.", "gift.", "health_fsa.")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("path", type=Path)
-    ap.add_argument("--year", type=int, help="the year the Rev. Proc. covers (default: read from its first lines)")
+    ap.add_argument("--year", type=int, help="the year the Rev. Proc. covers (default: read from the document)")
     args = ap.parse_args(argv)
     text = text_of(args.path)
     year = args.year or int(re.search(r"taxable years beginning in (20\d\d)", _flat(text)).group(1))
     found, problems = figures(text, year)
-
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-    from fin_assist.registry import load
-    reg = load()
-    print(f"{args.path.name}: {len(found)} figures for {year}")
-    for fid, v in found.items():
-        old = reg.get(fid, {}).get("values", {})
-        now = old.get(str(year))
-        prev = old.get(str(year - 1))
-        note = "same as registry" if now == v else (f"CHANGE registry has {now:,}" if now is not None else
-                                                    f"new year (was {prev:,} for {year - 1})" if prev is not None else "new")
-        print(f"  {fid:52} {v:>14,}  {note}")
-    tracked = [fid for fid, f in reg.items() if fid.startswith(("tax.", "gift.", "health_fsa.")) and fid not in found]
-    for fid in tracked:
-        problems.append(f"{fid}: tracked but not extracted")
-    for p in problems:
-        print("  PROBLEM", p)
-    return 1 if problems else 0
+    return report(args.path.name, found, problems, year, TRACKED)
 
 
 if __name__ == "__main__":

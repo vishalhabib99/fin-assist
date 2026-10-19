@@ -29,3 +29,13 @@ python scripts/revproc.py rp-26-XX.pdf     # the year is read from the document
 ```
 
 It prints each figure with "same as registry", "new year (was X)" or "CHANGE", rebuilds every bracket table's printed base-tax amounts, and lists anything it couldn't find. It writes nothing: copy the reviewed values into `tax.json` with the new source, then run the tests. `tests/test_revproc.py` holds it to the two Rev. Procs already in the registry (2024-40 and 2025-32): it must reproduce every figure, so a change in the IRS's layout shows up as a failing test, not a wrong number.
+
+## New year's retirement limits
+
+The IRS publishes next year's retirement-plan limits in one notice each fall (Notice 2025-67 for 2026). `scripts/retirement_notice.py` reads it:
+
+```bash
+python scripts/retirement_notice.py n-26-XX.pdf
+```
+
+It finds each limit by the Code section the notice cites (402(g)(1) for the 401(k) deferral, 414(v)(2)(B)(i) for the 50+ catch-up, 219(b)(5)(A) for the IRA limit, and so on), and checks each "increased from $A" against the registry's figure for the year before. Same output and rules as the tax tool. `tests/test_retirement_notice.py` holds it to Notices 2024-80 and 2025-67.
