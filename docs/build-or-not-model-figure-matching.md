@@ -57,8 +57,32 @@ The category pattern: guardrail tools check "supported by the context", not "mat
 
 Design implication: only WeFinance has a Python chat-model object to hand over. The shared piece across all four is an OpenAI-compatible endpoint (base URL, model, key), so the opt-in takes that, or any `text -> text` callable, and does not require LangChain.
 
-**Bars 1 and 2:** not run yet. They need the prototype (dev-checked on sets 1–6 first) and a fresh set 7.
+**Early stop: triggered.** The prototype ran on sets 1–6 (dev data) on 2026-10-19 with qwen3:8b through Ollama on an Apple M5 laptop. Code and per-set logs: branch [`llm-add-only`](https://github.com/vishalhabib99/fin-assist/tree/llm-add-only) (`src/fin_assist/llm_match.py`, `evals/llm_dev/`). Two designs were tried:
+
+- **Label:** the model labels every number; rules only find the numbers.
+- **Add-only:** the rules judge first; the model labels only numbers the rules didn't judge.
+
+| Sets 1–6 (dev) | Rules only (shipped) | Model labels every number | Add-only | Early-stop bar |
+|---|---|---|---|---|
+| Bad figures caught | 224/243 (92%) | 227/243 (93%) | **234/243 (96%)** | ≥ 85% |
+| Correct figures wrongly flagged | 4/506 (0.8%) | 55/506 (10.9%) | **10/506 (2.0%)** | ≤ 1% |
+| Clean answers → PASS | 166/171 (97%) | 128/171 (75%) | **137/171 (80%)** | (set 7: ≥ 95%) |
+| Median seconds per answer, by set | ~0 | 3.1–8.0 | **3.0–7.3** | (set 7: ≤ 3) |
+
+Rules-only was tuned on sets 1–5, so its numbers there flatter it. Set 6, never tuned on, is the fairer comparison: rules caught 31/46 with 4 false flags; add-only caught 41/46 with 7 false flags and passed 25 of 40 clean answers.
+
+What the numbers say:
+
+- **The model finds what the rules miss.** On set 6 it lifted recall from 67% to 89%: paraphrased topics ("the payroll tax ceiling"), figures before their label, swapped table rows.
+- **It also labels correct figures as the wrong fact,** often enough to fail: 2% of correct figures flagged and 1 clean answer in 5 sent to a person, against a bar of 1% and 1 in 20. Letting the rules keep the final say cut false flags from 10.9% to 2.0%, not far enough.
+- **It's too slow on a laptop.** An 8B model generates about 10 tokens a second here; even with a cached prompt prefix and a few tokens of output per figure, answers took 3–7 seconds at the median, up to 37.
 
 ## Decision
 
-Pending bars 1 and 2.
+**DON'T BUILD (yet).** The early stop triggered on false flags (2.0% vs ≤ 1%), so set 7 was not written and no Pro usage was spent. The rules-only check stays the shipped default, and nothing from the prototype is merged.
+
+What would reopen it, each to be re-run against the same bars on dev sets first and then a fresh set 7:
+
+1. A model that labels more accurately at the same size: the misses were mostly near-neighbour facts (the Medicare rate for the Social Security rate, one year for another).
+2. Or a faster setup, such as a smaller model or a hosted endpoint the agent already pays for (bar 4 showed all four agents have one). Speed alone wouldn't fix the false flags.
+3. The add-only design is the one to start from.
