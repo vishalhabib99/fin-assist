@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fin-assist check</title>
+<meta name="description" content="Paste an AI answer about money. fin-assist flags every stale or wrong IRS and SSA figure, with the right number and its source. Runs in your browser.">
+<style>
+  :root {
+    --bg: #F6F7F9; --surface: #FFFFFF; --text: #151A2D; --soft: #525B70; --faint: #8A92A5;
+    --border: #E2E5EC; --accent: #1D4ED8; --accent-soft: #E8EEFC;
+    --flag: #B45309; --flag-soft: #FEF3C7; --ok: #047857; --ok-soft: #D1FAE5;
+    --bad: #B91C1C; --bad-soft: #FEE2E2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1117; --surface: #161B26; --text: #ECEEF3; --soft: #A7AEC0; --faint: #6B7387;
+      --border: #272D3B; --accent: #7B9CF8; --accent-soft: #1B2740;
+      --flag: #FBBF24; --flag-soft: #3A2A0B; --ok: #34D399; --ok-soft: #0D2E24;
+      --bad: #F87171; --bad-soft: #3B1414;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1117; --surface: #161B26; --text: #ECEEF3; --soft: #A7AEC0; --faint: #6B7387;
+    --border: #272D3B; --accent: #7B9CF8; --accent-soft: #1B2740;
+    --flag: #FBBF24; --flag-soft: #3A2A0B; --ok: #34D399; --ok-soft: #0D2E24;
+    --bad: #F87171; --bad-soft: #3B1414;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 24px 16px 48px; }
+  .page { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: -.01em; }
+  h2 { font-size: 13px; letter-spacing: .05em; text-transform: uppercase; color: var(--faint); margin: 0 0 10px; }
+  .sub { color: var(--soft); margin: 0 0 20px; font-size: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--soft); }
+  textarea, select { width: 100%; margin-top: 4px; font: inherit; color: var(--text); background: var(--bg);
+                     border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+  textarea { min-height: 140px; resize: vertical; }
+  textarea:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-top: 12px; }
+  .row label { flex: 1 1 200px; }
+  button { font: inherit; font-weight: 600; border-radius: 8px; padding: 9px 16px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button:disabled { opacity: .55; cursor: default; }
+  .examples { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; font-size: 13px; color: var(--faint); align-items: center; }
+  .examples button { font-size: 13px; font-weight: 500; padding: 4px 10px; }
+  .status { font-size: 13px; color: var(--faint); margin-top: 10px; min-height: 1.4em; }
+  .hidden { display: none; }
+  .verdict { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .badge { font-weight: 700; font-size: 13px; letter-spacing: .05em; padding: 3px 10px; border-radius: 999px; }
+  .badge.PASS, .badge.send { background: var(--ok-soft); color: var(--ok); }
+  .badge.REVIEW, .badge.review { background: var(--flag-soft); color: var(--flag); }
+  .badge.fixed { background: var(--accent-soft); color: var(--accent); }
+  .verdict .why { color: var(--soft); font-size: 14px; }
+  .claims { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+  .claims li { border-top: 1px solid var(--border); padding-top: 8px; display: grid; grid-template-columns: 112px 1fr; gap: 4px 12px; }
+  @media (max-width: 520px) { .claims li { grid-template-columns: 1fr; } }
+  .chip { justify-self: start; align-self: start; text-transform: uppercase; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+  .chip.match { background: var(--ok-soft); color: var(--ok); }
+  .chip.stale, .chip.wrong_year, .chip.unknown_year, .chip.unverified { background: var(--flag-soft); color: var(--flag); }
+  .chip.wrong { background: var(--bad-soft); color: var(--bad); }
+  .fig { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .fig .yr { font-weight: 400; color: var(--faint); }
+  .expl { color: var(--soft); font-size: 14px; }
+  .src { font-size: 12.5px; overflow-wrap: anywhere; }
+  a { color: var(--accent); }
+  .draft { white-space: pre-wrap; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 14.5px; }
+  .draft mark { background: var(--accent-soft); color: var(--accent); font-weight: 600; border-radius: 3px; padding: 0 2px; }
+  .reasons { margin: 10px 0 0; padding-left: 18px; font-size: 14px; color: var(--soft); }
+  .note { font-size: 14px; color: var(--soft); margin: 8px 0 0; }
+  .foot { font-size: 13px; color: var(--faint); margin-top: 20px; }
+  .foot code { font-size: 12px; background: var(--accent-soft); color: var(--text); padding: 1px 5px; border-radius: 5px; }
+  .error { color: var(--bad); }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Is the AI quoting last year's numbers?</h1>
+  <p class="sub">Paste an AI answer about retirement accounts, HSAs, Social Security or federal tax. Every official figure in it is checked against IRS and SSA figures for the year it's about, with the right number and its source. The check runs in your browser; the answer never leaves it.</p>
+
+  <div class="card">
+    <label for="answer">AI answer</label>
+    <textarea id="answer" spellcheck="false" placeholder="For 2026 you can put up to $23,500 in your 401(k), plus an $8,000 catch-up. RMDs start at age 72."></textarea>
+    <div class="examples">Try:
+      <button type="button" data-ex="0">401(k) + RMD</button>
+      <button type="button" data-ex="1">HSA</button>
+      <button type="button" data-ex="2">Social Security</button>
+      <button type="button" data-ex="3">Advice + a stale limit</button>
+    </div>
+    <div class="row">
+      <label for="year">Year, when a sentence doesn't say
+        <select id="year"></select></label>
+      <button id="go" class="primary" type="button" disabled>Loading checker…</button>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite">Loading the checker (about 10 MB, once)…</div>
+  </div>
+
+  <div id="out" class="hidden">
+    <div class="card">
+      <h2>Figures</h2>
+      <div class="verdict"><span class="badge" id="decision"></span><span class="why" id="decision-why"></span></div>
+      <ul class="claims" id="claims"></ul>
+    </div>
+    <div class="card">
+      <h2>What the pre-send gate would do</h2>
+      <div class="verdict"><span class="badge" id="outcome"></span><span class="why" id="outcome-why"></span></div>
+      <div id="gate-body"></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p>Runs the real <a href="https://pypi.org/project/fin-assist/">fin-assist</a> <span id="ver"></span> package from PyPI, in your browser with <a href="https://pyodide.org/">Pyodide</a>: the same code as <code>pip install fin-assist</code>. Covers the figures in the <a href="https://github.com/vishalhabib99/fin-assist/tree/main/registry">registry</a>; a figure it doesn't know is left alone, not guessed. On blind test answers it catches about 82% of stale or wrong figures (<a href="https://github.com/vishalhabib99/fin-assist#results">results, misses included</a>).</p>
+    <p>A checker, not an advisor. Not financial or tax advice. <a href="https://github.com/vishalhabib99/fin-assist">Source on GitHub</a> · <a href="../room/">2026 contribution room calculator</a></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+// Keep in step with pyproject.toml; tests/test_check_page.py enforces it.
+const FIN_ASSIST_VERSION = "0.4.0";
+
+const EXAMPLES = [
+  "For 2026 you can put up to $23,500 in your 401(k), plus an $8,000 catch-up if you're 50 or older. Required minimum distributions start at age 72.",
+  "The 2026 HSA contribution limit is $4,300 for self-only coverage and $8,550 for family coverage. If you're 55 or older you can add a $1,000 catch-up.",
+  "In 2026, Social Security tax applies to wages up to $176,100, and the employee rate is 6.2%. If you claim benefits before full retirement age, the earnings limit is $24,480.",
+  "You should definitely move everything into an S&P 500 fund; it's guaranteed to return 10% a year. For 2026 the IRA limit is $7,000.",
+];
+
+const PY = `
+import json
+from fin_assist.numcheck import check_numbers
+from fin_assist.gate import gate
+from fin_assist.cli import _why, _MARK
+
+def run(text, year):
+    year = int(year) if year else None
+    r = check_numbers(text, year)
+    claims = [dict(c, why=_why(c), mark=_MARK[c["status"]]) for c in r["claims"]]
+    v = gate("", text, year)
+    reasons = [dict(x, why=_why(x)) if "status" in x else x for x in v.reasons]
+    return json.dumps({"decision": r["decision"], "claims": claims,
+                       "gate": {"outcome": v.outcome, "text": v.text, "fixes": v.fixes, "reasons": reasons}},
+                      default=str)
+`;
+
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+let run = null;
+
+const thisYear = new Date().getFullYear();
+for (const y of [thisYear - 1, thisYear, thisYear + 1]) {
+  const o = el("option", null, y === thisYear ? `This year (${y})` : String(y));
+  o.value = y === thisYear ? "" : String(y);
+  $("year").append(o);
+}
+$("year").value = "";
+$("ver").textContent = FIN_ASSIST_VERSION;
+
+document.querySelectorAll("[data-ex]").forEach((b) => b.addEventListener("click", () => {
+  $("answer").value = EXAMPLES[+b.dataset.ex];
+  if (run) check();
+}));
+
+function sourceLink(url) {
+  if (!url || !/^https?:\/\//.test(url)) return null;
+  const a = el("a", null, url.replace(/^https?:\/\/(www\.)?/, ""));
+  a.href = url; a.target = "_blank"; a.rel = "noopener";
+  return a;
+}
+
+function render(res) {
+  const { decision, claims, gate } = res;
+  $("decision").className = "badge " + decision;
+  $("decision").textContent = decision;
+  const flagged = claims.filter((c) => c.status !== "match").length;
+  $("decision-why").textContent = !claims.length
+    ? "No official figures found to check."
+    : flagged ? `${flagged} of ${claims.length} ${claims.length === 1 ? "figure" : "figures"} ${flagged === 1 ? "needs" : "need"} a look.`
+    : claims.length === 1 ? "The one figure matches the registry." : `All ${claims.length} figures match the registry.`;
+
+  const list = $("claims"); list.replaceChildren();
+  for (const c of claims) {
+    const li = el("li");
+    li.append(el("span", "chip " + c.status, c.mark));
+    const body = el("div");
+    const fig = el("div", "fig", c.span + " ");
+    fig.append(el("span", "yr", `(${c.year})`));
+    body.append(fig, el("div", "expl", c.why));
+    if (c.status !== "match") {
+      const link = sourceLink(c.source);
+      if (link) { const s = el("div", "src", "Source: "); s.append(link); body.append(s); }
+    }
+    li.append(body); list.append(li);
+  }
+
+  $("outcome").className = "badge " + gate.outcome;
+  $("outcome").textContent = gate.outcome.toUpperCase();
+  const gb = $("gate-body"); gb.replaceChildren();
+  if (gate.outcome === "send") {
+    $("outcome-why").textContent = "Nothing to fix: the draft goes out as written.";
+  } else if (gate.outcome === "fixed") {
+    $("outcome-why").textContent = `Only stale figures, each with one known right value, so it corrects ${gate.fixes.length === 1 ? "it" : "them"} and logs every change.`;
+    const d = el("div", "draft");
+    let rest = gate.text;
+    for (const f of gate.fixes) {
+      const i = rest.indexOf(f.replacement);
+      if (i < 0) continue;
+      d.append(rest.slice(0, i), el("mark", null, f.replacement));
+      rest = rest.slice(i + f.replacement.length);
+    }
+    d.append(rest);
+    gb.append(d);
+    const ul = el("ul", "reasons");
+    for (const f of gate.fixes) ul.append(el("li", null, `${f.span} → ${f.replacement}: ${f.label} (${f.year})`));
+    gb.append(ul);
+  } else {
+    $("outcome-why").textContent = "Held for a person; the customer gets a holding message instead.";
+    gb.append(el("div", "draft", gate.text));
+    const ul = el("ul", "reasons");
+    for (const r of gate.reasons) {
+      const what = r.type === "personal_recommendation" ? "Reads as a personal recommendation"
+        : r.type === "promissory" ? "Promissory wording (FINRA 2210)"
+        : r.type === "injection_attempt" ? "Text aimed at the checker"
+        : r.type === "empty_answer" ? "Empty answer"
+        : `${r.span} (${r.year}): ${r.why}`;
+      ul.append(el("li", null, r.type && !r.status && r.span ? `${what}: "${r.span}"` : what));
+    }
+    gb.append(ul);
+  }
+  $("out").classList.remove("hidden");
+}
+
+function check() {
+  const text = $("answer").value.trim();
+  if (!text) { $("status").textContent = "Paste an answer first."; return; }
+  try {
+    render(JSON.parse(run(text, $("year").value)));
+    $("status").textContent = "";
+  } catch (e) {
+    $("status").replaceChildren(el("span", "error", "The check failed: " + e.message));
+  }
+}
+
+$("go").addEventListener("click", check);
+$("answer").addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && run) check(); });
+
+(async () => {
+  try {
+    const py = await loadPyodide();
+    await py.loadPackage("micropip");
+    const micropip = py.pyimport("micropip");
+    // The checker and gate use only the standard library; the mcp dependency is for the MCP server.
+    await micropip.install.callKwargs(`fin-assist==${FIN_ASSIST_VERSION}`, { deps: false });
+    py.runPython(PY);
+    run = py.globals.get("run");
+    $("go").disabled = false; $("go").textContent = "Check";
+    $("status").textContent = "Ready. Paste an answer or try an example.";
+  } catch (e) {
+    $("status").replaceChildren(el("span", "error", "Couldn't load the checker: " + e.message));
+  }
+})();
+</script>
+</body>

@@ -26,7 +26,7 @@ Try it with no install (needs [uv](https://docs.astral.sh/uv/)):
 uvx fin-assist check "The 2026 HSA family limit is $8,550."
 ```
 
-Or install it: `pip install fin-assist`.
+Or install it: `pip install fin-assist`. Or paste an answer into the [browser check](https://vishalhabib99.github.io/fin-assist/check/): same package, runs in your browser, nothing sent anywhere.
 
 Give your agent the tool (Claude Code; any MCP client works the same way):
 
