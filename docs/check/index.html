@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>fin-assist check</title>
-<meta name="description" content="Paste an AI answer about money. fin-assist flags every stale or wrong IRS and SSA figure, with the right number and its source. Runs in your browser.">
+<meta name="description" content="Paste an AI answer about money. fin-assist flags every stale or wrong IRS, SSA or Medicare figure, with the right number and its source. Runs in your browser.">
 <style>
   :root {
     --bg: #F6F7F9; --surface: #FFFFFF; --text: #151A2D; --soft: #525B70; --faint: #8A92A5;
@@ -78,7 +78,7 @@
 <body>
 <div class="page">
   <h1>Is the AI quoting last year's numbers?</h1>
-  <p class="sub">Paste an AI answer about retirement accounts, HSAs, Social Security or federal tax. Every official figure in it is checked against IRS and SSA figures for the year it's about, with the right number and its source. The check runs in your browser; the answer never leaves it.</p>
+  <p class="sub">Paste an AI answer about retirement accounts, HSAs, Social Security, Medicare or federal tax. Every official figure in it is checked against IRS, SSA and CMS figures for the year it's about, with the right number and its source. The check runs in your browser; the answer never leaves it.</p>
 
   <div class="card">
     <label for="answer">AI answer</label>
@@ -119,7 +119,7 @@
 <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
 <script>
 // Keep in step with pyproject.toml; tests/test_check_page.py enforces it.
-const FIN_ASSIST_VERSION = "0.4.1";
+const FIN_ASSIST_VERSION = "0.4.2";
 
 const EXAMPLES = [
   "For 2026 you can put up to $23,500 in your 401(k), plus an $8,000 catch-up if you're 50 or older. Required minimum distributions start at age 72.",
@@ -252,9 +252,15 @@ $("answer").addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) &&
     await py.loadPackage("micropip");
     const micropip = py.pyimport("micropip");
     // The checker and gate use only the standard library; the mcp dependency is for the MCP server.
-    await micropip.install.callKwargs(`fin-assist==${FIN_ASSIST_VERSION}`, { deps: false });
+    try {
+      await micropip.install.callKwargs(`fin-assist==${FIN_ASSIST_VERSION}`, { deps: false });
+    } catch (e) {
+      // Right after a release the pinned version can take a few minutes to reach PyPI's index.
+      await micropip.install.callKwargs("fin-assist", { deps: false });
+    }
     py.runPython(PY);
     run = py.globals.get("run");
+    $("ver").textContent = py.runPython("from importlib.metadata import version; version('fin-assist')");
     $("go").disabled = false; $("go").textContent = "Check";
     $("status").textContent = "Ready. Paste an answer or try an example.";
   } catch (e) {

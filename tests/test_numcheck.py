@@ -217,3 +217,40 @@ def test_qbi_threshold_and_phase_in():
 def test_2025_bracket_quoted_for_2026_is_stale():
     r = check_numbers("For 2026, the 10% bracket for single filers covers taxable income up to $11,925.", 2026)
     assert [(c["status"], c["figure_year"], c["expected"]) for c in r["claims"]] == [("stale", 2025, 12_400)]
+
+
+# Estate exemption, Medicare Part B and the Roth catch-up wage threshold
+
+def test_estate_exemption_millions():
+    assert statuses("For 2026 the federal estate tax exemption is $13.99 million per person.") == [("$13.99 million", "stale")]
+    assert statuses("In 2026 the lifetime gift exemption is $15 million.") == [("$15 million", "match")]
+
+
+def test_medicare_part_b_premium_deductible_and_irmaa():
+    assert statuses("The 2026 Medicare Part B premium is $185.00 a month and the deductible is $257.") == [
+        ("$185.00", "stale"), ("$257", "stale")]
+    assert statuses("In 2026, Medicare Part B IRMAA surcharges start above $109,000 for single filers "
+                    "and $218,000 for married couples filing jointly.") == [("$109,000", "match"), ("$218,000", "match")]
+
+
+def test_roth_catch_up_wage_threshold():
+    assert statuses("Starting in 2026, the Roth catch-up wage threshold is $145,000.") == [("$145,000", "wrong")]
+
+
+def test_wrong_thresholds_stated_with_a_figure_word():
+    assert statuses("For 2026, the Medicare Part B IRMAA threshold for single filers is $103,000.") == [("$103,000", "wrong")]
+    assert statuses("For 2026, the estate tax exemption is $14.5 million per person.") == [("$14.5 million", "wrong")]
+
+
+def test_customer_amounts_next_to_thresholds_are_not_judged():
+    # "Your taxable income of $230,000": the customer's number, even in a sentence about a threshold
+    for text in ["Your taxable income of $230,000 is above the 2026 QBI threshold of $201,750 for single filers.",
+                 "Your estate is worth about $9 million, under the 2026 estate tax exemption of $15 million.",
+                 "At $120,000 of MAGI as a single filer, you will pay a Medicare Part B IRMAA surcharge in 2026.",
+                 "Your AMT income of $600,000 as a single filer is above the 2026 phase-out start."]:
+        assert check_numbers(text, 2026)["decision"] == "PASS", text
+
+
+def test_amount_followed_by_total_is_arithmetic():
+    assert check_numbers("The lifetime gift exemption is $15 million in 2026. Three gifts of $25,000 each: "
+                         "that's $75,000 total.", 2026)["decision"] == "PASS"

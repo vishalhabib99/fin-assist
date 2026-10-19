@@ -34,10 +34,12 @@ _DAYS = re.compile(r"\b(\d{1,3})[\s-]days?\b", re.I)
 _GATE = {"usd": (0.4, 2.5), "age": None, "percent": None, "days": None}
 # A dollar amount is judged only when the wording states it as an official figure, or when it
 # equals some year's figure exactly. "That's $6,000 for the year" is arithmetic, not a claim.
-_STATED = re.compile(r"\b(?:limits?|max(?:imum)?|caps?|ceiling|catch[- ]?up|exclusion|deduction|deductible|out[- ]of[- ]pocket|threshold|wage base|taxable max(?:imum)?|up to|at least|no more than|bracket|earnings (?:test|limit)|exempt amount|benefit|standard)\b", re.I)
+_STATED = re.compile(r"\b(?:limits?|max(?:imum)?|caps?|ceiling|catch[- ]?up|exclusion|exemption|deduction|deductible|out[- ]of[- ]pocket|threshold|wage base|taxable max(?:imum)?|up to|at least|no more than|bracket|earnings (?:test|limit)|exempt amount|benefit|standard)\b", re.I)
 # "You can contribute $X" / "able to defer $X" states the limit, unless it's room left ("$3,000 more")
 _CAN_PUT = re.compile(r"\b(?:can|could|able to|allowed to|may)\s+(?:contribute|defer|put in|put away|save)\s*$", re.I)
 _ROOM_LEFT = re.compile(r"^\s*(?:more|extra|additional|left|remaining)\b", re.I)
+# "$75,000 total", "$45,000 altogether": a sum, not an official figure
+_TOTAL_AFTER = re.compile(r"^\s*(?:in )?(?:total|altogether|combined)\b", re.I)
 _STATED_AFTER = re.compile(r"^\s*(?:annual |yearly |contribution |deferral )?(?:limit|cap|maximum|catch[- ]?up|carry ?over|roll ?over)\b|^\s*(?:can|may)\s+(?:be\s+)?(?:carr(?:y|ied)|roll(?:ed)?)\s?over|^[^.;$]{0,25}\b(?:on top of|in addition to|above|beyond) the\b[^.;$]{0,25}\blimit", re.I)
 _LIST_JOIN = re.compile(r"\b(?:and|or|while|vs\.?|versus|to|through)\b|/|–|-", re.I)
 _NOT_LIST = re.compile(r"\b(?:so|but|your|you|which|leaves?)\b", re.I)
@@ -264,7 +266,7 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                                   and not _NOT_LIST.search(window))
                               or (_REFER.search(window) and any(_STATED.search(r) for r in recent))
                               or (_CAN_PUT.search(window) and not _ROOM_LEFT.match(sentence[m.end():])))
-                if _OWN.search(window) or _OURS.search(sentence[:m.start()]):
+                if _OWN.search(window) or _OURS.search(sentence[:m.start()]) or _TOTAL_AFTER.match(sentence[m.end():]):
                     stated = False
                 prev_usd, prev_stated = m, stated
             y = _year_for(sentence, m, context_year, default_year)

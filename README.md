@@ -4,7 +4,7 @@
 
 **Catch the stale and wrong money figures in an AI agent's answer before a customer sees them.**
 
-Every finance AI repeats last year's numbers: last year's 401(k) limit, the old RMD age, an HSA limit from two years ago, a Social Security wage base that changed in January. Models learn figures from training data that is a year or more out of date, and the IRS and SSA change them every year. fin-assist checks every official figure in a draft answer against a registry of IRS and SSA figures, each tied to its year and the primary source it was read from.
+Every finance AI repeats last year's numbers: last year's 401(k) limit, the old RMD age, an HSA limit from two years ago, a Social Security wage base that changed in January. Models learn figures from training data that is a year or more out of date, and the IRS, SSA and CMS change them every year. fin-assist checks every official figure in a draft answer against a registry of IRS, SSA and CMS (Medicare) figures, each tied to its year and the primary source it was read from.
 
 ```console
 $ fin-assist check "For 2026 you can put up to $23,500 in your 401(k), plus an $8,000 catch-up. RMDs start at age 72."
@@ -45,14 +45,15 @@ reply = verdict.text   # "send": unchanged · "fixed": stale figures replaced, e
 
 ## What it checks
 
-79 figures in [`registry/`](registry/README.md), each read on a primary IRS or SSA page, with the date it was read:
+85 figures in [`registry/`](registry/README.md), each read on a primary IRS, SSA or CMS page, with the date it was read:
 
 | Area | Figures | Years |
 |---|---|---|
-| Retirement plans and IRAs | 401(k)/403(b)/457/TSP, IRA and SIMPLE limits and catch-ups, RMD age and penalties, early-withdrawal tax, rollover window and withholding | 2025–2026 |
+| Retirement plans and IRAs | 401(k)/403(b)/457/TSP, IRA and SIMPLE limits and catch-ups, the Roth catch-up wage threshold, RMD age and penalties, early-withdrawal tax, rollover window and withholding | 2025–2026 |
 | HSA and HDHP | Contribution limits, catch-up, minimum deductibles, out-of-pocket maximums | 2025–2027 |
 | Social Security and SSI | Taxable maximum, payroll tax rates, COLA, earnings test, maximum benefit, SGA, SSI payment standard and resource limits | 2025–2027 |
-| Federal tax | Brackets (single, joint, head of household), standard deduction, gift exclusion and gift splitting, health FSA, long-term capital gains thresholds, AMT exemption and phase-out, QBI threshold and phase-in | 2024–2026 |
+| Federal tax | Brackets (single, joint, head of household), standard deduction, gift exclusion and gift splitting, health FSA, long-term capital gains thresholds, AMT exemption and phase-out, QBI threshold and phase-in, estate and lifetime gift exemption | 2024–2026 |
+| Medicare | Part B standard premium and deductible, where IRMAA starts | 2024–2026 |
 
 Each figure in an answer gets one status:
 

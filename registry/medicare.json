@@ -1,0 +1,124 @@
+{
+  "domain": "medicare",
+  "about": "Medicare Part B standard premium, deductible and where the income-related surcharge (IRMAA) starts, from the CMS fact sheet for each year.",
+  "sources": {
+    "cms_2026": {
+      "url": "https://www.cms.gov/newsroom/fact-sheets/2026-medicare-parts-b-premiums-deductibles",
+      "title": "CMS fact sheet: 2026 Medicare Parts A & B premiums and deductibles (shows 2025 for comparison)",
+      "read_on": "2026-10-19"
+    },
+    "cms_2025": {
+      "url": "https://www.cms.gov/newsroom/fact-sheets/2025-medicare-parts-b-premiums-and-deductibles",
+      "title": "CMS fact sheet: 2025 Medicare Parts A & B premiums and deductibles (shows 2024 for comparison)",
+      "read_on": "2026-10-19"
+    }
+  },
+  "facts": [
+    {
+      "id": "medicare.part_b.standard_premium",
+      "label": "Medicare Part B standard monthly premium",
+      "unit": "usd_per_month",
+      "values": {
+        "2024": 174.7,
+        "2025": 185.0,
+        "2026": 202.9
+      },
+      "source": {
+        "2024": "cms_2025",
+        "2025": "cms_2025",
+        "2026": "cms_2026"
+      },
+      "aliases": [
+        "Part B premium"
+      ],
+      "cues": [
+        [
+          "Part B|\\bMedicare\\b"
+        ],
+        [
+          "premium"
+        ]
+      ]
+    },
+    {
+      "id": "medicare.part_b.deductible",
+      "label": "Medicare Part B annual deductible",
+      "unit": "usd_per_year",
+      "values": {
+        "2024": 240,
+        "2025": 257,
+        "2026": 283
+      },
+      "source": {
+        "2024": "cms_2025",
+        "2025": "cms_2025",
+        "2026": "cms_2026"
+      },
+      "aliases": [
+        "Part B deductible"
+      ],
+      "cues": [
+        [
+          "Part B|\\bMedicare\\b"
+        ],
+        [
+          "deductible"
+        ]
+      ]
+    },
+    {
+      "id": "medicare.irmaa.start.single",
+      "label": "Medicare Part B IRMAA starts above this MAGI, individual tax return",
+      "unit": "usd",
+      "values": {
+        "2025": 106000,
+        "2026": 109000
+      },
+      "source": {
+        "2025": "cms_2025",
+        "2026": "cms_2026"
+      },
+      "aliases": [
+        "IRMAA threshold"
+      ],
+      "cues": [
+        [
+          "\\bIRMAA\\b|income[- ]related|surcharge|higher premium|high[- ]income"
+        ],
+        [
+          "Part B|\\bMedicare\\b"
+        ],
+        [
+          "single|individual|unmarried|file alone|own return"
+        ]
+      ]
+    },
+    {
+      "id": "medicare.irmaa.start.married_joint",
+      "label": "Medicare Part B IRMAA starts above this MAGI, joint tax return",
+      "unit": "usd",
+      "values": {
+        "2025": 212000,
+        "2026": 218000
+      },
+      "source": {
+        "2025": "cms_2025",
+        "2026": "cms_2026"
+      },
+      "aliases": [
+        "IRMAA threshold"
+      ],
+      "cues": [
+        [
+          "\\bIRMAA\\b|income[- ]related|surcharge|higher premium|high[- ]income"
+        ],
+        [
+          "Part B|\\bMedicare\\b"
+        ],
+        [
+          "joint(?:ly)?|married|couples?"
+        ]
+      ]
+    }
+  ]
+}

@@ -1010,6 +1010,28 @@
           "married filing jointly|joint(ly)?|married couples?"
         ]
       ]
+    },
+    {
+      "id": "tax.estate.basic_exclusion",
+      "label": "Estate and lifetime gift tax basic exclusion amount, per person",
+      "unit": "usd",
+      "values": {
+        "2025": 13990000,
+        "2026": 15000000
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [
+        "estate tax exemption",
+        "lifetime gift exemption"
+      ],
+      "cues": [
+        [
+          "estate tax|estate and gift|estate exemption|lifetime (?:gift )?(?:tax )?(?:exemption|exclusion)|basic exclusion|unified credit|exemption from (?:the )?estate"
+        ]
+      ]
     }
   ]
 }
