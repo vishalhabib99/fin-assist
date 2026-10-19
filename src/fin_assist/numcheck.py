@@ -29,13 +29,16 @@ _YEAR = re.compile(r"\b(20[2-3]\d)\b")
 _REL = re.compile(r"\b(this|next|last) (tax )?year\b", re.I)
 _USD = re.compile(r"\$\s?(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s*(k\b|K\b|thousand|million)?|\b(\d{1,3}(?:,\d{3})+)\s*dollars", re.I)
 _PCT = re.compile(r"\b(\d{1,2}(?:\.\d+)?)\s?(%|percent\b)", re.I)
-_AGE = re.compile(r"\b(?:age|aged|turns?|turning|reach(?:es|ing)?|(?:begin|start|starts|must|until|by|RMDs?)\s+at)\s+(\d{2})(½|\s?1/2)?(?!\d)|\b(\d{2})(½|\s?1/2)?\s*(?:years? old|or older|and older)", re.I)
+_AGE = re.compile(r"\b(?:age|aged|turns?|turning|reach(?:es|ing)?|(?:begin|start|starts|must|until|by|RMDs?|distributions?)\s+at)\s+(\d{2})(½|\s?1/2)?(?!\d)|\b(\d{2})(½|\s?1/2)?\s*(?:years? old|or older|and older)", re.I)
 _DAYS = re.compile(r"\b(\d{1,3})[\s-]days?\b", re.I)
 _GATE = {"usd": (0.4, 2.5), "age": None, "percent": None, "days": None}
 # A dollar amount is judged only when the wording states it as an official figure, or when it
 # equals some year's figure exactly. "That's $6,000 for the year" is arithmetic, not a claim.
 _STATED = re.compile(r"\b(?:limits?|max(?:imum)?|caps?|ceiling|catch[- ]?up|exclusion|deduction|deductible|out[- ]of[- ]pocket|threshold|wage base|taxable max(?:imum)?|up to|at least|no more than|bracket|earnings (?:test|limit)|exempt amount|benefit|standard)\b", re.I)
-_STATED_AFTER = re.compile(r"^\s*(?:annual |yearly |contribution |deferral )?(?:limit|cap|maximum|catch[- ]?up)\b|^\s*(?:can|may)\s+(?:be\s+)?(?:carr(?:y|ied)|roll(?:ed)?)\s?over|^[^.;$]{0,25}\b(?:on top of|in addition to|above|beyond) the\b[^.;$]{0,25}\blimit", re.I)
+# "You can contribute $X" / "able to defer $X" states the limit, unless it's room left ("$3,000 more")
+_CAN_PUT = re.compile(r"\b(?:can|could|able to|allowed to|may)\s+(?:contribute|defer|put in|put away|save)\s*$", re.I)
+_ROOM_LEFT = re.compile(r"^\s*(?:more|extra|additional|left|remaining)\b", re.I)
+_STATED_AFTER = re.compile(r"^\s*(?:annual |yearly |contribution |deferral )?(?:limit|cap|maximum|catch[- ]?up|carry ?over|roll ?over)\b|^\s*(?:can|may)\s+(?:be\s+)?(?:carr(?:y|ied)|roll(?:ed)?)\s?over|^[^.;$]{0,25}\b(?:on top of|in addition to|above|beyond) the\b[^.;$]{0,25}\blimit", re.I)
 _LIST_JOIN = re.compile(r"\b(?:and|or|while|vs\.?|versus|to|through)\b|/|–|-", re.I)
 _NOT_LIST = re.compile(r"\b(?:so|but|your|you|which|leaves?)\b", re.I)
 # The business's or customer's own numbers, and arithmetic on official figures: "your estimated
@@ -123,6 +126,12 @@ def _candidates(sentence: str, kind: str, n: float) -> list[str]:
     return out
 
 
+def _topics(text: str, kind: str) -> list[str]:
+    """Every fact of this kind whose cues are all in the text, whatever the figure."""
+    return [fid for fid, f in FACTS.items()
+            if _kind(f["unit"]) == kind and _CUES[fid] and all(c.search(text) for c in _CUES[fid])]
+
+
 def _carried(sentence: str, context: str, kind: str, n: float) -> list[str]:
     """Candidates whose topic was named earlier (previous sentences, a heading, the first line).
 
@@ -136,6 +145,14 @@ def _carried(sentence: str, context: str, kind: str, n: float) -> list[str]:
     if kind == "age":
         return out
     return [fid for fid in out if len(_CUES[fid]) > 1 and all(c.search(sentence) for c in _CUES[fid][1:])]
+
+
+def _is_total(n: float, year: int, facts: list[str]) -> bool:
+    """$32,500 = the $24,500 limit + the $8,000 catch-up: arithmetic on two of the figures the
+    answer is talking about, not a claim of its own."""
+    vals = [(fid, lookup(FACTS, fid, year)) for fid in facts]
+    vals = [(f, v) for f, v in vals if v]
+    return any(fa != fb and _same(a + b, n) for i, (fa, a) in enumerate(vals) for fb, b in vals[i + 1:])
 
 
 def _exact_any(sentence: str, context: str, kind: str, n: float) -> bool:
@@ -245,7 +262,8 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                               # a list under one topic word: "$16,100 for single filers and $31,500 for joint"
                               or (prev_stated and len(window) <= 40 and _LIST_JOIN.search(window)
                                   and not _NOT_LIST.search(window))
-                              or (_REFER.search(window) and any(_STATED.search(r) for r in recent)))
+                              or (_REFER.search(window) and any(_STATED.search(r) for r in recent))
+                              or (_CAN_PUT.search(window) and not _ROOM_LEFT.match(sentence[m.end():])))
                 if _OWN.search(window) or _OURS.search(sentence[:m.start()]):
                     stated = False
                 prev_usd, prev_stated = m, stated
@@ -256,6 +274,8 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                 continue
             exact = any(_same(v, n) for fid in cands for v in FACTS[fid]["values"].values())
             if not (stated or exact):
+                continue
+            if kind == "usd" and not exact and _is_total(n, y, _topics(context + " " + sentence, kind)):
                 continue
             verdict = _judge(n, y, cands)
             if verdict["status"] != "match":

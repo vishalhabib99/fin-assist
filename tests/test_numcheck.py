@@ -154,3 +154,39 @@ def test_carryover_into_next_year_is_this_years_figure():
 def test_range_continues_a_list():
     assert statuses("**2026 Head of Household**\n- 12% bracket: taxable income from $17,700 to $66,200") == [
         ("$17,700", "match"), ("$66,200", "wrong")]
+
+
+# Fixes from blind set 5 (each written as a new sentence, not the set's own wording)
+
+def test_defer_names_a_workplace_plan():
+    assert statuses("This year you may defer $23,500, with a $7,500 catch-up at 50.") == [
+        ("$23,500", "stale"), ("$7,500", "stale")]
+
+
+def test_wage_base_applies_up_to():
+    assert statuses("The Social Security payroll tax applies up to $176,100 of wages in 2026.") == [("$176,100", "stale")]
+
+
+def test_able_to_contribute_states_a_limit_but_room_left_does_not():
+    assert statuses("Next year you'll be able to contribute $25,000 to your 401(k).", 2026) == [("$25,000", "unknown_year")]
+    assert statuses("You can contribute $9,000 more to your 401(k) this year.") == []
+
+
+def test_required_distributions_at_old_age():
+    assert statuses("Required distributions start at 70½ for most savers.") == [("start at 70½", "wrong")]
+
+
+def test_employees_pay_medicare_rate():
+    assert statuses("Employees pay 6.2% for Social Security and 2.9% for Medicare.") == [("6.2%", "match"), ("2.9%", "wrong")]
+
+
+def test_roll_the_money_into_an_ira():
+    assert statuses("You must roll the funds into an IRA within 30 days.") == [("30 days", "wrong")]
+
+
+def test_fsa_rollover_named_after_the_figure():
+    assert statuses("For 2026 your FSA allows a $640 rollover.") == [("$640", "wrong")]
+
+
+def test_total_of_two_figures_is_arithmetic():
+    assert check_numbers("With the $24,500 401(k) limit and the $8,000 catch-up, you can defer up to $32,500.", 2026)["decision"] == "PASS"

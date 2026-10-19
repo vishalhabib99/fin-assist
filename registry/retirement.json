@@ -46,7 +46,7 @@
       ],
       "cues": [
         [
-          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan|elective deferral|deferral limit|salary deferral"
+          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan|elective deferral|deferral limit|salary deferral|\\bdefer\\b"
         ]
       ]
     },
@@ -64,7 +64,7 @@
       ],
       "cues": [
         [
-          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan"
+          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan|\\bdefer\\b"
         ],
         [
           "catch[- ]?up"
@@ -84,7 +84,7 @@
       ],
       "cues": [
         [
-          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan"
+          "401\\(k\\)|403\\(b\\)|\\b457\\b|\\bTSP\\b|workplace plan|employer plan|\\bdefer\\b"
         ],
         [
           "catch[- ]?up"
@@ -202,7 +202,7 @@
       ],
       "cues": [
         [
-          "\\bRMDs?\\b|required minimum distribution|minimum distributions?"
+          "\\bRMDs?\\b|required minimum distribution|minimum distributions?|required distributions?"
         ]
       ],
       "unverified_values": [
@@ -220,7 +220,7 @@
       "aliases": [],
       "cues": [
         [
-          "\\bRMDs?\\b|required minimum distribution|minimum distributions?"
+          "\\bRMDs?\\b|required minimum distribution|minimum distributions?|required distributions?"
         ],
         [
           "miss|fail|excise|penalt"
@@ -238,7 +238,7 @@
       "aliases": [],
       "cues": [
         [
-          "\\bRMDs?\\b|required minimum distribution|minimum distributions?"
+          "\\bRMDs?\\b|required minimum distribution|minimum distributions?|required distributions?"
         ],
         [
           "correct|fix|two years|2 years"
@@ -296,7 +296,7 @@
       ],
       "cues": [
         [
-          "roll ?over|roll(?:ed|ing)? (?:it |them |the money |this )?over|indirect rollover|deposit it"
+          "roll ?over|roll(?:ed|ing)? (?:it |them |the money |this )?over|indirect rollover|deposit it|roll (?:it |them |the money |the funds |this |that )?into|deposit (?:the money|the funds)"
         ]
       ]
     },
