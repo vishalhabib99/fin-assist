@@ -1,6 +1,6 @@
 # fin-assist
 
-[![ci](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml/badge.svg)](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![MCP server](https://img.shields.io/badge/MCP-server-6E56CF)
+[![ci](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml/badge.svg)](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml) [![PyPI](https://img.shields.io/pypi/v/fin-assist)](https://pypi.org/project/fin-assist/) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![MCP server](https://img.shields.io/badge/MCP-server-6E56CF)
 
 **Catch the stale and wrong money figures in an AI agent's answer before a customer sees them.**
 
@@ -23,13 +23,15 @@ It is a checker, not an advisor. It never writes answers and never gives financi
 Try it with no install (needs [uv](https://docs.astral.sh/uv/)):
 
 ```bash
-uvx --from git+https://github.com/vishalhabib99/fin-assist fin-assist check "The 2026 HSA family limit is $8,550."
+uvx fin-assist check "The 2026 HSA family limit is $8,550."
 ```
+
+Or install it: `pip install fin-assist`.
 
 Give your agent the tool (Claude Code; any MCP client works the same way):
 
 ```bash
-claude mcp add fin-assist -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-assist-mcp
+claude mcp add fin-assist -- uvx --from fin-assist fin-assist-mcp
 ```
 
 Gate your agent: one call before the answer reaches the customer ([examples](examples/README.md) for plain Python, streaming and LangChain, runnable with no model or API key):
@@ -228,7 +230,7 @@ Scripted reviewers on the demo queue (**policies, not people**; `python review/s
 ## Use it in Claude Code
 
 ```bash
-claude mcp add fin-assist -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-assist-mcp
+claude mcp add fin-assist -- uvx --from fin-assist fin-assist-mcp
 cp -r skills/fact-judge skills/advice-judge ~/.claude/skills/
 ```
 
