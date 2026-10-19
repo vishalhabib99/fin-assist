@@ -163,7 +163,15 @@ def figures(text: str, year: int) -> tuple[dict, list[str]]:
     return out, problems
 
 
-def report(name: str, found: dict, problems: list[str], year: int, prefixes: tuple[str, ...]) -> int:
+def from_source(reg: dict, fid: str, year: int, url_part: str) -> bool:
+    """Is this fact's figure for the year (or its latest year) sourced from documents like this one?"""
+    srcs = reg[fid]["sources"]
+    src = srcs.get(str(year)) or srcs[max(srcs)]
+    return url_part in src["url"]
+
+
+def report(name: str, found: dict, problems: list[str], year: int, prefixes: tuple[str, ...],
+           url_part: str | None = None) -> int:
     """Print each figure against the registry; return 1 if anything needs a look."""
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
     from fin_assist.numcheck import fmt
@@ -177,7 +185,8 @@ def report(name: str, found: dict, problems: list[str], year: int, prefixes: tup
                                                     f"new year (was {fmt(prev)} for {year - 1})" if prev is not None else "new")
         print(f"  {fid:52} {fmt(v):>14}  {note}")
     problems = problems + [f"{fid}: tracked but not extracted" for fid in reg
-                           if fid.startswith(prefixes) and "any" not in reg[fid]["values"] and fid not in found]
+                           if fid.startswith(prefixes) and "any" not in reg[fid]["values"] and fid not in found
+                           and (url_part is None or from_source(reg, fid, year, url_part))]
     for p in problems:
         print("  PROBLEM", p)
     return 1 if problems else 0
@@ -194,7 +203,7 @@ def main(argv=None) -> int:
     text = text_of(args.path)
     year = args.year or int(re.search(r"taxable years beginning in (20\d\d)", _flat(text)).group(1))
     found, problems = figures(text, year)
-    return report(args.path.name, found, problems, year, TRACKED)
+    return report(args.path.name, found, problems, year, TRACKED, url_part="/irs-drop/rp-")
 
 
 if __name__ == "__main__":

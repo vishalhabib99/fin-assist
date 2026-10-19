@@ -254,3 +254,30 @@ def test_customer_amounts_next_to_thresholds_are_not_judged():
 def test_amount_followed_by_total_is_arithmetic():
     assert check_numbers("The lifetime gift exemption is $15 million in 2026. Three gifts of $25,000 each: "
                          "that's $75,000 total.", 2026)["decision"] == "PASS"
+
+
+# The 2025 tax law's new deductions and SALT cap (figures most AI models were trained before)
+
+def test_new_deductions_right_and_wrong():
+    assert statuses("Starting in 2025, seniors 65 and older get an extra $6,000 deduction, "
+                    "or $12,000 for a married couple if both qualify.") == [("$6,000", "match"), ("$12,000", "match")]
+    assert statuses("The senior deduction is $4,000 per person for 2026.") == [("$4,000", "wrong")]
+    assert statuses("No tax on tips: you can deduct up to $20,000 of tip income in 2026.") == [("$20,000", "wrong")]
+    assert statuses("The overtime deduction is capped at $12,500, or $25,000 for joint filers, in 2026.") == [
+        ("$12,500", "match"), ("$25,000", "match")]
+    assert statuses("The senior bonus deduction phases out above $100,000 of income for single filers.") == [("$100,000", "wrong")]
+
+
+def test_salt_cap_old_figure_is_stale_and_floor_is_not():
+    assert statuses("For 2026 the SALT cap is $10,000.") == [("$10,000", "stale")]
+    assert statuses("The SALT deduction cap is $40,400 for 2026, reduced for MAGI over $505,000 but never below $10,000.") == [
+        ("$40,400", "match"), ("$505,000", "match"), ("$10,000", "match")]
+    assert statuses("In 2026 the state and local tax deduction is limited to $40,000.") == [("$40,000", "stale")]
+
+
+def test_customer_amounts_near_new_deductions_are_not_judged():
+    for text in ["You earned $180,000, so your tips deduction phases out partly.",
+                 "Your MAGI of $90,000 is above where the senior deduction phases out.",
+                 "You paid $2,400 of car loan interest this year, all deductible.",
+                 "You paid $18,000 in state and local taxes, under the $40,400 SALT cap."]:
+        assert check_numbers(text, 2026)["decision"] == "PASS", text

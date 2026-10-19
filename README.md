@@ -45,7 +45,7 @@ reply = verdict.text   # "send": unchanged · "fixed": stale figures replaced, e
 
 ## What it checks
 
-85 figures in [`registry/`](registry/README.md), each read on a primary IRS, SSA or CMS page, with the date it was read:
+102 figures in [`registry/`](registry/README.md), each read on a primary IRS, SSA or CMS page, with the date it was read:
 
 | Area | Figures | Years |
 |---|---|---|
@@ -54,6 +54,7 @@ reply = verdict.text   # "send": unchanged · "fixed": stale figures replaced, e
 | Social Security and SSI | Taxable maximum, payroll tax rates, COLA, earnings test, maximum benefit, SGA, SSI payment standard and resource limits | 2025–2027 |
 | Federal tax | Brackets (single, joint, head of household), standard deduction, gift exclusion and gift splitting, health FSA, long-term capital gains thresholds, AMT exemption and phase-out, QBI threshold and phase-in, estate and lifetime gift exemption | 2024–2026 |
 | Medicare | Part B standard premium and deductible, where IRMAA starts | 2024–2026 |
+| New deductions in the 2025 tax law | Senior deduction ($6,000), no tax on tips and overtime, car loan interest: each maximum and where it phases out; the SALT cap, where it shrinks and its floor | 2024–2028 |
 
 Each figure in an answer gets one status:
 

@@ -16,6 +16,26 @@
       "url": "https://www.irs.gov/pub/irs-drop/rp-24-40.pdf",
       "title": "Rev. Proc. 2024-40: 2025 inflation-adjusted items",
       "read_on": "2026-10-19"
+    },
+    "irs_wftc_individuals": {
+      "url": "https://www.irs.gov/newsroom/working-families-tax-cuts-individuals-and-workers",
+      "title": "IRS: Working Families Tax Cuts (One, Big, Beautiful Bill) provisions for individuals and workers",
+      "read_on": "2026-10-19"
+    },
+    "irs_p530_2025": {
+      "url": "https://www.irs.gov/publications/p530",
+      "title": "IRS Publication 530 (2025), What's New: SALT deduction limit",
+      "read_on": "2026-10-19"
+    },
+    "irs_1040es_2026_salt": {
+      "url": "https://www.irs.gov/forms-pubs/correction-to-state-and-local-income-tax-deduction-amount-in-the-2026-form-1040-es",
+      "title": "IRS: correction to the SALT deduction amount in the 2026 Form 1040-ES",
+      "read_on": "2026-10-19"
+    },
+    "irs_i1040sca_2024": {
+      "url": "https://www.irs.gov/pub/irs-prior/i1040sca--2024.pdf",
+      "title": "2024 Instructions for Schedule A (Form 1040), line 5",
+      "read_on": "2026-10-19"
     }
   },
   "facts": [
@@ -1038,6 +1058,421 @@
       "cues": [
         [
           "estate tax|estate and gift|estate exemption|lifetime (?:gift )?(?:tax )?(?:exemption|exclusion)|basic exclusion|unified credit|exemption from (?:the )?estate"
+        ]
+      ]
+    },
+    {
+      "id": "tax.senior_deduction.per_person",
+      "label": "Senior deduction (age 65+), per eligible person, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 6000,
+        "2026": 6000,
+        "2027": 6000,
+        "2028": 6000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "\\bseniors?\\b|age 65|65 (?:and|or) (?:older|over)|over 65|older (?:taxpayers|adults|Americans)"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude|bonus"
+        ]
+      ]
+    },
+    {
+      "id": "tax.senior_deduction.married_both",
+      "label": "Senior deduction when both spouses are 65+, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 12000,
+        "2026": 12000,
+        "2027": 12000,
+        "2028": 12000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "\\bseniors?\\b|age 65|65 (?:and|or) (?:older|over)|over 65|older (?:taxpayers|adults|Americans)"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude|bonus"
+        ],
+        [
+          "both|couples?|married|joint|spouses"
+        ]
+      ]
+    },
+    {
+      "id": "tax.senior_deduction.phaseout_start.single",
+      "label": "Senior deduction phases out above this MAGI, single, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 75000,
+        "2026": 75000,
+        "2027": 75000,
+        "2028": 75000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "\\bseniors?\\b|age 65|65 (?:and|or) (?:older|over)|over 65|older (?:taxpayers|adults|Americans)"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude|bonus"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ]
+      ]
+    },
+    {
+      "id": "tax.senior_deduction.phaseout_start.married_joint",
+      "label": "Senior deduction phases out above this MAGI, joint, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 150000,
+        "2026": 150000,
+        "2027": 150000,
+        "2028": 150000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "\\bseniors?\\b|age 65|65 (?:and|or) (?:older|over)|over 65|older (?:taxpayers|adults|Americans)"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude|bonus"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?|couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.tips_deduction.max",
+      "label": "No tax on tips: maximum deduction, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 25000,
+        "2026": 25000,
+        "2027": 25000,
+        "2028": 25000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "\\btips?\\b|tipped"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ]
+      ]
+    },
+    {
+      "id": "tax.tips_deduction.phaseout_start.single",
+      "label": "Tips deduction phases out above this MAGI, single, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 150000,
+        "2026": 150000,
+        "2027": 150000,
+        "2028": 150000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "\\btips?\\b|tipped"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ]
+      ]
+    },
+    {
+      "id": "tax.tips_deduction.phaseout_start.married_joint",
+      "label": "Tips deduction phases out above this MAGI, joint, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 300000,
+        "2026": 300000,
+        "2027": 300000,
+        "2028": 300000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "\\btips?\\b|tipped"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?|couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.overtime_deduction.max.single",
+      "label": "No tax on overtime: maximum deduction, single, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 12500,
+        "2026": 12500,
+        "2027": 12500,
+        "2028": 12500
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "overtime"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ]
+      ]
+    },
+    {
+      "id": "tax.overtime_deduction.max.married_joint",
+      "label": "No tax on overtime: maximum deduction, joint, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 25000,
+        "2026": 25000,
+        "2027": 25000,
+        "2028": 25000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "overtime"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?|couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.overtime_deduction.phaseout_start.single",
+      "label": "Overtime deduction phases out above this MAGI, single, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 150000,
+        "2026": 150000,
+        "2027": 150000,
+        "2028": 150000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "overtime"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ]
+      ]
+    },
+    {
+      "id": "tax.overtime_deduction.phaseout_start.married_joint",
+      "label": "Overtime deduction phases out above this MAGI, joint, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 300000,
+        "2026": 300000,
+        "2027": 300000,
+        "2028": 300000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "overtime"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?|couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.car_loan_interest.max",
+      "label": "Car loan interest deduction: maximum, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 10000,
+        "2026": 10000,
+        "2027": 10000,
+        "2028": 10000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "car[- ]loan|auto[- ]loan|vehicle[- ]loan|car (?:payment|purchase) interest|loan on (?:a|your) (?:car|vehicle)"
+        ],
+        [
+          "interest"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ]
+      ]
+    },
+    {
+      "id": "tax.car_loan_interest.phaseout_start.single",
+      "label": "Car loan interest deduction phases out above this MAGI, single, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 100000,
+        "2026": 100000,
+        "2027": 100000,
+        "2028": 100000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "car[- ]loan|auto[- ]loan|vehicle[- ]loan|car (?:payment|purchase) interest|loan on (?:a|your) (?:car|vehicle)"
+        ],
+        [
+          "interest"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ]
+      ]
+    },
+    {
+      "id": "tax.car_loan_interest.phaseout_start.married_joint",
+      "label": "Car loan interest deduction phases out above this MAGI, joint, 2025-2028",
+      "unit": "usd",
+      "values": {
+        "2025": 200000,
+        "2026": 200000,
+        "2027": 200000,
+        "2028": 200000
+      },
+      "source": "irs_wftc_individuals",
+      "aliases": [],
+      "cues": [
+        [
+          "car[- ]loan|auto[- ]loan|vehicle[- ]loan|car (?:payment|purchase) interest|loan on (?:a|your) (?:car|vehicle)"
+        ],
+        [
+          "interest"
+        ],
+        [
+          "deduct(?:ion|ible)?|write[- ]?off|no tax on|tax[- ]free|exclude"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out|MAGI|modified adjusted gross|income (?:over|above)"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?|couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.salt_cap",
+      "label": "SALT deduction cap (state and local taxes), except married filing separately",
+      "unit": "usd",
+      "values": {
+        "2024": 10000,
+        "2025": 40000,
+        "2026": 40400
+      },
+      "source": {
+        "2024": "irs_i1040sca_2024",
+        "2025": "irs_p530_2025",
+        "2026": "irs_1040es_2026_salt"
+      },
+      "aliases": [
+        "SALT cap"
+      ],
+      "cues": [
+        [
+          "\\bSALT\\b|state and local (?:income |sales |property )?tax"
+        ],
+        [
+          "cap|capped|limit|deduct|deduction|up to|max"
+        ]
+      ]
+    },
+    {
+      "id": "tax.salt_cap.phaseout_start",
+      "label": "SALT cap starts to shrink above this MAGI, except married filing separately",
+      "unit": "usd",
+      "values": {
+        "2025": 500000,
+        "2026": 505000
+      },
+      "source": {
+        "2025": "irs_p530_2025",
+        "2026": "irs_1040es_2026_salt"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSALT\\b|state and local (?:income |sales |property )?tax"
+        ],
+        [
+          "reduc|shrink|phase|MAGI|modified adjusted gross|income (?:over|above)|more than"
+        ]
+      ]
+    },
+    {
+      "id": "tax.salt_cap.floor",
+      "label": "SALT cap is never reduced below this, except married filing separately",
+      "unit": "usd",
+      "values": {
+        "2025": 10000,
+        "2026": 10000
+      },
+      "source": {
+        "2025": "irs_p530_2025",
+        "2026": "irs_1040es_2026_salt"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bSALT\\b|state and local (?:income |sales |property )?tax"
+        ],
+        [
+          "below|floor|minimum|at least|not (?:be )?reduced|no lower than|bottoms? out"
         ]
       ]
     }

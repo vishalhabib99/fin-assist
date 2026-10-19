@@ -8,7 +8,7 @@ Current-year figures an AI agent is likely to quote, each tied to the year it ap
 | `hsa.json` | HSA limits, HDHP deductibles and out-of-pocket maximums | 2025–2027 |
 | `social_security.json` | COLA, taxable maximum, payroll tax rates, earnings test, max benefit, SGA, SSI payment standard and resource limits | 2025–2027 |
 | `medicare.json` | Medicare Part B standard premium and deductible (2024–2026), where IRMAA starts for single and joint returns (2025–2026) | 2024–2026 |
-| `tax.json` | Brackets (single, joint, head of household), standard deduction (2025 as amended by the 2025 tax law), additional aged/blind deduction, long-term capital gains 0% and 15% thresholds, AMT exemption, phase-out start and 28% threshold, QBI threshold and phase-in, estate and lifetime gift exemption; gift exclusion and gift splitting (2024–2026); health FSA (2026) | 2025–2026 |
+| `tax.json` | Brackets (single, joint, head of household), standard deduction (2025 as amended by the 2025 tax law), additional aged/blind deduction, long-term capital gains 0% and 15% thresholds, AMT exemption, phase-out start and 28% threshold, QBI threshold and phase-in, estate and lifetime gift exemption; the 2025 tax law's senior, tips, overtime and car-loan-interest deductions (2025–2028) and SALT cap, phase-out and floor (2024–2026); gift exclusion and gift splitting (2024–2026); health FSA (2025–2026) | 2024–2028 |
 
 Rules:
 

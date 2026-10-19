@@ -11,7 +11,9 @@ from fin_assist.registry import load  # noqa: E402
 
 REG = load()
 FIX = ROOT / "tests" / "fixtures"
-TRACKED = [fid for fid in REG if fid.startswith(("tax.", "gift.", "health_fsa."))]
+# Facts whose figure comes from a Rev. Proc.; the 2025 law's new deductions and SALT come from other IRS pages
+TRACKED = [fid for fid in REG if fid.startswith(("tax.", "gift.", "health_fsa."))
+           and revproc.from_source(REG, fid, 2026, "/irs-drop/rp-")]
 # Rev. Proc. 2024-40 printed the 2025 standard deduction before the 2025 tax law raised it;
 # Rev. Proc. 2025-32 sec. 3.01 replaced those amounts, and the registry holds the replacements.
 SUPERSEDED_2025 = {"tax.standard_deduction.single": 15_000, "tax.standard_deduction.married_separate": 15_000,
