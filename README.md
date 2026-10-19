@@ -77,9 +77,10 @@ Every test set was written by a separate agent that never saw the code or the ea
 | 2 (harder: tables, back-references, customer numbers) | 40 | 19 / 25 | 4 / 62 | 18 / 21 | 14 / 19 |
 | 3 (60 answers, all four areas, figures a year early, unpublished 2027 limits) | 60 | 38 / 43 | 5 / 87 | 32 / 33 | 21 / 27 |
 | 4 (60 answers written to trip a number checker: company plan figures, estimates, tables, tax rates) | 60 | 44 / 52 | 3 / 99 | 28 / 32 | 21 / 28 |
-| 5 (80 answers, a different writer model, payroll tax rates and SSI added) | 80 | **45 / 55** | **0 / 82** | **36 / 42** | **38 / 38** |
+| 5 (80 answers, a different writer model, payroll tax rates and SSI added) | 80 | 45 / 55 | 0 / 82 | 36 / 42 | 38 / 38 |
+| 6 (80 answers, harder phrasing: paraphrased topics, figures before their label, unpublished years stated as fact, look-alike customer numbers) | 80 | **31 / 46** | **4 / 139** | **29 / 40** | **35 / 40** |
 
-Read set 5, the latest, this way: no clean answer was sent to a person, and 6 answers in 42 with a bad figure would have gone out unflagged. False flags are solved on fresh data; recall is the open problem (about 82% of bad figures caught, flat since set 3). The misses are in [`evals/numcheck_blind5_first_run.txt`](evals/numcheck_blind5_first_run.txt) and will be fixed and measured on a fresh set 6. Caveat: these are synthetic answers, not production traffic. Score any labeled set with `python evals/numcheck_score.py <file.jsonl>`.
+Read set 6, the latest, this way: on harder phrasing, recall fell to 67% (31 of 46 bad figures), and 11 of 40 answers with a bad figure would have gone out unflagged. False flags came back too: 4 of 139 correct figures, from a figure read against the wrong year ("up from $184,500 this year" next to 2027), a plan carryover "into 2027", a customer's own running total, and a 10% early-withdrawal tax read as the 20% withholding rate. The set-5 fixes lifted set 5 to 52 of 55 but did not carry over to new wording, so I report the drop as-is. The misses are in [`evals/numcheck_blind6_first_run.txt`](evals/numcheck_blind6_first_run.txt); they will be fixed and measured on a fresh set 7. Caveat: these are synthetic answers, not production traffic. Score any labeled set with `python evals/numcheck_score.py <file.jsonl>`.
 
 ## Keeping it current
 

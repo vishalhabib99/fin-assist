@@ -1,0 +1,28 @@
+bad figures caught: 31/46
+good figures falsely flagged: 4/139
+answers with a bad figure -> REVIEW: 29/40
+clean answers -> PASS: 35/40
+   g06 missed bad $176,100
+   g12 missed bad $403,500
+   g14 missed bad $2,050
+   g17 false flag $680
+   g17 clean answer sent to REVIEW ['$680']
+   g18 missed bad $640
+   g29 clean answer sent to REVIEW ['$35,750']
+   g34 missed bad 3.6%
+   g37 false flag $184,500
+   g37 clean answer sent to REVIEW ['$184,500']
+   g38 missed bad $190,800
+   g38 false flag 6.2%
+   g42 missed bad $1,000
+   g43 clean answer sent to REVIEW ['$4,500', '$3,000']
+   g48 missed bad 1.5%
+   g49 false flag 10%
+   g49 clean answer sent to REVIEW ['10%']
+   g52 missed bad $15,750
+   g62 missed bad $24,480
+   g64 missed bad $20,000
+   g68 missed bad 70½
+   g70 missed bad 7.5%
+   g72 missed bad $7,500
+   g72 missed bad $17,000
