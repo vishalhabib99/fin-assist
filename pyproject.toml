@@ -1,11 +1,24 @@
 [project]
 name = "fin-assist"
-version = "0.3.0"
-description = "Checks AI-drafted answers to US retirement-account questions before they reach a customer: SEND or REVIEW, with an IRS or FINRA source for every flag."
+version = "0.4.0"
+description = "Catch stale and wrong money figures in an AI agent's answer before a customer sees them: every IRS and SSA figure checked against a year-stamped, sourced registry."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 dependencies = ["mcp>=2.0"]
+authors = [{ name = "Vishal Habib" }]
+keywords = ["ai-agents", "guardrails", "llm", "mcp", "fintech", "irs", "retirement", "evals"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Topic :: Office/Business :: Financial",
+]
+
+[project.urls]
+Homepage = "https://github.com/vishalhabib99/fin-assist"
+Issues = "https://github.com/vishalhabib99/fin-assist/issues"
+Calculator = "https://vishalhabib99.github.io/fin-assist/room/"
 
 [project.scripts]
 fin-assist-mcp = "fin_assist.server:main"
