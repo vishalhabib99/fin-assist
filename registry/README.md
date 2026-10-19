@@ -7,7 +7,7 @@ Current-year figures an AI agent is likely to quote, each tied to the year it ap
 | `retirement.json` | 401(k)/403(b)/457/TSP, IRA, SIMPLE limits; RMD age; early-distribution and rollover rules | 2025–2026 (IRS hasn't published 2027 yet) |
 | `hsa.json` | HSA limits, HDHP deductibles and out-of-pocket maximums | 2025–2027 |
 | `social_security.json` | COLA, taxable maximum, payroll tax rates, earnings test, max benefit, SGA, SSI payment standard and resource limits | 2025–2027 |
-| `tax.json` | 2026 brackets (single, joint, head of household), standard deduction, gift exclusion and gift splitting (2024–2026), health FSA; long-term capital gains 0% and 15% thresholds, AMT exemption, phase-out start and 28% threshold, QBI threshold and phase-in (2025–2026) | 2025–2026 |
+| `tax.json` | Brackets (single, joint, head of household), standard deduction (2025 as amended by the 2025 tax law), additional aged/blind deduction, long-term capital gains 0% and 15% thresholds, AMT exemption, phase-out start and 28% threshold, QBI threshold and phase-in; gift exclusion and gift splitting (2024–2026); health FSA (2026) | 2025–2026 |
 
 Rules:
 

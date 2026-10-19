@@ -50,7 +50,7 @@ def test_social_security_and_tax():
     assert statuses("In 2026 Social Security taxes earnings up to $176,100.") == [("$176,100", "stale")]
     assert statuses("The 2027 COLA is 3.6%.") == [("3.6%", "match")]
     assert statuses("For 2026 the standard deduction is $32,200 for married couples filing jointly.") == [("$32,200", "match")]
-    assert statuses("For 2026 the standard deduction for single filers is $15,750.") == [("$15,750", "wrong")]
+    assert statuses("For 2026 the standard deduction for single filers is $15,750.") == [("$15,750", "stale")]  # the 2025 figure
 
 
 def test_year_carries_from_an_earlier_sentence():
@@ -94,7 +94,7 @@ def test_arithmetic_and_plans_are_not_judged():
 
 def test_one_topic_word_covers_a_list():
     assert statuses("For 2026, the standard deduction is $16,100 for single filers and $31,500 for married couples filing jointly.") == [
-        ("$16,100", "match"), ("$31,500", "wrong")]
+        ("$16,100", "match"), ("$31,500", "stale")]  # $31,500 is the 2025 joint figure
 
 
 def test_old_rmd_rules():
@@ -212,3 +212,8 @@ def test_qbi_threshold_and_phase_in():
     assert statuses("For 2026, the QBI deduction limits start above $197,300 for single filers.") == [("$197,300", "stale")]
     assert statuses("Married filing jointly, the 2026 QBI threshold is $403,500 and it's fully phased in at $553,500.") == [
         ("$403,500", "match"), ("$553,500", "match")]
+
+
+def test_2025_bracket_quoted_for_2026_is_stale():
+    r = check_numbers("For 2026, the 10% bracket for single filers covers taxable income up to $11,925.", 2026)
+    assert [(c["status"], c["figure_year"], c["expected"]) for c in r["claims"]] == [("stale", 2025, 12_400)]

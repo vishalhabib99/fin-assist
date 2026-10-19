@@ -40,21 +40,28 @@ def test_rmd_and_penalties_match_facts_json():
     assert REG["rollover.window_days"]["values"]["any"] == FACTS["rollovers"]["window_days"]["value"]
 
 
-# Rev. Proc. 2025-32 prints the tax owed at the bottom of each bracket. Rebuilding those
-# amounts from the stored thresholds catches a threshold misread from the PDF.
-BASE_TAX_2026 = {
-    "single": [1_240, 5_800, 17_966, 41_024, 58_448, 192_979.25],
-    "married_joint": [2_480, 11_600, 35_932, 82_048, 116_896, 206_583.50],
-    "head_of_household": [1_770, 7_740, 16_155, 39_207, 56_631, 191_171],
+# Rev. Proc. 2025-32 (2026) and 2024-40 (2025) print the tax owed at the bottom of each bracket.
+# Rebuilding those amounts from the stored thresholds catches a threshold misread from the PDF.
+BASE_TAX = {
+    2026: {
+        "single": [1_240, 5_800, 17_966, 41_024, 58_448, 192_979.25],
+        "married_joint": [2_480, 11_600, 35_932, 82_048, 116_896, 206_583.50],
+        "head_of_household": [1_770, 7_740, 16_155, 39_207, 56_631, 191_171],
+    },
+    2025: {
+        "single": [1_192.50, 5_578.50, 17_651, 40_199, 57_231, 188_769.75],
+        "married_joint": [2_385, 11_157, 35_302, 80_398, 114_462, 202_154.50],
+        "head_of_household": [1_700, 7_442, 15_912, 38_460, 55_484, 187_031.50],
+    },
 }
 RATES = [10, 12, 22, 24, 32, 35]
 
 
-@pytest.mark.parametrize("status", BASE_TAX_2026)
-def test_bracket_thresholds_reproduce_irs_base_tax(status):
-    tops = [lookup(REG, f"tax.bracket.{status}.{r}_pct_top", 2026) for r in RATES]
+@pytest.mark.parametrize("year,status", [(y, s) for y in BASE_TAX for s in BASE_TAX[y]])
+def test_bracket_thresholds_reproduce_irs_base_tax(year, status):
+    tops = [lookup(REG, f"tax.bracket.{status}.{r}_pct_top", year) for r in RATES]
     owed, prev = 0.0, 0
-    for rate, top, expected in zip(RATES, tops, BASE_TAX_2026[status]):
+    for rate, top, expected in zip(RATES, tops, BASE_TAX[year][status]):
         owed += (top - prev) * rate / 100
         prev = top
         assert owed == pytest.approx(expected, abs=0.01)

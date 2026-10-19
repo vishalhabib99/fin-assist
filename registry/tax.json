@@ -1,6 +1,6 @@
 {
   "domain": "tax",
-  "about": "Federal income tax figures: 2026 from Rev. Proc. 2025-32 (reflects law as of 2025-10-09); 2025 capital gains, AMT and QBI amounts from Rev. Proc. 2024-40. Married-filing-separately amounts are not covered yet.",
+  "about": "Federal income tax figures: 2026 from Rev. Proc. 2025-32 (reflects law as of 2025-10-09); 2025 brackets, capital gains, AMT, QBI and aged/blind amounts from Rev. Proc. 2024-40, and the 2025 standard deduction as amended by the 2025 tax law (Rev. Proc. 2025-32, section 3.01). Married-filing-separately brackets are not covered yet.",
   "sources": {
     "irs_rp_2025_32": {
       "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
@@ -24,9 +24,13 @@
       "label": "Top of the 10% bracket, single",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 11925,
         "2026": 12400
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -42,9 +46,13 @@
       "label": "Top of the 12% bracket, single",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 48475,
         "2026": 50400
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -60,9 +68,13 @@
       "label": "Top of the 22% bracket, single",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 103350,
         "2026": 105700
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -78,9 +90,13 @@
       "label": "Top of the 24% bracket, single",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 197300,
         "2026": 201775
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -96,9 +112,13 @@
       "label": "Top of the 32% bracket, single",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 250525,
         "2026": 256225
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -114,9 +134,13 @@
       "label": "Top of the 35% bracket, single (37% applies above this)",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 626350,
         "2026": 640600
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -132,9 +156,13 @@
       "label": "Top of the 10% bracket, married filing jointly",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 23850,
         "2026": 24800
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -150,9 +178,13 @@
       "label": "Top of the 12% bracket, married filing jointly",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 96950,
         "2026": 100800
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -168,9 +200,13 @@
       "label": "Top of the 22% bracket, married filing jointly",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 206700,
         "2026": 211400
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -186,9 +222,13 @@
       "label": "Top of the 24% bracket, married filing jointly",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 394600,
         "2026": 403550
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -204,9 +244,13 @@
       "label": "Top of the 32% bracket, married filing jointly",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 501050,
         "2026": 512450
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -222,9 +266,13 @@
       "label": "Top of the 35% bracket, married filing jointly (37% applies above this)",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 751600,
         "2026": 768700
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -240,9 +288,13 @@
       "label": "Top of the 10% bracket, head of household",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 17000,
         "2026": 17700
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -258,9 +310,13 @@
       "label": "Top of the 12% bracket, head of household",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 64850,
         "2026": 67450
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -276,9 +332,13 @@
       "label": "Top of the 22% bracket, head of household",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 103350,
         "2026": 105700
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -294,9 +354,13 @@
       "label": "Top of the 24% bracket, head of household",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 197300,
         "2026": 201750
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -312,9 +376,13 @@
       "label": "Top of the 32% bracket, head of household",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 250500,
         "2026": 256200
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -330,9 +398,13 @@
       "label": "Top of the 35% bracket, head of household (37% applies above this)",
       "unit": "usd_taxable_income",
       "values": {
+        "2025": 626350,
         "2026": 640600
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -348,9 +420,13 @@
       "label": "Standard deduction, married filing jointly / surviving spouse",
       "unit": "usd_per_year",
       "values": {
+        "2025": 31500,
         "2026": 32200
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2025_32",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [
         "standard deduction"
       ],
@@ -368,9 +444,13 @@
       "label": "Standard deduction, head of household",
       "unit": "usd_per_year",
       "values": {
+        "2025": 23625,
         "2026": 24150
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2025_32",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [
         "standard deduction"
       ],
@@ -388,9 +468,13 @@
       "label": "Standard deduction, single",
       "unit": "usd_per_year",
       "values": {
+        "2025": 15750,
         "2026": 16100
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2025_32",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [
         "standard deduction"
       ],
@@ -408,9 +492,13 @@
       "label": "Standard deduction, married filing separately",
       "unit": "usd_per_year",
       "values": {
+        "2025": 15750,
         "2026": 16100
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2025_32",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [
         "standard deduction"
       ],
@@ -428,9 +516,13 @@
       "label": "Additional standard deduction, aged or blind (married)",
       "unit": "usd_per_year",
       "values": {
+        "2025": 1600,
         "2026": 1650
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
@@ -449,9 +541,13 @@
       "label": "Additional standard deduction, aged or blind (unmarried, not a surviving spouse)",
       "unit": "usd_per_year",
       "values": {
+        "2025": 2000,
         "2026": 2050
       },
-      "source": "irs_rp_2025_32",
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
       "aliases": [],
       "cues": [
         [
