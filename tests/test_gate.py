@@ -51,3 +51,12 @@ def test_langchain_example():
     sys.path.insert(0, str(EXAMPLES))
     lc = importlib.import_module("langchain_agent")
     assert lc.chain.invoke({"question": "IRA limit?"}) == "For 2026 the IRA contribution limit is $7,500, or $8,600 if you're 50 or older."
+
+
+def test_fixed_figures_keep_cents_and_the_drafts_style():
+    v = gate("", "The 2026 Medicare Part B premium is $185.00 a month and the deductible is $257.", 2026)
+    assert v.outcome == "fixed" and v.text == "The 2026 Medicare Part B premium is $202.90 a month and the deductible is $283."
+    v = gate("", "For 2026 the estate tax exemption is $13.99 million per person.", 2026)
+    assert v.text == "For 2026 the estate tax exemption is $15 million per person."
+    v = gate("", "The 2026 IRA limit is $7k.", 2026)
+    assert v.text == "The 2026 IRA limit is $7.5k."

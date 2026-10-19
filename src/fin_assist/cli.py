@@ -5,7 +5,7 @@ import argparse
 import json
 import sys
 
-from .numcheck import FACTS, check_numbers
+from .numcheck import FACTS, check_numbers, fmt
 
 _MARK = {"match": "ok", "stale": "STALE", "wrong_year": "WRONG YEAR", "wrong": "WRONG",
          "unknown_year": "UNKNOWN YEAR", "unverified": "UNVERIFIED"}
@@ -13,12 +13,12 @@ _MARK = {"match": "ok", "stale": "STALE", "wrong_year": "WRONG YEAR", "wrong": "
 
 def _why(c: dict) -> str:
     if c["status"] == "stale":
-        return f"that's the {c['figure_year']} figure; {c['year']} is {c['expected']:,g}"
+        return f"that's the {c['figure_year']} figure; {c['year']} is {fmt(c['expected'])}"
     if c["status"] == "wrong_year":
-        return f"that's the {c['figure_year']} figure, quoted for {c['year']}; {c['year']} is {c['expected']:,g}"
+        return f"that's the {c['figure_year']} figure, quoted for {c['year']}; {c['year']} is {fmt(c['expected'])}"
     if c["status"] == "wrong":
         exp = c.get("expected") or {}
-        return "expected " + " or ".join(f"{v:,g} ({FACTS[k]['label']})" for k, v in exp.items())
+        return "expected " + " or ".join(f"{fmt(v)} ({FACTS[k]['label']})" for k, v in exp.items())
     if c["status"] == "unknown_year":
         return f"no verified {c['year']} figure yet; not guessing"
     if c["status"] == "unverified":
@@ -40,7 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "facts":
         for fid, fact in FACTS.items():
             if args.query.lower() in (fid + " " + fact["label"]).lower():
-                vals = ", ".join(f"{y}: {v:,g}" for y, v in fact["values"].items())
+                vals = ", ".join(f"{y}: {fmt(v)}" for y, v in fact["values"].items())
                 print(f"{fid:48} {vals}")
         return 0
 

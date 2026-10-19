@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from fin_assist import check
-from fin_assist.numcheck import check_numbers
+from fin_assist.numcheck import check_numbers, fmt
 
 # Advice-boundary flags from the retirement checker. Its fact flags are left out here because
 # check_numbers covers figures across every area (HSA, Social Security, tax), not just retirement.
@@ -31,10 +31,16 @@ class Verdict:
 
 
 def _money(value: float, span: str) -> str:
+    """The right figure, written the way the draft wrote the wrong one ("$15 million", "$7.5k", "$202.90")."""
     if span.endswith("%"):
         return f"{value:g}%"
     if span.startswith("$"):
-        return f"${value:,.0f}"
+        low = span.lower()
+        if "million" in low:
+            return f"${value / 1_000_000:g} million"
+        if low.endswith("k") or "thousand" in low:
+            return f"${value / 1_000:g}k"
+        return "$" + fmt(value)
     return f"{value:g}"
 
 

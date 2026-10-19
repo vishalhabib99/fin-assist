@@ -62,6 +62,11 @@ _CARRY_INTO = re.compile(r"carr(?:y|ies|ied)?\s?over\s+into\s+(20[2-3]\d)", re.I
 _HEADING = re.compile(r"^\s*(?:#{1,6}\s+.+|\*\*[^*]+\*\*:?|[^.!?]{3,80}:)\s*$")
 
 
+def fmt(value: float) -> str:
+    """24,500 / 1,000,000 / 202.90: whole numbers with commas, cents when there are any."""
+    return f"{value:,.0f}" if float(value).is_integer() else f"{value:,.2f}"
+
+
 def _kind(unit: str) -> str:
     return "usd" if unit.startswith("usd") else {"age_years": "age"}.get(unit, unit)
 
