@@ -1,0 +1,33 @@
+bad figures caught: 47/52
+good figures falsely flagged: 15/99
+answers with a bad figure -> REVIEW: 32/32
+clean answers -> PASS: 20/28
+seconds per answer: median 8.02, max 37.19; model failures: 0
+   e03 clean answer sent to REVIEW ['$210,000']
+   e04 false flag $1,650
+   e04 false flag $2,050
+   e04 clean answer sent to REVIEW ['$1,650', '$2,050']
+   e10 clean answer sent to REVIEW ['$12,700']
+   e13 false flag $17,000
+   e13 false flag $4,000
+   e13 clean answer sent to REVIEW ['$17,000', '$4,000', '$654']
+   e14 false flag up to $12,400
+   e14 false flag over $12,400 up to $50,400
+   e14 false flag over $50,400 up to $105,700
+   e14 false flag up to $201,775
+   e14 clean answer sent to REVIEW ['10%', '$12,400', '12%', '$12,400', '$50,400', '22%', '$50,400', '$105,700', '24%', '$105,700', '$201,775', '10%', '$1,240', '12%', '22%']
+   e15 missed bad $66,200
+   e15 false flag $24,150
+   e31 missed bad $1,000
+   e32 false flag up to $24,800
+   e32 false flag 12%: $24,800 to $100,800
+   e34 missed bad $67,920
+   e35 clean answer sent to REVIEW ['$3,550']
+   e43 false flag $176,100
+   e43 false flag $4,018
+   e43 clean answer sent to REVIEW ['$176,100', '$4,018']
+   e46 missed bad $2,000
+   e50 false flag $3,400.00
+   e50 clean answer sent to REVIEW ['$3,400.00']
+   e53 false flag $4,000
+   e58 missed bad 2.5%

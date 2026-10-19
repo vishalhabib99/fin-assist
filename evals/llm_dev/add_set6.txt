@@ -1,0 +1,32 @@
+bad figures caught: 41/46
+good figures falsely flagged: 7/139
+answers with a bad figure -> REVIEW: 38/40
+clean answers -> PASS: 25/40
+seconds per answer: median 4.15, max 19.96; model failures: 0
+   g01 clean answer sent to REVIEW ['$4,150']
+   g03 clean answer sent to REVIEW ['$5,600']
+   g05 false flag 6.2%
+   g05 clean answer sent to REVIEW ['6.2%']
+   g11 clean answer sent to REVIEW ['$88,000']
+   g13 clean answer sent to REVIEW ['$26,200']
+   g14 missed bad $2,050
+   g17 false flag $680
+   g17 clean answer sent to REVIEW ['$680']
+   g19 clean answer sent to REVIEW ['$2,250', '$7,900']
+   g29 clean answer sent to REVIEW ['$35,750']
+   g34 missed bad 3.6%
+   g37 false flag $184,500
+   g37 clean answer sent to REVIEW ['$184,500']
+   g38 false flag 6.2%
+   g43 clean answer sent to REVIEW ['$4,500', '$3,000']
+   g45 false flag $23,500
+   g45 clean answer sent to REVIEW ['$23,500']
+   g49 false flag 10%
+   g49 clean answer sent to REVIEW ['10%']
+   g53 clean answer sent to REVIEW ['10%', '12%', '22%', '24%', '$72,000', '22%']
+   g57 clean answer sent to REVIEW ['$3,900']
+   g68 missed bad 70½
+   g70 false flag 6.2%
+   g72 missed bad $7,500
+   g72 missed bad $17,000
+   g75 clean answer sent to REVIEW ['$95,000', '12%']

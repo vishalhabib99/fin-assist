@@ -1,0 +1,6 @@
+bad figures caught: 22/22
+good figures falsely flagged: 0/37
+answers with a bad figure -> REVIEW: 21/21
+clean answers -> PASS: 18/19
+seconds per answer: median 2.97, max 10.51; model failures: 0
+   b26 clean answer sent to REVIEW ['$140,000']

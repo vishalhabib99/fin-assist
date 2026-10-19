@@ -225,10 +225,36 @@ def _tables_to_sentences(text: str) -> tuple[str, set[str]]:
     return "\n".join(out), stated
 
 
-def check_numbers(answer: str, year: int | None = None) -> dict:
+def _model_labels(llm, answer: str, sentences: list[str], year: int):
+    """Ask the model which fact each number is about. {(sentence index, start): (fact, year)}."""
+    from .llm_match import build_prompt, parse
+    spans = [(si, m.start(), m.group(0).strip(), sentence, _options(kind, n))
+             for si, sentence in enumerate(sentences) for kind, n, m in _numbers(sentence)]
+    spans = [s for s in spans if s[4]]
+    if not spans:
+        return {}
+    figures = [(i, span, sentence, options) for i, (_, _, span, sentence, options) in enumerate(spans)]
+    labels = parse(llm(build_prompt(answer, figures, FACTS, year)), figures, FACTS)
+    return {(si, start): labels.get(i, (None, None)) for i, (si, start, *_) in enumerate(spans)}
+
+
+def _options(kind: str, n: float) -> list[str]:
+    """The facts a number could be: same kind, and for dollars the same size range the rules use."""
+    gate = _GATE[kind]
+    return [fid for fid, f in FACTS.items() if _kind(f["unit"]) == kind and (
+        not gate or any(gate[0] * v <= n <= gate[1] * v for v in f["values"].values()))
+        and (kind != "age" or any(abs(n - v) <= 5 for v in f["values"].values()))]
+
+
+def check_numbers(answer: str, year: int | None = None, llm=None, llm_mode: str = "add") -> dict:
     """Return {"decision": "PASS" | "REVIEW", "year": default year, "claims": [...]}.
 
     year: the tax year the answer is about when a sentence doesn't say (default: this year).
+    llm: optional prompt -> text callable (see llm_match). The model says which registry fact
+    a number is about; values and the comparison stay here. llm_mode "add": the model labels
+    only numbers the rules didn't judge, and the rules keep the final say on the rest.
+    "label": the model labels every number. If the model fails,
+    the answer is checked with the rules only and "llm" in the result says so.
     Numbers whose topic the registry doesn't recognize are not judged; PASS means no
     recognized figure is wrong, not that the answer is correct.
     """
@@ -238,7 +264,14 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
     lines = [l.strip() for l in text.splitlines() if l.strip()]
     title = lines[0] if lines else ""          # "Here's a summary of the 2026 limits for your 401(k):"
     headings: list[str] = []
-    for sentence in filter(None, (s.strip() for s in _SENT.split(text))):
+    sentences = [s.strip() for s in _SENT.split(text) if s.strip()]
+    labels, llm_status = None, None
+    if llm is not None:
+        try:
+            labels, llm_status = _model_labels(llm, answer or "", sentences, default_year), "used"
+        except Exception as e:  # any model failure: rules only for this answer
+            llm_status = f"failed, rules only: {type(e).__name__}: {e}"[:200]
+    for si, sentence in enumerate(sentences):
         years = _YEAR_ANY.findall(_CARRY_INTO.sub("", sentence))
         found = sorted(_numbers(sentence), key=lambda t: t[2].start())
         prev_usd, prev_stated = None, False
@@ -268,12 +301,35 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                     stated = False
                 prev_usd, prev_stated = m, stated
             y = _year_for(sentence, m, context_year, default_year)
+            def model_claim() -> bool:
+                """Judge this number by the model's label. False when the model says none."""
+                fid, model_year = labels.get((si, m.start()), (None, None))
+                gate = _GATE[kind]
+                if fid is None or _kind(FACTS[fid]["unit"]) != kind or (
+                        gate and not any(gate[0] * v <= n <= gate[1] * v for v in FACTS[fid]["values"].values())):
+                    return False
+                my = model_year or y
+                exact = any(_same(v, n) for v in FACTS[fid]["values"].values())
+                if kind == "usd" and not exact and _is_total(n, my, _topics(context + " " + sentence, kind) + [fid]):
+                    return False
+                claims.append({"span": m.group(0).strip(), "value": n, "year": my, **_judge(n, my, [fid]),
+                               "label": FACTS[fid]["label"], "source": _source(fid, my), "sentence": sentence})
+                return True
+
+            if labels is not None and llm_mode == "label":
+                model_claim()
+                continue
+            add = labels is not None and llm_mode == "add"
             # The topic is often named one sentence earlier ("The HSA family limit... For 2026 it's $8,550.")
             cands = _candidates(sentence, kind, n) or _carried(sentence, context, kind, n)
             if not cands:
+                if add:
+                    model_claim()
                 continue
             exact = any(_same(v, n) for fid in cands for v in FACTS[fid]["values"].values())
             if not (stated or exact):
+                if add:
+                    model_claim()
                 continue
             if kind == "usd" and not exact and _is_total(n, y, _topics(context + " " + sentence, kind)):
                 continue
@@ -293,4 +349,7 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
         if _HEADING.match(sentence):
             headings.append(sentence)
     bad = [c for c in claims if c["status"] != "match"]
-    return {"decision": "REVIEW" if bad else "PASS", "year": default_year, "claims": claims}
+    out = {"decision": "REVIEW" if bad else "PASS", "year": default_year, "claims": claims}
+    if llm_status:
+        out["llm"] = llm_status
+    return out

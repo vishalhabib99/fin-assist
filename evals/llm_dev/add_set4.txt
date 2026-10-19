@@ -1,0 +1,10 @@
+bad figures caught: 52/52
+good figures falsely flagged: 0/99
+answers with a bad figure -> REVIEW: 32/32
+clean answers -> PASS: 23/28
+seconds per answer: median 7.25, max 37.14; model failures: 0
+   e03 clean answer sent to REVIEW ['$210,000']
+   e10 clean answer sent to REVIEW ['$12,700']
+   e13 clean answer sent to REVIEW ['$654']
+   e14 clean answer sent to REVIEW ['10%', '12%', '22%', '24%', '10%', '$1,240', '12%', '22%']
+   e35 clean answer sent to REVIEW ['$3,550']
