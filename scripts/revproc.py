@@ -166,15 +166,16 @@ def figures(text: str, year: int) -> tuple[dict, list[str]]:
 def report(name: str, found: dict, problems: list[str], year: int, prefixes: tuple[str, ...]) -> int:
     """Print each figure against the registry; return 1 if anything needs a look."""
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+    from fin_assist.numcheck import fmt
     from fin_assist.registry import load
     reg = load()
     print(f"{name}: {len(found)} figures for {year}")
     for fid, v in found.items():
         old = reg.get(fid, {}).get("values", {})
         now, prev = old.get(str(year)), old.get(str(year - 1))
-        note = "same as registry" if now == v else (f"CHANGE registry has {now:,}" if now is not None else
-                                                    f"new year (was {prev:,} for {year - 1})" if prev is not None else "new")
-        print(f"  {fid:52} {v:>14,}  {note}")
+        note = "same as registry" if now == v else (f"CHANGE registry has {fmt(now)}" if now is not None else
+                                                    f"new year (was {fmt(prev)} for {year - 1})" if prev is not None else "new")
+        print(f"  {fid:52} {fmt(v):>14}  {note}")
     problems = problems + [f"{fid}: tracked but not extracted" for fid in reg
                            if fid.startswith(prefixes) and "any" not in reg[fid]["values"] and fid not in found]
     for p in problems:

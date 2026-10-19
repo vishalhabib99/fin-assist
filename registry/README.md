@@ -39,3 +39,13 @@ python scripts/retirement_notice.py n-26-XX.pdf
 ```
 
 It finds each limit by the Code section the notice cites (402(g)(1) for the 401(k) deferral, 414(v)(2)(B)(i) for the 50+ catch-up, 219(b)(5)(A) for the IRA limit, and so on), and checks each "increased from $A" against the registry's figure for the year before. Same output and rules as the tax tool. `tests/test_retirement_notice.py` holds it to Notices 2024-80 and 2025-67.
+
+## New year's Medicare figures
+
+CMS publishes next year's Part B premium, deductible and IRMAA table in a fact sheet each fall. Save the page and run:
+
+```bash
+python scripts/cms_partb.py 2027-medicare-parts-b-premiums-deductibles.html
+```
+
+The year is read from the premium sentence. The sheet also states last year's premium and deductible and the change between them, and both are checked: last year's figure against the registry, and this year minus last year against the stated change. `tests/test_cms_partb.py` holds it to the 2025 and 2026 sheets.
