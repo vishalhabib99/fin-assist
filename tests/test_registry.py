@@ -60,9 +60,22 @@ def test_bracket_thresholds_reproduce_irs_base_tax(status):
         assert owed == pytest.approx(expected, abs=0.01)
 
 
+# Figures that really fell, each with the reason; anything else falling is a typo.
+FELL = {
+    "tax.amt.phaseout_start.unmarried": "2025 tax law reset it to $500,000 for 2026 (Rev. Proc. 2025-32)",
+    "tax.amt.phaseout_start.married_joint": "2025 tax law reset it to $1,000,000 for 2026 (Rev. Proc. 2025-32)",
+}
+
+
 def test_values_rise_or_hold_year_over_year():
     for fid, fact in REG.items():
         years = sorted(y for y in fact["values"] if y != "any")
         vals = [fact["values"][y] for y in years]
-        if fact["unit"].startswith("usd"):
+        if fact["unit"].startswith("usd") and fid not in FELL:
             assert vals == sorted(vals), fid
+
+
+def test_every_figure_that_fell_still_falls():
+    for fid in FELL:
+        vals = [v for _, v in sorted(REG[fid]["values"].items())]
+        assert vals != sorted(vals), f"{fid} no longer falls; remove it from FELL"

@@ -190,3 +190,25 @@ def test_fsa_rollover_named_after_the_figure():
 
 def test_total_of_two_figures_is_arithmetic():
     assert check_numbers("With the $24,500 401(k) limit and the $8,000 catch-up, you can defer up to $32,500.", 2026)["decision"] == "PASS"
+
+
+# Capital gains, AMT and QBI (Rev. Proc. 2024-40 for 2025, 2025-32 for 2026)
+
+def test_capital_gains_zero_rate_stale_and_current():
+    assert statuses("For 2026, single filers pay 0% on long-term capital gains up to $48,350 of taxable income.") == [
+        ("$48,350", "stale")]
+    assert statuses("In 2026 the 0% capital gains rate covers married filing jointly couples up to $98,900, "
+                    "and the 15% rate runs to $613,700.") == [("$98,900", "match"), ("$613,700", "match")]
+
+
+def test_amt_phaseout_start_dropped_in_2026():
+    # The 2026 law cut the phase-out start from $626,350 to $500,000 for single filers
+    r = check_numbers("For 2026, the AMT exemption for single filers is $90,100 and starts to phase out at $626,350.", 2026)
+    assert [(c["span"], c["status"], c.get("expected")) for c in r["claims"]] == [
+        ("$90,100", "match", None), ("$626,350", "stale", 500_000)]
+
+
+def test_qbi_threshold_and_phase_in():
+    assert statuses("For 2026, the QBI deduction limits start above $197,300 for single filers.") == [("$197,300", "stale")]
+    assert statuses("Married filing jointly, the 2026 QBI threshold is $403,500 and it's fully phased in at $553,500.") == [
+        ("$403,500", "match"), ("$553,500", "match")]

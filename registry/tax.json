@@ -1,6 +1,6 @@
 {
   "domain": "tax",
-  "about": "Federal income tax figures for 2026 from Rev. Proc. 2025-32 (reflects law as of 2025-10-09). Married-filing-separately brackets are not covered yet.",
+  "about": "Federal income tax figures: 2026 from Rev. Proc. 2025-32 (reflects law as of 2025-10-09); 2025 capital gains, AMT and QBI amounts from Rev. Proc. 2024-40. Married-filing-separately amounts are not covered yet.",
   "sources": {
     "irs_rp_2025_32": {
       "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
@@ -11,6 +11,11 @@
       "url": "https://www.irs.gov/businesses/small-businesses-self-employed/frequently-asked-questions-on-gift-taxes",
       "title": "IRS Frequently asked questions on gift taxes (annual exclusion table by year)",
       "read_on": "2026-10-17"
+    },
+    "irs_rp_2024_40": {
+      "url": "https://www.irs.gov/pub/irs-drop/rp-24-40.pdf",
+      "title": "Rev. Proc. 2024-40: 2025 inflation-adjusted items",
+      "read_on": "2026-10-19"
     }
   },
   "facts": [
@@ -541,6 +546,372 @@
         ],
         [
           "carry ?over|roll ?over"
+        ]
+      ]
+    },
+    {
+      "id": "tax.ltcg.single.0_pct_top",
+      "label": "Top of the 0% long-term capital gains rate, single",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 48350,
+        "2026": 49450
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [
+        "0% capital gains"
+      ],
+      "cues": [
+        [
+          "capital gains?|\\bLTCG\\b|qualified dividends?"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
+    },
+    {
+      "id": "tax.ltcg.single.15_pct_top",
+      "label": "Top of the 15% long-term capital gains rate, single",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 533400,
+        "2026": 545500
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [
+        "15% capital gains"
+      ],
+      "cues": [
+        [
+          "capital gains?|\\bLTCG\\b|qualified dividends?"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
+    },
+    {
+      "id": "tax.ltcg.married_joint.0_pct_top",
+      "label": "Top of the 0% long-term capital gains rate, married filing jointly",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 96700,
+        "2026": 98900
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [
+        "0% capital gains"
+      ],
+      "cues": [
+        [
+          "capital gains?|\\bLTCG\\b|qualified dividends?"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.ltcg.married_joint.15_pct_top",
+      "label": "Top of the 15% long-term capital gains rate, married filing jointly",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 600050,
+        "2026": 613700
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [
+        "15% capital gains"
+      ],
+      "cues": [
+        [
+          "capital gains?|\\bLTCG\\b|qualified dividends?"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.ltcg.head_of_household.0_pct_top",
+      "label": "Top of the 0% long-term capital gains rate, head of household",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 64750,
+        "2026": 66200
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [
+        "0% capital gains"
+      ],
+      "cues": [
+        [
+          "capital gains?|\\bLTCG\\b|qualified dividends?"
+        ],
+        [
+          "head of household"
+        ]
+      ]
+    },
+    {
+      "id": "tax.ltcg.head_of_household.15_pct_top",
+      "label": "Top of the 15% long-term capital gains rate, head of household",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 566700,
+        "2026": 579600
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [
+        "15% capital gains"
+      ],
+      "cues": [
+        [
+          "capital gains?|\\bLTCG\\b|qualified dividends?"
+        ],
+        [
+          "head of household"
+        ]
+      ]
+    },
+    {
+      "id": "tax.amt.exemption.unmarried",
+      "label": "AMT exemption, single (unmarried)",
+      "unit": "usd",
+      "values": {
+        "2025": 88100,
+        "2026": 90100
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bAMT\\b|alternative minimum tax"
+        ],
+        [
+          "exemption|exempt"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
+    },
+    {
+      "id": "tax.amt.exemption.married_joint",
+      "label": "AMT exemption, married filing jointly",
+      "unit": "usd",
+      "values": {
+        "2025": 137000,
+        "2026": 140200
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bAMT\\b|alternative minimum tax"
+        ],
+        [
+          "exemption|exempt"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.amt.phaseout_start.unmarried",
+      "label": "AMT exemption phase-out starts, single (unmarried)",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 626350,
+        "2026": 500000
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bAMT\\b|alternative minimum tax"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
+    },
+    {
+      "id": "tax.amt.phaseout_start.married_joint",
+      "label": "AMT exemption phase-out starts, married filing jointly",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 1252700,
+        "2026": 1000000
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bAMT\\b|alternative minimum tax"
+        ],
+        [
+          "phase[- ]?outs?|phases? out|phasing out"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.amt.28_pct_threshold",
+      "label": "AMT 28% rate starts above this much excess income (all but married filing separately)",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 239100,
+        "2026": 244500
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bAMT\\b|alternative minimum tax"
+        ],
+        [
+          "28%|28 percent"
+        ]
+      ]
+    },
+    {
+      "id": "tax.qbi.threshold.unmarried",
+      "label": "QBI deduction threshold, single and other non-joint returns",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 197300,
+        "2026": 201750
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bQBI\\b|qualified business income|199A|pass-through deduction"
+        ],
+        [
+          "threshold|limit|phase|begins|starts|above|over"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
+    },
+    {
+      "id": "tax.qbi.threshold.married_joint",
+      "label": "QBI deduction threshold, married filing jointly",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 394600,
+        "2026": 403500
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bQBI\\b|qualified business income|199A|pass-through deduction"
+        ],
+        [
+          "threshold|limit|phase|begins|starts|above|over"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
+        ]
+      ]
+    },
+    {
+      "id": "tax.qbi.phase_in_end.unmarried",
+      "label": "QBI deduction fully phased in (limits apply in full), single and other non-joint returns",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 247300,
+        "2026": 276750
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bQBI\\b|qualified business income|199A|pass-through deduction"
+        ],
+        [
+          "fully|phase[- ]?in|phased in|range|ends?"
+        ],
+        [
+          "single|unmarried"
+        ]
+      ]
+    },
+    {
+      "id": "tax.qbi.phase_in_end.married_joint",
+      "label": "QBI deduction fully phased in (limits apply in full), married filing jointly",
+      "unit": "usd_taxable_income",
+      "values": {
+        "2025": 494600,
+        "2026": 553500
+      },
+      "source": {
+        "2025": "irs_rp_2024_40",
+        "2026": "irs_rp_2025_32"
+      },
+      "aliases": [],
+      "cues": [
+        [
+          "\\bQBI\\b|qualified business income|199A|pass-through deduction"
+        ],
+        [
+          "fully|phase[- ]?in|phased in|range|ends?"
+        ],
+        [
+          "married filing jointly|joint(ly)?|married couples?"
         ]
       ]
     }
