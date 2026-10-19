@@ -26,7 +26,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from fin_doctor import check  # noqa: E402
+from fin_assist import check  # noqa: E402
 
 KINDS = ("bad_flagged", "bad_unflagged", "good")
 

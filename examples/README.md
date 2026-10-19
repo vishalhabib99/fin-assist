@@ -1,9 +1,9 @@
-# Gate your agent with fin-doctor
+# Gate your agent with fin-assist
 
 One call before your agent's answer reaches a customer:
 
 ```python
-from fin_doctor.gate import gate
+from fin_assist.gate import gate
 
 verdict = gate(question, draft, year=2026)
 reply = verdict.text          # send this, not the draft
@@ -49,4 +49,4 @@ Put it at the one place where the finished answer passes before the user sees it
 - **Streamed token by token**: either hold the tokens and show the gated text (`hold` in `streaming_agent.py`, the safe default for money answers), or show them live and replace the message when the check finishes (`correct`, which needs a UI that can replace a message in place).
 - **LangChain**: make it the last step of the chain (`langchain_agent.py`).
 
-The demo agent's system prompt asks for education only. The gate doesn't trust that: advice-like and promissory wording still goes to `review`. fin-doctor is a checker, not an advisor, and none of this is financial or tax advice.
+The demo agent's system prompt asks for education only. The gate doesn't trust that: advice-like and promissory wording still goes to `review`. fin-assist is a checker, not an advisor, and none of this is financial or tax advice.

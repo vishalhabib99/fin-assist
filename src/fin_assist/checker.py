@@ -1,4 +1,4 @@
-"""Deterministic layer of fin-doctor.
+"""Deterministic layer of fin-assist.
 
 Checks an AI-drafted answer against data/facts.json and a few text rules.
 Anything it can't verify goes to REVIEW; nothing unverified is ever SEND.

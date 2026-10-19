@@ -6,10 +6,10 @@ Each component is recorded separately, because each one is governed under a diff
 
 | ID | Component | What it does | Type | Framework | Materiality* | Owner |
 |---|---|---|---|---|---|---|
-| RAC-1 | Pattern rules ([`checker.py`](../../src/fin_doctor/checker.py)) | First pass: numbers, rules, scope and phrasing checked against the facts table | Deterministic, rule-based | SR 26-2 principles | High | Product owner |
+| RAC-1 | Pattern rules ([`checker.py`](../../src/fin_assist/checker.py)) | First pass: numbers, rules, scope and phrasing checked against the facts table | Deterministic, rule-based | SR 26-2 principles | High | Product owner |
 | RAC-2 | fact-judge ([skill](../../skills/fact-judge/SKILL.md)) | Checks every claim against the facts table, including claims that aren't numbers | **Generative (LLM)** | NIST AI 600-1 | High | Product owner |
 | RAC-3 | advice-judge ([skill](../../skills/advice-judge/SKILL.md)) | Flags personal recommendations and promissory language (FINRA 2210(d)(1)) | **Generative (LLM)** | NIST AI 600-1 | High | Product owner |
-| RAC-4 | Contribution room ([`room.py`](../../src/fin_doctor/room.py), [`room.js`](../../docs/room/room.js)) | Computes remaining contribution room from IRS limits | Deterministic calculation | SR 26-2 principles | Medium | Product owner |
+| RAC-4 | Contribution room ([`room.py`](../../src/fin_assist/room.py), [`room.js`](../../docs/room/room.js)) | Computes remaining contribution room from IRS limits | Deterministic calculation | SR 26-2 principles | Medium | Product owner |
 | RAC-D1 | Facts table ([`facts.json`](../../data/facts.json)) | IRS-sourced limits and rules that RAC-1, 2 and 4 depend on | Data dependency | Both | High (shared) | Product owner |
 | RAC-V1 | Claude (Anthropic) | The model behind RAC-2 and RAC-3, and behind the eval case writers | Third-party model | SR 26-2 §VII (vendor) + NIST AI 600-1 | High (shared) | Vendor. Oversight: product owner |
 

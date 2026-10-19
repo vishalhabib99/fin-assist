@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from fin_doctor.checker import FACTS
-from fin_doctor.registry import load, lookup, validate
+from fin_assist.checker import FACTS
+from fin_assist.registry import load, lookup, validate
 
 REG = load()
 

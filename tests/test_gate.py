@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from fin_doctor.gate import HOLDING_MESSAGE, gate
+from fin_assist.gate import HOLDING_MESSAGE, gate
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
 

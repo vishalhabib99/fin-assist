@@ -1,4 +1,4 @@
-# Validation report: fin-doctor v0.2.0
+# Validation report: fin-assist v0.2.0
 
 **Date:** 2026-09-26 · **Scope:** RAC-1 to RAC-4, D1 and V1 ([inventory](inventory.md)) · **Evidence:** this repo at tag `v0.2.0`, plus the checks named below.
 

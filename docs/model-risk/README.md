@@ -1,6 +1,6 @@
 # Model risk pack
 
-How fin-doctor would be governed if a regulated financial firm deployed it. It's written the way a model risk function would review it, and it applies the April 2026 rules.
+How fin-assist would be governed if a regulated financial firm deployed it. It's written the way a model risk function would review it, and it applies the April 2026 rules.
 
 | Document | What it answers |
 |---|---|

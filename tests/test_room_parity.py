@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from fin_doctor.checker import FACTS, FACTS_PATH
-from fin_doctor.room import contribution_room
+from fin_assist.checker import FACTS, FACTS_PATH
+from fin_assist.room import contribution_room
 
 ROOT = Path(__file__).resolve().parents[1]
 NODE = shutil.which("node")

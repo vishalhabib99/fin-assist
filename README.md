@@ -1,13 +1,13 @@
-# fin-doctor
+# fin-assist
 
 [![ci](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml/badge.svg)](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![MCP server](https://img.shields.io/badge/MCP-server-6E56CF)
 
 **Catch the stale and wrong money figures in an AI agent's answer before a customer sees them.**
 
-Every finance AI repeats last year's numbers: last year's 401(k) limit, the old RMD age, an HSA limit from two years ago, a Social Security wage base that changed in January. Models learn figures from training data that is a year or more out of date, and the IRS and SSA change them every year. fin-doctor checks every official figure in a draft answer against a registry of IRS and SSA figures, each tied to its year and the primary source it was read from.
+Every finance AI repeats last year's numbers: last year's 401(k) limit, the old RMD age, an HSA limit from two years ago, a Social Security wage base that changed in January. Models learn figures from training data that is a year or more out of date, and the IRS and SSA change them every year. fin-assist checks every official figure in a draft answer against a registry of IRS and SSA figures, each tied to its year and the primary source it was read from.
 
 ```console
-$ fin-doctor check "For 2026 you can put up to $23,500 in your 401(k), plus an $8,000 catch-up. RMDs start at age 72."
+$ fin-assist check "For 2026 you can put up to $23,500 in your 401(k), plus an $8,000 catch-up. RMDs start at age 72."
 REVIEW
   STALE        $23,500        (2026) that's the 2025 figure; 2026 is 24,500
                source: https://www.irs.gov/newsroom/401k-limit-increases-to-24500-for-2026-ira-limit-increases-to-7500
@@ -23,19 +23,19 @@ It is a checker, not an advisor. It never writes answers and never gives financi
 Try it with no install (needs [uv](https://docs.astral.sh/uv/)):
 
 ```bash
-uvx --from git+https://github.com/vishalhabib99/fin-assist fin-doctor check "The 2026 HSA family limit is $8,550."
+uvx --from git+https://github.com/vishalhabib99/fin-assist fin-assist check "The 2026 HSA family limit is $8,550."
 ```
 
 Give your agent the tool (Claude Code; any MCP client works the same way):
 
 ```bash
-claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-doctor-mcp
+claude mcp add fin-assist -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-assist-mcp
 ```
 
 Gate your agent: one call before the answer reaches the customer ([examples](examples/README.md) for plain Python, streaming and LangChain, runnable with no model or API key):
 
 ```python
-from fin_doctor.gate import gate
+from fin_assist.gate import gate
 
 verdict = gate(question, draft, year=2026)
 reply = verdict.text   # "send": unchanged · "fixed": stale figures replaced, each logged with its source · "review": held for a person
@@ -63,7 +63,7 @@ Each figure in an answer gets one status:
 | `unknown_year` | No verified figure for that year yet (e.g. a 2027 401(k) limit before the IRS publishes it). Never guessed | REVIEW |
 | `unverified` | A real rule the registry doesn't cover yet (e.g. RMD age 75 for later birth years) | REVIEW |
 
-Customer amounts (salaries, balances, planned contributions, arithmetic) are not judged. A dollar amount is checked only when the answer states it as an official figure (a limit, catch-up, deductible, "up to"), or when it equals a known figure exactly. PASS means no recognized figure is wrong, not that the whole answer is right. For the rest of the answer, see the [retirement answer check](#fin-doctor) below.
+Customer amounts (salaries, balances, planned contributions, arithmetic) are not judged. A dollar amount is checked only when the answer states it as an official figure (a limit, catch-up, deductible, "up to"), or when it equals a known figure exactly. PASS means no recognized figure is wrong, not that the whole answer is right. For the rest of the answer, see the [retirement answer check](#fin-assist) below.
 
 ## Results
 
@@ -84,7 +84,7 @@ Read set 5, the latest, this way: no clean answer was sent to a person, and 6 an
 Figures change every year, so the registry is built to be updated, not trusted forever:
 
 - A missing year is unknown, never last year's number. The check can't create the bug it's meant to catch.
-- Every value carries its source URL and the date it was read. `python -m fin_doctor.registry` validates the files, and CI runs it.
+- Every value carries its source URL and the date it was read. `python -m fin_assist.registry` validates the files, and CI runs it.
 - A scheduled routine opens an issue when the IRS publishes next year's limits (each November). [CONTRIBUTING.md](CONTRIBUTING.md) explains how to add or update a figure.
 
 > Reference build by an AI product manager: [PRD](PRD.md) → [eval plan](EVAL_PLAN.md) → build → blind evals → release gate. Not affiliated with any financial firm; public IRS, SSA and FINRA sources only. Not financial or tax advice.
@@ -122,7 +122,7 @@ Every number in `facts.json` was read from the cited IRS page on 2026-09-26: [20
 The same logic is the `contribution_room` MCP tool, so an AI assistant can compute the numbers instead of quoting last year's limits from memory. It's deterministic (no model) and uses the same facts table:
 
 - The age 60–63 catch-up ($11,250) and the Roth income phase-out, using the exact IRS Pub 590-A Worksheet 2-2 method. It's tested against the IRS's own worked example ($6,540).
-- The page ([`docs/room/room.js`](docs/room/room.js)) and the tool ([`room.py`](src/fin_doctor/room.py)) are checked against each other on 400 inputs in [`tests/test_room_parity.py`](tests/test_room_parity.py).
+- The page ([`docs/room/room.js`](docs/room/room.js)) and the tool ([`room.py`](src/fin_assist/room.py)) are checked against each other on 400 inputs in [`tests/test_room_parity.py`](tests/test_room_parity.py).
 - Anything the table doesn't cover (spousal IRAs, IRA deductibility, the Roth catch-up rule for high earners, employer contributions) is listed as **not covered** rather than guessed.
 
 ## Results
@@ -228,7 +228,7 @@ Scripted reviewers on the demo queue (**policies, not people**; `python review/s
 ## Use it in Claude Code
 
 ```bash
-claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-doctor-mcp
+claude mcp add fin-assist -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-assist-mcp
 cp -r skills/fact-judge skills/advice-judge ~/.claude/skills/
 ```
 
@@ -237,7 +237,7 @@ Then: *"Check this draft answer: …"*. Claude calls `check_answer`, then runs b
 Deterministic layer from Python:
 
 ```python
-from fin_doctor import check
+from fin_assist import check
 check("What's the IRA limit for 2026?", "It's $7,000.")
 # {'decision': 'REVIEW', 'flags': [{'type': 'wrong_fact', 'span': '$7,000',
 #   'reason': 'not a 2026 ira limit (that is the 2025 figure)', 'source': 'https://www.irs.gov/...'}]}

@@ -13,7 +13,7 @@ import sys
 import time
 from typing import Iterator
 
-from fin_doctor.gate import gate
+from fin_assist.gate import gate
 
 QUESTION = "How much can I put in my 401(k) this year?"
 DRAFT = "For 2026 you can defer up to $23,500 into your 401(k), plus an $8,000 catch-up if you're 50 or older."

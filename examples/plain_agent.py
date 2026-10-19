@@ -1,4 +1,4 @@
-"""A minimal education-only Q&A agent with fin-doctor as its last step.
+"""A minimal education-only Q&A agent with fin-assist as its last step.
 
     python examples/plain_agent.py                      # canned drafts, no model, no setup
     python examples/plain_agent.py --ollama llama3.2    # a local model via Ollama (free)
@@ -14,7 +14,7 @@ import os
 import urllib.request
 from pathlib import Path
 
-from fin_doctor.gate import gate
+from fin_assist.gate import gate
 
 SYSTEM = ("You answer general questions about US retirement accounts, HSAs, Social Security and federal tax. "
           "Give education only: explain rules and figures, never tell the person what they should do. "

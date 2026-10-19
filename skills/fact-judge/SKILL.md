@@ -1,6 +1,6 @@
 ---
 name: fact-judge
-description: Check every factual claim in an AI-drafted answer to a US retirement-account question against the fin-doctor facts table (IRS-sourced). Catches wrong claims that aren't plain numbers — wrong deadlines, exceptions applied to the wrong account type, "yes/no" rule errors — which the MCP tool's pattern rules miss.
+description: Check every factual claim in an AI-drafted answer to a US retirement-account question against the fin-assist facts table (IRS-sourced). Catches wrong claims that aren't plain numbers — wrong deadlines, exceptions applied to the wrong account type, "yes/no" rule errors — which the MCP tool's pattern rules miss.
 ---
 
 # fact-judge

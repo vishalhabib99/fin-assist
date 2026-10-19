@@ -1,6 +1,6 @@
-"""The pre-send gate: run fin-doctor on a draft before the customer sees it.
+"""The pre-send gate: run fin-assist on a draft before the customer sees it.
 
-    from fin_doctor.gate import gate
+    from fin_assist.gate import gate
 
 Three outcomes:
   send     no problems found; send the draft as written
@@ -13,8 +13,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from fin_doctor import check
-from fin_doctor.numcheck import check_numbers
+from fin_assist import check
+from fin_assist.numcheck import check_numbers
 
 # Advice-boundary flags from the retirement checker. Its fact flags are left out here because
 # check_numbers covers figures across every area (HSA, Social Security, tax), not just retirement.

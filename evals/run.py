@@ -10,7 +10,7 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from fin_doctor import check  # noqa: E402
+from fin_assist import check  # noqa: E402
 
 args = [a for a in sys.argv[1:] if a != "--strict"]
 path = Path(args[0] if args else Path(__file__).parent / "cases.jsonl")

@@ -1,6 +1,6 @@
 # RetireBench
 
-How often do free AI chat assistants get basic US retirement-account facts wrong, and would [fin-doctor](../README.md) have caught the mistakes?
+How often do free AI chat assistants get basic US retirement-account facts wrong, and would [fin-assist](../README.md) have caught the mistakes?
 
 **Status:** questions and key **frozen 2026-09-26** (git tag `retirebench-v1`), before any answers were collected. Collection must finish before 2027-01-01, because "this year" questions assume 2026.
 

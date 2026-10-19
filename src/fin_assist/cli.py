@@ -1,4 +1,4 @@
-"""fin-doctor command line: check the figures in an answer, or list the registry."""
+"""fin-assist command line: check the figures in an answer, or list the registry."""
 from __future__ import annotations
 
 import argparse
@@ -27,7 +27,7 @@ def _why(c: dict) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="fin-doctor", description="Check the official financial figures in an AI answer.")
+    ap = argparse.ArgumentParser(prog="fin-assist", description="Check the official financial figures in an AI answer.")
     sub = ap.add_subparsers(dest="cmd", required=True)
     c = sub.add_parser("check", help="check an answer (text argument, or stdin)")
     c.add_argument("answer", nargs="?", help="the answer text; reads stdin when omitted")
