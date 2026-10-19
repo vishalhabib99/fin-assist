@@ -1,6 +1,6 @@
 # fin-doctor
 
-[![ci](https://github.com/vishalhabib99/fin-doctor/actions/workflows/ci.yml/badge.svg)](https://github.com/vishalhabib99/fin-doctor/actions/workflows/ci.yml) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![MCP server](https://img.shields.io/badge/MCP-server-6E56CF)
+[![ci](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml/badge.svg)](https://github.com/vishalhabib99/fin-assist/actions/workflows/ci.yml) [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![MCP server](https://img.shields.io/badge/MCP-server-6E56CF)
 
 **Catch the stale and wrong money figures in an AI agent's answer before a customer sees them.**
 
@@ -23,13 +23,13 @@ It is a checker, not an advisor. It never writes answers and never gives financi
 Try it with no install (needs [uv](https://docs.astral.sh/uv/)):
 
 ```bash
-uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor check "The 2026 HSA family limit is $8,550."
+uvx --from git+https://github.com/vishalhabib99/fin-assist fin-doctor check "The 2026 HSA family limit is $8,550."
 ```
 
 Give your agent the tool (Claude Code; any MCP client works the same way):
 
 ```bash
-claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor-mcp
+claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-doctor-mcp
 ```
 
 Gate your agent: one call before the answer reaches the customer ([examples](examples/README.md) for plain Python, streaming and LangChain, runnable with no model or API key):
@@ -117,7 +117,7 @@ Every number in `facts.json` was read from the cited IRS page on 2026-09-26: [20
 
 ## Contribution room calculator
 
-**[How much more can I put in this year?](https://vishalhabib99.github.io/fin-doctor/room/)** Enter your age, income and what you've contributed so far. It shows the 2026 room left in your 401(k)/403(b)/TSP or SIMPLE IRA, traditional IRA and Roth IRA, with an IRS link on every number. It runs in your browser, with no account and no tracking.
+**[How much more can I put in this year?](https://vishalhabib99.github.io/fin-assist/room/)** Enter your age, income and what you've contributed so far. It shows the 2026 room left in your 401(k)/403(b)/TSP or SIMPLE IRA, traditional IRA and Roth IRA, with an IRS link on every number. It runs in your browser, with no account and no tracking.
 
 The same logic is the `contribution_room` MCP tool, so an AI assistant can compute the numbers instead of quoting last year's limits from memory. It's deterministic (no model) and uses the same facts table:
 
@@ -211,7 +211,7 @@ python review/build_queue.py            # -> review/out/review.html (for the rev
 python review/score.py review-decisions-<name>.json review/out/key.json
 ```
 
-**Try it:** [the demo queue](https://vishalhabib99.github.io/fin-doctor/review-demo/) (source: [`docs/review-demo/`](docs/review-demo/index.html)) has 29 items, 6 of them checks, built with the default seed 7. Its key isn't committed, but anyone can rebuild it from this public repo, so for real reviews build with your own private `--seed`.
+**Try it:** [the demo queue](https://vishalhabib99.github.io/fin-assist/review-demo/) (source: [`docs/review-demo/`](docs/review-demo/index.html)) has 29 items, 6 of them checks, built with the default seed 7. Its key isn't committed, but anyone can rebuild it from this public repo, so for real reviews build with your own private `--seed`.
 
 The page is one self-contained file with no server and no tracking. Progress is saved in the reviewer's browser. The answer key is never in the page, and a test enforces that.
 
@@ -228,7 +228,7 @@ Scripted reviewers on the demo queue (**policies, not people**; `python review/s
 ## Use it in Claude Code
 
 ```bash
-claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-doctor fin-doctor-mcp
+claude mcp add fin-doctor -- uvx --from git+https://github.com/vishalhabib99/fin-assist fin-doctor-mcp
 cp -r skills/fact-judge skills/advice-judge ~/.claude/skills/
 ```
 
