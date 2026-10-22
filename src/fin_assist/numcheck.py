@@ -29,12 +29,12 @@ _YEAR = re.compile(r"\b(20[2-3]\d)\b")
 _REL = re.compile(r"\b(this|next|last) (tax )?year\b", re.I)
 _USD = re.compile(r"\$\s?(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s*(k\b|K\b|thousand|million)?|\b(\d{1,3}(?:,\d{3})+)\s*dollars", re.I)
 _PCT = re.compile(r"\b(\d{1,2}(?:\.\d+)?)\s?(%|percent\b)", re.I)
-_AGE = re.compile(r"\b(?:age|aged|turns?|turning|reach(?:es|ing)?|(?:begin|start|starts|must|until|by|RMDs?|distributions?)\s+at)\s+(\d{2})(½|\s?1/2)?(?!\d)|\b(\d{2})(½|\s?1/2)?\s*(?:years? old|or older|and older)", re.I)
+_AGE = re.compile(r"\b(?:age|aged|turns?|turning|reach(?:es|ing)?|(?:begin|began|begins|start|starts|started|must|until|by|RMDs?|distributions?)\s+at)\s+(\d{2})(½|\s?1/2)?(?!\d)|\b(\d{2})(½|\s?1/2)?\s*(?:years? old|or older|and older)", re.I)
 _DAYS = re.compile(r"\b(\d{1,3})[\s-]days?\b", re.I)
 _GATE = {"usd": (0.4, 2.5), "age": None, "percent": None, "days": None}
 # A dollar amount is judged only when the wording states it as an official figure, or when it
 # equals some year's figure exactly. "That's $6,000 for the year" is arithmetic, not a claim.
-_STATED = re.compile(r"\b(?:limits?|max(?:imum)?|caps?|ceiling|catch[- ]?up|exclusion|exemption|deduction|deductible|out[- ]of[- ]pocket|threshold|wage base|taxable max(?:imum)?|up to|at least|no more than|bracket|earnings (?:test|limit)|exempt amount|benefit|standard)\b", re.I)
+_STATED = re.compile(r"\b(?:limits?|max(?:imum)?|caps?|ceiling|catch[- ]?up|exclusion|exemption|deduction|deductible|out[- ]of[- ]pocket|threshold|wage base|taxable max(?:imum)?|up to|at least|no more than|bracket|earnings (?:test|limit)|exempt amount|benefit|standard|cut-?off|each (?:of you|spouse) (?:adds|gets)|stops at|tops out at|(?:rises|climbs|increases|goes up|jumps) to(?! about| roughly| around| approximately))\b", re.I)
 # "You can contribute $X" / "able to defer $X" states the limit, unless it's room left ("$3,000 more")
 _CAN_PUT = re.compile(r"\b(?:can|could|able to|allowed to|may)\s+(?:contribute|defer|put in|put away|save)\s*$", re.I)
 _ROOM_LEFT = re.compile(r"^\s*(?:more|extra|additional|left|remaining)\b", re.I)
@@ -50,14 +50,16 @@ _OWN = re.compile(r"\b(?:your (?:estimated|projected|current|personal|own|total|
 _OURS = re.compile(r"\b(?:our|my|with your|based on your|on your|would be(?: reduced)?|reduced)\b|\byour\s*$", re.I)
 _OURS_HEADING = re.compile(r"\b(?:our|my)\b", re.I)
 # "That's $10,000" right after a sentence about a limit refers back to it.
+_RUNNING = re.compile(r"/\s?mo(?:nth)?\b|\b(?:per|a|each) month\b|\bleaving\b", re.I)
 _REFER = re.compile(r"\b(?:that's|that is|it's|it is|which is)\s*$", re.I)
 # The customer's own amounts ("your salary is $210,000", "on pace for $16,800") are not official figures.
 _CUSTOMER = re.compile(r"\b(?:your (?:salary|income|wages|pay|balance|savings|benefit|portfolio|personal|own|total|planned)\b|you(?:'re| are|'ve| have)? ?(?:planning to|plan to|earn|earned|make|made|saved|contributed|put in|on pace)|on pace for|currently)\b[^.;:$]{0,40}$", re.I)
-_AFTER = re.compile(r"^[^.;$%\d]{0,30}?\b(?:in|for|of)\s+(?:tax year\s*)?(20[2-3]\d)\b|^\s*,?\s*(20[2-3]\d)\b")
+_AFTER = re.compile(r"^[^.;,$%\d]{0,30}?\b(?:in|for|of)\s+(?:tax year\s*)?(20[2-3]\d)\b|^\s*,?\s*(20[2-3]\d)\b")
 # "Carryover into 2027", "until 2028": a destination year, not the year the figure applies to
+_REL_AFTER = re.compile(r"^\s*,?\s*(?:in |for )?(this|next|last) (?:tax )?year\b", re.I)
 _YEAR_ANY = re.compile(r"(?<!until )(?<!through )\b(20[2-3]\d)\b")
 # "Carryover into 2027: up to $680" is the 2026 plan year's carryover
-_CARRY_INTO = re.compile(r"carr(?:y|ies|ied)?\s?over\s+into\s+(20[2-3]\d)", re.I)
+_CARRY_INTO = re.compile(r"(?:carr(?:y|ies|ied)?\s?over|rolls?(?:\s?over)?)(?:\s+of\b[^.;]{0,40}?\bunused\b[^.;$]{0,20}?)?\s+into\s+(20[2-3]\d|next year)", re.I)
 # Markdown headings and bold lines name the topic for the lines under them
 _HEADING = re.compile(r"^\s*(?:#{1,6}\s+.+|\*\*[^*]+\*\*:?|[^.!?]{3,80}:)\s*$")
 
@@ -89,16 +91,19 @@ def _numbers(sentence: str):
 
 
 _FROM = re.compile(r"\bfrom\s*$", re.I)
-_TO = re.compile(r"\bto\s*$", re.I)
+_TO = re.compile(r"(?<!up )\bto\s*$", re.I)
 
 
 def _year_for(sentence: str, m: re.Match, context_year: int, default_year: int) -> int:
     carry = _CARRY_INTO.search(sentence)
-    if carry and carry.start() < m.start():
-        return int(carry.group(1)) - 1
+    if carry and (carry.start() < m.start() or 0 <= carry.start() - m.end() <= 2):
+        return default_year if carry.group(1).lower() == "next year" else int(carry.group(1)) - 1
     after = _AFTER.match(sentence[m.end():])
     if after:
         return int(after.group(1) or after.group(2))
+    rel = _REL_AFTER.match(sentence[m.end():])
+    if rel:
+        return default_year + {"this": 0, "next": 1, "last": -1}[rel.group(1).lower()]
     # "goes from $8,750 to $9,000" after "from $4,400 in 2026 to $4,500 in 2027": earliest / latest year
     span_years = sorted({int(y) for y in _YEAR_ANY.findall(sentence)})
     if len(span_years) >= 2:
@@ -152,6 +157,27 @@ def _carried(sentence: str, context: str, kind: str, n: float) -> list[str]:
     if kind == "age":
         return out
     return [fid for fid in out if len(_CUES[fid]) > 1 and all(c.search(sentence) for c in _CUES[fid][1:])]
+
+
+def _label(window: str) -> str:
+    """The words right before a figure, back to the last comma, colon or semicolon."""
+    return re.split(r"[,;:]", window)[-1]
+
+
+def _side_by_side(sentence: str, found) -> bool:
+    """"401(k) $24,500, SIMPLE IRA $7,500, and IRA $17,000": two or more figures, each right
+    after a label naming a different fact. The label then names its figure, even when another
+    figure in the sentence would match."""
+    named, start = set(), 0
+    for kind, _, m in found:
+        if kind != "usd":
+            continue
+        label = _label(sentence[start:m.start()])
+        facts = frozenset(f for f in _topics(label, "usd"))
+        if facts:
+            named.add(facts)
+        start = m.end()
+    return len(named) >= 2
 
 
 def _is_total(n: float, year: int, facts: list[str]) -> bool:
@@ -249,6 +275,7 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
         years = _YEAR_ANY.findall(_CARRY_INTO.sub("", sentence))
         found = sorted(_numbers(sentence), key=lambda t: t[2].start())
         prev_usd, prev_stated = None, False
+        side_by_side = _side_by_side(sentence, found)
         context = " ".join([title] + headings[-2:] + recent)
         if headings and _OURS_HEADING.search(headings[-1]) and not _HEADING.match(sentence):
             recent = (recent + [sentence])[-2:]
@@ -263,15 +290,15 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
             stated = True
             if kind != "usd" and _OWN.search(sentence[:m.start()]):
                 continue
+            window = sentence[(prev_usd.end() if prev_usd else 0):m.start()]
             if kind == "usd" and sentence not in table_cells:
-                window = sentence[(prev_usd.end() if prev_usd else 0):m.start()]
                 stated = bool(_STATED.search(window) or _STATED_AFTER.match(sentence[m.end():])
                               # a list under one topic word: "$16,100 for single filers and $31,500 for joint"
                               or (prev_stated and len(window) <= 40 and _LIST_JOIN.search(window)
                                   and not _NOT_LIST.search(window))
                               or (_REFER.search(window) and any(_STATED.search(r) for r in recent))
                               or (_CAN_PUT.search(window) and not _ROOM_LEFT.match(sentence[m.end():])))
-                if _OWN.search(window) or _OURS.search(sentence[:m.start()]) or _TOTAL_AFTER.match(sentence[m.end():]):
+                if _OWN.search(window) or _RUNNING.search(window) or _OURS.search(sentence[:m.start()]) or _TOTAL_AFTER.match(sentence[m.end():]):
                     stated = False
                 prev_usd, prev_stated = m, stated
             y = _year_for(sentence, m, context_year, default_year)
@@ -280,12 +307,17 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
             if not cands:
                 continue
             exact = any(_same(v, n) for fid in cands for v in FACTS[fid]["values"].values())
+            named = False
+            if kind == "usd" and side_by_side:
+                near = [f for f in cands if all(c.search(_label(window)) for c in _CUES[f])]
+                if near and len(near) < len(cands):
+                    cands, named = near, True
             if not (stated or exact):
                 continue
             if kind == "usd" and not exact and _is_total(n, y, _topics(context + " " + sentence, kind)):
                 continue
             verdict = _judge(n, y, cands)
-            if verdict["status"] != "match":
+            if verdict["status"] != "match" and not named:
                 more = [f for f in _carried(sentence, context, kind, n) if f not in cands]
                 if more and _judge(n, y, more)["status"] == "match":
                     verdict = _judge(n, y, more)

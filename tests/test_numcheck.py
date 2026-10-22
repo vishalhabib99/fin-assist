@@ -281,3 +281,46 @@ def test_customer_amounts_near_new_deductions_are_not_judged():
                  "You paid $2,400 of car loan interest this year, all deductible.",
                  "You paid $18,000 in state and local taxes, under the $40,400 SALT cap."]:
         assert check_numbers(text, 2026)["decision"] == "PASS", text
+
+
+def test_side_by_side_labels_name_their_figures():
+    # swapped: each figure is another account's limit
+    assert statuses("For 2026: 401(k) $24,500, SIMPLE IRA $7,500, and IRA $17,000.") == [
+        ("$24,500", "match"), ("$7,500", "wrong"), ("$17,000", "wrong")]
+    assert statuses("For 2026: 401(k) $24,500, SIMPLE IRA $17,000, and IRA $7,500.") == [
+        ("$24,500", "match"), ("$17,000", "match"), ("$7,500", "match")]
+    # one label, not a list: the topic before the colon still counts
+    assert statuses("For your SIMPLE IRA: the 2026 employee deferral limit is $17,000.") == [("$17,000", "match")]
+
+
+def test_year_words_next_to_the_figure():
+    assert statuses("Next year (2027), the Social Security wage base rises to $192,300, up from $184,500 this year.") == [
+        ("$192,300", "match"), ("$184,500", "match")]
+    assert statuses("The 2026 COLA was 3.6%, and the increase announced for 2027 is 2.8%.") == [
+        ("3.6%", "wrong_year"), ("2.8%", "stale")]
+    assert statuses("Health FSA: carryover of up to $680 of unused funds into 2027.") == [("$680", "match")]
+    assert statuses("Your FSA limit is $3.4k. Up to $640 rolls into next year.") == [("$3.4k", "match"), ("$640", "wrong")]
+    assert statuses("Last year's 401(k) cap carries over unchanged into 2026: $23,500.") == [("$23,500", "stale")]
+
+
+def test_paraphrased_topics():
+    assert statuses("The payroll tax ceiling for this year is $176,100.") == [("$176,100", "stale")]
+    assert statuses("$15,750 is what a single filer can deduct without itemizing on a 2026 return.") == [("$15,750", "stale")]
+    assert statuses("Medicare: 1.5% of every dollar, no cap.") == [("1.5%", "wrong")]
+    assert statuses("Your share of FICA is 7.5% of wages.") == [("7.5%", "wrong")]
+    assert statuses("Because you were born in 1951, your RMDs started at 70½.") == [("started at 70½", "wrong")]
+    assert statuses("Before full retirement age, in 2027 the cutoff is $24,480; above it, SSA withholds $1 for every $2.") == [
+        ("$24,480", "stale")]
+
+
+def test_early_withdrawal_tax_next_to_withholding():
+    assert check_numbers("Taking $20,000 out of your 401(k) at 45 means a 10% additional tax, "
+                         "and the plan will withhold 20% up front.", 2026)["decision"] == "PASS"
+
+
+def test_running_totals_and_estimates_are_not_judged():
+    for text in ["The 2026 IRA max is $7.5k. You've done $500/month since January, which is $4,500 through September, leaving $3,000.",
+                 "You planned $7,000 for your HSA this year, so you could add $1,750 more.",
+                 "With the 2.8% COLA, your $2,100 monthly payment rises to about $2,159.",
+                 "Employer contribution: Contoso adds $500 to your FSA."]:
+        assert check_numbers(text, 2026)["decision"] == "PASS", text

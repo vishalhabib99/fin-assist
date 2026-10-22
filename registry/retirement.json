@@ -123,7 +123,7 @@
       ],
       "cues": [
         [
-          "\\bIRAs?\\b"
+          "(?<!SIMPLE )(?<!SEP )\\bIRAs?\\b"
         ]
       ]
     },
@@ -139,7 +139,7 @@
       "aliases": [],
       "cues": [
         [
-          "\\bIRAs?\\b"
+          "(?<!SIMPLE )(?<!SEP )\\bIRAs?\\b"
         ],
         [
           "\\b50\\b|catch[- ]?up"
@@ -163,7 +163,7 @@
       ],
       "cues": [
         [
-          "\\bIRAs?\\b"
+          "(?<!SIMPLE )(?<!SEP )\\bIRAs?\\b"
         ],
         [
           "catch[- ]?up"
@@ -276,7 +276,7 @@
       ],
       "cues": [
         [
-          "early|before (age )?59|under 59"
+          "early|before (age )?59|under 59|\\bat (age )?([2-4]\\d|5[0-8])\\b"
         ],
         [
           "withdraw|distribution|penalt|additional tax"

@@ -452,7 +452,7 @@
       ],
       "cues": [
         [
-          "standard deduction"
+          "standard deduction|without itemizing"
         ],
         [
           "married filing jointly|joint(ly)?|married couples?"
@@ -476,7 +476,7 @@
       ],
       "cues": [
         [
-          "standard deduction"
+          "standard deduction|without itemizing"
         ],
         [
           "head of household"
@@ -500,7 +500,7 @@
       ],
       "cues": [
         [
-          "standard deduction"
+          "standard deduction|without itemizing"
         ],
         [
           "single|unmarried"
@@ -524,7 +524,7 @@
       ],
       "cues": [
         [
-          "standard deduction"
+          "standard deduction|without itemizing"
         ],
         [
           "married filing separately|separate"
@@ -546,13 +546,13 @@
       "aliases": [],
       "cues": [
         [
-          "standard deduction"
+          "standard deduction|without itemizing"
         ],
         [
           "65|aged|blind|older"
         ],
         [
-          "married|each spouse"
+          "married|each spouse|husband|wife|both of you|each of you"
         ]
       ]
     },
@@ -571,7 +571,7 @@
       "aliases": [],
       "cues": [
         [
-          "standard deduction"
+          "standard deduction|without itemizing"
         ],
         [
           "65|aged|blind|older"
@@ -669,7 +669,7 @@
           "\\bFSAs?\\b|flexible spending"
         ],
         [
-          "carry ?over|roll ?over"
+          "carry ?over|roll ?over|rolls? (over|into)"
         ]
       ]
     },

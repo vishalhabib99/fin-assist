@@ -58,7 +58,7 @@
           "Social Security|OASDI|payroll tax"
         ],
         [
-          "taxable max|wage base|maximum taxable|earnings (up to|cap)|taxed up to|capped|subject to|wages up to|applies to (wages|earnings|pay) up to|up to the (cap|limit|maximum)|\\bcap\\b|appl(?:y|ies) up to"
+          "taxable max|wage base|ceiling|maximum taxable|earnings (up to|cap)|taxed up to|capped|subject to|wages up to|applies to (wages|earnings|pay) up to|up to the (cap|limit|maximum)|\\bcap\\b|appl(?:y|ies) up to"
         ]
       ]
     },
@@ -107,7 +107,7 @@
       ],
       "cues": [
         [
-          "earnings (test|limit)|exempt amount|Social Security.{0,60}\\bearn|\\bearn.{0,60}(Social Security|\\bSSA\\b|benefits?)"
+          "earnings (test|limit)|exempt amount|Social Security.{0,60}\\bearn|\\bearn.{0,60}(Social Security|\\bSSA\\b|benefits?)|\\$1 for every \\$2\\b|before (your )?(full retirement age|FRA)"
         ]
       ]
     },
@@ -300,7 +300,7 @@
           "Social Security|OASDI|payroll"
         ],
         [
-          "tax|withh[eo]ld|employees? pay"
+          "tax|withh[eo]ld|employees? pay|employee rate|of (every dollar|wages|pay|earnings)"
         ]
       ]
     },
@@ -324,7 +324,7 @@
           "Medicare|\\bHI\\b"
         ],
         [
-          "tax|withh[eo]ld|employees? pay"
+          "tax|withh[eo]ld|employees? pay|of (every dollar|wages|pay|earnings)"
         ]
       ]
     },
@@ -350,7 +350,7 @@
           "FICA|Social Security and Medicare|payroll tax|Social Security\\b.{0,40}\\bMedicare"
         ],
         [
-          "tax|rate|withh[eo]ld|combined"
+          "tax|rate|withh[eo]ld|combined|of (wages|pay|earnings)"
         ]
       ]
     }
