@@ -50,6 +50,6 @@ One scanner fix was made during the run, to match the spec rather than change it
 
 ## Decision
 
-**DON'T BUILD.** The maintained US calculators that hard-code figures mostly keep year-keyed tables and update them; the stale-figure bug in code is real but rare (2 found in 6 repos read, counting ignidash), and a value-matching scanner finds noise, not those bugs. Confirmed bugs get one-off fix PRs instead: ignidash [#69](https://github.com/schelskedevco/ignidash/pull/69) (sent), fplan (drafted, pending).
+**DON'T BUILD.** The maintained US calculators that hard-code figures mostly keep year-keyed tables and update them; the stale-figure bug in code is real but rare (2 found in 6 repos read, counting ignidash), and a value-matching scanner finds noise, not those bugs. Confirmed bugs get one-off fix PRs instead: ignidash [#69](https://github.com/schelskedevco/ignidash/pull/69) (sent). fplan: no PR. Its limits are user inputs in today's dollars that it inflates forward, and its own examples use older values on purpose, so the stale default changes results only when a user leaves it out.
 
 What would reopen it: a scanner that reads the structure of year-keyed tables and checks sibling values (filing status, coverage tier) within a table, re-run against the same bars on a fresh set of repos.
