@@ -31,8 +31,30 @@ The rule is scored by what it changes: rules-only vs rules + fingerprint, on the
 
 ## Evidence
 
-Pending.
+**Early stop: not triggered, on the third version.** Sets 1–7, dev data, 2026-10-22. Branch [`value-fingerprint`](https://github.com/vishalhabib99/fin-assist/tree/value-fingerprint). Three versions were tried, all inside the design limits above; all three are reported:
+
+| Version | Set 7 caught (rules only: 27/42) | Fingerprint's own false flags, sets 1–7 | Clean PASS lost |
+|---|---|---|---|
+| 1. Another year's value, or a sibling fact's value for the same year | 34/42 (+17 pts) | 11 / 612 (1.8%): fails | 4 |
+| 2. Only an earlier year's value (stale), skipping "from $X to $Y" and "$X → $Y" | 31/42 (+9.5 pts): fails | 0 / 612 | 0 |
+| 3. Version 2 plus a later year's value (wrong year), skipping "$X more / left" | **32/42 (+11.9 pts)** | **0 / 612** | **0** |
+
+Version 1's sibling rule misread whenever the topic words named an incomplete set of facts (the age-65 add-on in a head-of-household answer, the QBI phase-in end read as the threshold), so it was dropped. Version 3 is frozen for set 8. It was tuned until it cleared the early-stop bar on dev data, so the dev numbers flatter it; only set 8 counts.
+
+**Set 8, first run** (80 answers, 45 bad and 168 correct figures, written by a new agent from the figures table only; [`evals/numcheck_blind8.jsonl`](../evals/numcheck_blind8.jsonl)):
+
+| Set 8 | Rules only (shipped) | Rules + fingerprint | Bar |
+|---|---|---|---|
+| Bad figures caught | 33/45 (73%) | 36/45 (80%) | **+10 pts: +6.7, fails** |
+| Fingerprint's own false flags | n/a | 1/168 (0.6%) | ≤ 1%: passes |
+| Clean answers → PASS | 33/40 | 32/40 | drop ≤ 1: passes |
+| Answers with a bad figure → REVIEW | 30/40 | 33/40 | (product target ≥ 90%) |
+| Correct figures wrongly flagged, all causes | 6/168 | 7/168 | (product target ≤ 1%) |
+
+It caught three stale figures the rules missed ($176,100, last year's wage base; $64,750 and $48,350, last year's 0% capital-gains tops). Its one false flag was the $202.90 Part B premium in an answer that also names the 2024 income year IRMAA looks back to: the figure was read against 2024. Labels for all four were checked against the figures table and hold.
 
 ## Decision
 
-Pending.
+**DON'T BUILD.** On fresh wording the fingerprint adds about 7 points of recall, not the 10 the bar asked for, while costing almost nothing in false flags. Exact-value matching is safe but narrow: most misses on set 8 were not another year's distinctive value but round figures ($2,000, $12,500, $150,000), swapped labels and wrong amounts with no topic word nearby. Nothing from the prototype is merged; the code stays on branch `value-fingerprint`.
+
+What would reopen it: as part of a larger change to how figures are matched to facts, re-run against the same bars on a fresh set, starting from version 3.

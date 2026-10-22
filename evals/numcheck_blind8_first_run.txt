@@ -1,0 +1,29 @@
+bad figures caught: 33/45
+good figures falsely flagged: 6/168
+answers with a bad figure -> REVIEW: 30/40
+clean answers -> PASS: 33/40
+   i01 missed bad $2,000
+   i05 missed bad $6,000
+   i06 missed bad $212,000
+   i07 missed bad $1,960
+   i08 missed bad $12,500
+   i17 missed bad $150,000
+   i20 false flag $16,100
+   i20 clean answer sent to REVIEW ['$16,100']
+   i35 missed bad $18,000
+   i40 missed bad $660
+   i40 false flag $3,400
+   i42 false flag 7.65%
+   i42 clean answer sent to REVIEW ['7.65%']
+   i43 false flag $150,000
+   i43 clean answer sent to REVIEW ['$150,000']
+   i44 false flag $150,000
+   i44 clean answer sent to REVIEW ['$150,000']
+   i47 missed bad $1,650
+   i51 clean answer sent to REVIEW ['$4k']
+   i56 missed bad $176,100
+   i57 clean answer sent to REVIEW ['$24,150']
+   i60 missed bad $64,750
+   i73 missed bad $48,350
+   i77 false flag $613,700
+   i77 clean answer sent to REVIEW ['$613,700']
