@@ -1,0 +1,34 @@
+bad figures caught: 27/42
+good figures falsely flagged: 9/146
+answers with a bad figure -> REVIEW: 28/40
+clean answers -> PASS: 34/40
+   h01 missed bad $403,550
+   h05 missed bad $24,150
+   h05 missed bad $23,625
+   h06 missed bad $626,350
+   h08 missed bad $2,000
+   h08 missed bad $3,000
+   h10 missed bad $2,050
+   h13 missed bad $4,018
+   h33 missed bad $150,000
+   h37 false flag 1.45%
+   h37 clean answer sent to REVIEW ['1.45%']
+   h38 missed bad $500,000
+   h42 missed bad 7.45%
+   h42 false flag 1.45%
+   h43 false flag 25%
+   h43 clean answer sent to REVIEW ['25%']
+   h50 missed bad $96,700
+   h51 false flag $49,450
+   h51 false flag $545,500
+   h51 clean answer sent to REVIEW ['$49,450', '$545,500']
+   h61 missed bad $100,000
+   h65 false flag $240
+   h65 false flag $257
+   h65 clean answer sent to REVIEW ['$240', '$257']
+   h68 missed bad $145,000
+   h69 clean answer sent to REVIEW ['$7,900']
+   h73 missed bad $31,500
+   h77 false flag $109,000
+   h77 false flag $218,000
+   h77 clean answer sent to REVIEW ['$109,000', '$218,000']
