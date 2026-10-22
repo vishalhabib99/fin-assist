@@ -180,6 +180,35 @@ def _side_by_side(sentence: str, found) -> bool:
     return len(named) >= 2
 
 
+# Distinctive dollar values (not a multiple of $1,000) -> the facts and years that have them
+_PRINTS: dict[float, list[tuple[str, str]]] = {}
+for _fid, _f in FACTS.items():
+    if _kind(_f["unit"]) == "usd":
+        for _y, _v in _f["values"].items():
+            if _v % 1000:
+                _PRINTS.setdefault(float(_v), []).append((_fid, _y))
+
+
+def _fingerprint(n: float, y: int, answer: str) -> dict | None:
+    """$626,350 for 2026 is 2025's AMT phase-out start; $23,625 under 2026 is 2025's head-of-household
+    deduction. A figure the topic rules didn't judge, that is exactly an earlier year's registry value
+    of a fact named in the answer, and no fact's value for the year meant, is stale.
+    """
+    hits = [(fid, yr) for fid, yr in _PRINTS.get(n, []) if any(c.search(answer) for c in _CUES[fid])]
+    if not hits or any(_same(lookup(FACTS, fid, y) or -1, n) for fid, _ in hits):
+        return None
+    for fid, yr in hits:
+        current = lookup(FACTS, fid, y)
+        if current is not None and yr != "any":
+            return {"status": "stale" if int(yr) < y else "wrong_year", "fact": fid,
+                    "figure_year": int(yr), "expected": current}
+    return None
+
+
+# "went from $7,500 to $8,000", "$206,700 → $211,400": the earlier figure of a change
+_CHANGE_TO = re.compile(r"^\s*(?:→|->|to\s+\$)")
+
+
 def _is_total(n: float, year: int, facts: list[str]) -> bool:
     """$32,500 = the $24,500 limit + the $8,000 catch-up: arithmetic on two of the figures the
     answer is talking about, not a claim of its own."""
@@ -258,7 +287,7 @@ def _tables_to_sentences(text: str) -> tuple[str, set[str]]:
     return "\n".join(out), stated
 
 
-def check_numbers(answer: str, year: int | None = None) -> dict:
+def check_numbers(answer: str, year: int | None = None, fingerprint: bool = True) -> dict:
     """Return {"decision": "PASS" | "REVIEW", "year": default year, "claims": [...]}.
 
     year: the tax year the answer is about when a sentence doesn't say (default: this year).
@@ -302,22 +331,33 @@ def check_numbers(answer: str, year: int | None = None) -> dict:
                     stated = False
                 prev_usd, prev_stated = m, stated
             y = _year_for(sentence, m, context_year, default_year)
+            # the fingerprint never judges the company's or the customer's own amounts or arithmetic
+            printable = (fingerprint and kind == "usd" and not (
+                _OWN.search(window) or _RUNNING.search(window) or _OURS.search(sentence[:m.start()])
+                or _TOTAL_AFTER.match(sentence[m.end():])))
+            unjudged = None
             # The topic is often named one sentence earlier ("The HSA family limit... For 2026 it's $8,550.")
             cands = _candidates(sentence, kind, n) or _carried(sentence, context, kind, n)
             if not cands:
-                continue
-            exact = any(_same(v, n) for fid in cands for v in FACTS[fid]["values"].values())
+                unjudged = "no topic"
+            exact = cands and any(_same(v, n) for fid in cands for v in FACTS[fid]["values"].values())
             named = False
-            if kind == "usd" and side_by_side:
+            if cands and kind == "usd" and side_by_side:
                 near = [f for f in cands if all(c.search(_label(window)) for c in _CUES[f])]
                 if near and len(near) < len(cands):
                     cands, named = near, True
-            if not (stated or exact):
-                continue
+            if cands and not (stated or exact):
+                unjudged = "not stated"
             if kind == "usd" and not exact and _is_total(n, y, _topics(context + " " + sentence, kind)):
                 continue
-            verdict = _judge(n, y, cands)
-            if verdict["status"] != "match" and not named:
+            if unjudged:
+                verdict = (printable and not _FROM.search(window) and not _ROOM_LEFT.match(sentence[m.end():]) and not _CHANGE_TO.match(sentence[m.end():])
+                           and _fingerprint(n, y, answer))
+                if not verdict or verdict["status"] == "match":
+                    continue
+            else:
+                verdict = _judge(n, y, cands)
+            if verdict["status"] != "match" and not named and not unjudged:
                 more = [f for f in _carried(sentence, context, kind, n) if f not in cands]
                 if more and _judge(n, y, more)["status"] == "match":
                     verdict = _judge(n, y, more)

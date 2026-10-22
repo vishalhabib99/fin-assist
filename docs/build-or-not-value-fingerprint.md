@@ -31,7 +31,15 @@ The rule is scored by what it changes: rules-only vs rules + fingerprint, on the
 
 ## Evidence
 
-Pending.
+**Early stop: not triggered, on the third version.** Sets 1–7, dev data, 2026-10-22. Branch [`value-fingerprint`](https://github.com/vishalhabib99/fin-assist/tree/value-fingerprint). Three versions were tried, all inside the design limits above; all three are reported:
+
+| Version | Set 7 caught (rules only: 27/42) | Fingerprint's own false flags, sets 1–7 | Clean PASS lost |
+|---|---|---|---|
+| 1. Another year's value, or a sibling fact's value for the same year | 34/42 (+17 pts) | 11 / 612 (1.8%): fails | 4 |
+| 2. Only an earlier year's value (stale), skipping "from $X to $Y" and "$X → $Y" | 31/42 (+9.5 pts): fails | 0 / 612 | 0 |
+| 3. Version 2 plus a later year's value (wrong year), skipping "$X more / left" | **32/42 (+11.9 pts)** | **0 / 612** | **0** |
+
+Version 1's sibling rule misread whenever the topic words named an incomplete set of facts (the age-65 add-on in a head-of-household answer, the QBI phase-in end read as the threshold), so it was dropped. Version 3 is frozen for set 8. It was tuned until it cleared the early-stop bar on dev data, so the dev numbers flatter it; only set 8 counts.
 
 ## Decision
 

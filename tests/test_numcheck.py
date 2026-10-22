@@ -324,3 +324,19 @@ def test_running_totals_and_estimates_are_not_judged():
                  "With the 2.8% COLA, your $2,100 monthly payment rises to about $2,159.",
                  "Employer contribution: Contoso adds $500 to your FSA."]:
         assert check_numbers(text, 2026)["decision"] == "PASS", text
+
+
+def test_fingerprint_flags_another_years_exact_value():
+    text = "Your AMT exemption of $90,100 starts phasing out once your AMTI passes $626,350 this year."
+    assert statuses(text) == [("$626,350", "stale")]
+    assert check_numbers(text, 2026, fingerprint=False)["decision"] == "PASS"
+    assert statuses("| Filing status | 2025 | 2026 |\n|---|---|---|\n| Single | $15,750 | $16,100 |\n"
+                    "| Head of household | $24,150 | $23,625 |") == [("$24,150", "wrong_year"), ("$23,625", "stale")]
+
+
+def test_fingerprint_leaves_changes_round_and_customer_amounts_alone():
+    for text in ["For 2026 the 50+ catch-up went from $7,500 to $8,000.",
+                 "MFJ bracket tops, 2025 → 2026: 22%: $206,700 → $211,400.",
+                 "You planned $7,000 for your HSA this year, so you could add $1,750 more.",
+                 "The AMT applies to you; you owe $2,000 extra this year."]:
+        assert check_numbers(text, 2026)["decision"] == "PASS", text
