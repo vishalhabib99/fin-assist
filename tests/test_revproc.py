@@ -30,6 +30,13 @@ def test_2026_rev_proc_reproduces_every_registry_figure():
     assert {fid: REG[fid]["values"]["2026"] for fid in TRACKED} == {fid: found[fid] for fid in TRACKED}
 
 
+def test_2027_rev_proc_reproduces_every_registry_figure():
+    # Rev. Proc. 2026-35 reworded the estate sentence ("the basic exclusion amount under § 2010(c)(3) is")
+    found, problems = extract("rp-26-35.txt", 2027)
+    assert problems == []
+    assert {fid: REG[fid]["values"]["2027"] for fid in TRACKED} == {fid: found[fid] for fid in TRACKED}
+
+
 def test_2025_rev_proc_reproduces_the_registry_except_the_superseded_deduction():
     found, problems = extract("rp-24-40.txt", 2025)
     assert problems == []
@@ -45,6 +52,6 @@ def test_a_misread_threshold_fails_the_base_tax_rebuild():
 
 
 def test_year_is_read_from_the_document():
-    for name, year in [("rp-24-40.txt", 2025), ("rp-25-32.txt", 2026)]:
+    for name, year in [("rp-24-40.txt", 2025), ("rp-25-32.txt", 2026), ("rp-26-35.txt", 2027)]:
         flat = revproc._flat((FIX / name).read_text())
         assert int(re.search(r"taxable years beginning in (20\d\d)", flat).group(1)) == year

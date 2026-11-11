@@ -143,7 +143,12 @@ def figures(text: str, year: int) -> tuple[dict, list[str]]:
     else:
         problems.append(f"QBI for {year}: not found")
 
-    est = re.search(rf"(?:dying in calendar year {year}, the basic exclusion amount is|basic exclusion amount to) {N}(?: for calendar year {year})?", flat)
+    # Wording varies by year: "dying in calendar year Y, the basic exclusion amount is $X" (2024-40),
+    # "basic exclusion amount to $X for calendar year Y" (2025-32),
+    # "For calendar year Y, the basic exclusion amount under § 2010(c)(3) is $X" (2026-35)
+    est = re.search(rf"(?:dying in calendar year {year}, the basic exclusion amount is|basic exclusion amount to"
+                    rf"|For calendar year {year}, the basic exclusion amount under § ?2010\(c\)\(3\) is) {N}"
+                    rf"(?: for calendar year {year})?", flat)
     if est and (f"calendar year {year}" in flat[est.start() - 80:est.end() + 30]):
         out["tax.estate.basic_exclusion"] = _num(est.group(1))
     else:
