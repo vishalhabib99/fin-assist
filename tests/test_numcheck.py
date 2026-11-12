@@ -38,7 +38,8 @@ def test_old_rmd_age_is_wrong_and_age_75_is_unverified():
 
 
 def test_unpublished_year_is_unknown_not_stale():
-    assert statuses("In 2027 the 401(k) limit is $24,500.") == [("$24,500", "unknown_year")]
+    assert statuses("In 2028 the 401(k) limit is $24,500.") == [("$24,500", "unknown_year")]
+    assert statuses("In 2027 the 401(k) limit is $24,500.") == [("$24,500", "stale")]  # Notice 2026-66
 
 
 def test_customer_amounts_are_not_judged():
@@ -105,8 +106,8 @@ def test_old_rmd_rules():
 
 
 def test_markdown_table_takes_topic_and_year_from_headers():
-    table = "| Account | 2026 | 2027 |\n|---|---|---|\n| 401(k) deferral | $24,500 | $25.5k |\n| HSA (self-only) | $4,400 | $4,500 |"
-    assert statuses(table) == [("$24,500", "match"), ("$25.5k", "unknown_year"), ("$4,400", "match"), ("$4,500", "match")]
+    table = "| Account | 2026 | 2028 |\n|---|---|---|\n| 401(k) deferral | $24,500 | $25.5k |\n| HSA (self-only) | $4,400 | $4,500 |"
+    assert statuses(table) == [("$24,500", "match"), ("$25.5k", "unknown_year"), ("$4,400", "match"), ("$4,500", "unknown_year")]
 
 
 def test_our_plan_and_estimates_are_not_judged():
@@ -168,7 +169,8 @@ def test_wage_base_applies_up_to():
 
 
 def test_able_to_contribute_states_a_limit_but_room_left_does_not():
-    assert statuses("Next year you'll be able to contribute $25,000 to your 401(k).", 2026) == [("$25,000", "unknown_year")]
+    assert statuses("Next year you'll be able to contribute $25,000 to your 401(k).", 2026) == [("$25,000", "wrong")]  # 2027: $25,500
+    assert statuses("Next year you'll be able to contribute $26,000 to your 401(k).", 2027) == [("$26,000", "unknown_year")]
     assert statuses("You can contribute $9,000 more to your 401(k) this year.") == []
 
 

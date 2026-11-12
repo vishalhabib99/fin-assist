@@ -36,6 +36,11 @@
       "url": "https://www.irs.gov/pub/irs-drop/n-24-80.pdf",
       "title": "Notice 2024-80: 2025 amounts relating to retirement plans and IRAs",
       "read_on": "2026-10-19"
+    },
+    "irs_n_2026_66": {
+      "url": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
+      "title": "Notice 2026-66: 2027 amounts relating to retirement plans and IRAs",
+      "read_on": "2026-11-12"
     }
   },
   "facts": [
@@ -45,9 +50,14 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 23500,
-        "2026": 24500
+        "2026": 24500,
+        "2027": 25500
       },
-      "source": "irs_2026_limits",
+      "source": {
+        "2025": "irs_2026_limits",
+        "2026": "irs_2026_limits",
+        "2027": "irs_n_2026_66"
+      },
       "aliases": [
         "401(k) limit",
         "403(b) limit",
@@ -66,9 +76,14 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 7500,
-        "2026": 8000
+        "2026": 8000,
+        "2027": 8500
       },
-      "source": "irs_2026_limits",
+      "source": {
+        "2025": "irs_2026_limits",
+        "2026": "irs_2026_limits",
+        "2027": "irs_n_2026_66"
+      },
       "aliases": [
         "401(k) catch-up"
       ],
@@ -87,11 +102,13 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 11250,
-        "2026": 11250
+        "2026": 11250,
+        "2027": 11750
       },
       "source": {
         "2025": "irs_n_2024_80",
-        "2026": "irs_2026_limits"
+        "2026": "irs_2026_limits",
+        "2027": "irs_n_2026_66"
       },
       "aliases": [
         "super catch-up"
@@ -114,9 +131,14 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 7000,
-        "2026": 7500
+        "2026": 7500,
+        "2027": 7500
       },
-      "source": "irs_ira_limits",
+      "source": {
+        "2025": "irs_ira_limits",
+        "2026": "irs_ira_limits",
+        "2027": "irs_n_2026_66"
+      },
       "aliases": [
         "IRA limit",
         "Roth IRA limit"
@@ -133,9 +155,14 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 8000,
-        "2026": 8600
+        "2026": 8600,
+        "2027": 8600
       },
-      "source": "irs_ira_limits",
+      "source": {
+        "2025": "irs_ira_limits",
+        "2026": "irs_ira_limits",
+        "2027": "irs_n_2026_66"
+      },
       "aliases": [],
       "cues": [
         [
@@ -152,11 +179,13 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 1000,
-        "2026": 1100
+        "2026": 1100,
+        "2027": 1100
       },
       "source": {
         "2025": "irs_n_2024_80",
-        "2026": "irs_2026_limits"
+        "2026": "irs_2026_limits",
+        "2027": "irs_n_2026_66"
       },
       "aliases": [
         "IRA catch-up"
@@ -176,9 +205,14 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 16500,
-        "2026": 17000
+        "2026": 17000,
+        "2027": 17500
       },
-      "source": "irs_2026_limits",
+      "source": {
+        "2025": "irs_2026_limits",
+        "2026": "irs_2026_limits",
+        "2027": "irs_n_2026_66"
+      },
       "aliases": [
         "SIMPLE limit"
       ],
@@ -194,9 +228,14 @@
       "unit": "usd_per_year",
       "values": {
         "2025": 3500,
-        "2026": 4000
+        "2026": 4000,
+        "2027": 4000
       },
-      "source": "irs_2026_limits",
+      "source": {
+        "2025": "irs_2026_limits",
+        "2026": "irs_2026_limits",
+        "2027": "irs_n_2026_66"
+      },
       "aliases": [],
       "cues": [
         [
@@ -342,11 +381,13 @@
       "unit": "usd",
       "values": {
         "2025": 145000,
-        "2026": 150000
+        "2026": 150000,
+        "2027": 155000
       },
       "source": {
         "2025": "irs_n_2024_80",
-        "2026": "irs_n_2025_67"
+        "2026": "irs_n_2025_67",
+        "2027": "irs_n_2026_66"
       },
       "aliases": [
         "Roth catch-up rule"

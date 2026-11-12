@@ -51,7 +51,7 @@ reply = verdict.text   # "send": unchanged · "fixed": stale figures replaced, e
 
 | Area | Figures | Years |
 |---|---|---|
-| Retirement plans and IRAs | 401(k)/403(b)/457/TSP, IRA and SIMPLE limits and catch-ups, the Roth catch-up wage threshold, RMD age and penalties, early-withdrawal tax, rollover window and withholding | 2025–2026 |
+| Retirement plans and IRAs | 401(k)/403(b)/457/TSP, IRA and SIMPLE limits and catch-ups, the Roth catch-up wage threshold, RMD age and penalties, early-withdrawal tax, rollover window and withholding | 2025–2027 |
 | HSA and HDHP | Contribution limits, catch-up, minimum deductibles, out-of-pocket maximums | 2025–2027 |
 | Social Security and SSI | Taxable maximum, payroll tax rates, COLA, earnings test, maximum benefit, SGA, SSI payment standard and resource limits | 2025–2027 |
 | Federal tax | Brackets (single, joint, head of household), standard deduction, gift exclusion and gift splitting, health FSA, long-term capital gains thresholds, AMT exemption and phase-out, QBI threshold and phase-in, estate and lifetime gift exemption | 2024–2027 |
@@ -66,7 +66,7 @@ Each figure in an answer gets one status:
 | `stale` | Right for an earlier year, quoted as current | REVIEW |
 | `wrong_year` | Next year's figure quoted early | REVIEW |
 | `wrong` | The topic is recognized and the figure matches no year | REVIEW |
-| `unknown_year` | No verified figure for that year yet (e.g. a 2027 401(k) limit before the IRS publishes it). Never guessed | REVIEW |
+| `unknown_year` | No verified figure for that year yet (e.g. a 2028 401(k) limit before the IRS publishes it). Never guessed | REVIEW |
 | `unverified` | A real rule the registry doesn't cover yet (e.g. RMD age 75 for later birth years) | REVIEW |
 
 Customer amounts (salaries, balances, planned contributions, arithmetic) are not judged. A dollar amount is checked only when the answer states it as an official figure (a limit, catch-up, deductible, "up to"), or when it equals a known figure exactly. PASS means no recognized figure is wrong, not that the whole answer is right. For the rest of the answer (advice, promissory wording, injected text), see the [retirement answer check](#retirement-answer-check) below.
@@ -79,12 +79,14 @@ Every test set was written by a separate agent that never saw the code or the ea
 |---|---|---|---|---|---|
 | 1 | 40 | 19 / 22 | 1 / 37 | 18 / 21 | 17 / 19 |
 | 2 (harder: tables, back-references, customer numbers) | 40 | 19 / 25 | 4 / 62 | 18 / 21 | 14 / 19 |
-| 3 (60 answers, all four areas, figures a year early, unpublished 2027 limits) | 60 | 38 / 43 | 5 / 87 | 32 / 33 | 21 / 27 |
+| 3 (60 answers, all four areas, figures a year early, then-unpublished 2027 limits) | 60 | 38 / 43 | 5 / 87 | 32 / 33 | 21 / 27 |
 | 4 (60 answers written to trip a number checker: company plan figures, estimates, tables, tax rates) | 60 | 44 / 52 | 3 / 99 | 28 / 32 | 21 / 28 |
 | 5 (80 answers, a different writer model, payroll tax rates and SSI added) | 80 | 45 / 55 | 0 / 82 | 36 / 42 | 38 / 38 |
 | 6 (80 answers, harder phrasing: paraphrased topics, figures before their label, unpublished years stated as fact, look-alike customer numbers) | 80 | 31 / 46 | 4 / 139 | 29 / 40 | 35 / 40 |
 | 7 (80 answers across all 102 figures: Medicare, capital gains, AMT, QBI, the new deductions, SALT; tables, multi-year chains, persona voices) | 80 | 27 / 42 | 9 / 146 | 28 / 40 | 34 / 40 |
 | 8 (80 answers, same brief as set 7, plus follow-up corrections and bank-chatbot voices) | 80 | **33 / 45** | **6 / 168** | **30 / 40** | **33 / 40** |
+
+Four answers in sets 3 to 5 (d38, d40, e33, f57) quoted a "2027" 401(k) limit of $25,500 and a 50+ catch-up of $8,500 before the IRS published them. Notice 2026-66 confirmed both on 2026-11-12, so those figures are now labeled correct. The first-run numbers above are unchanged.
 
 Read sets 7 and 8, the latest, this way: fixing set 6's misses (all caught on set 6 afterwards: 45 of 45 now that one "unpublished 2027" figure, a $20,000 gift exclusion, turned out to be the IRS's real 2027 amount) did not carry over. On fresh wording recall was 64% on set 7 (27 of 42) and 73% on set 8 (33 of 45), and 10 to 12 of 40 answers with a bad figure would have gone out unflagged. Most misses are figures with no topic word the rules know nearby (a deduction table headed only "Filing status", "once your AMTI passes", "if you don't itemize"), swapped labels (individual and couple SSI limits), and round wrong amounts. False flags were 9 of 146 and 6 of 168 correct figures: figure chains across years ("$240 → $257 → $283"), the 2024 income year that 2026 IRMAA looks back to, a plan's own limits, and rates read against the wrong rate. So the rules catch about two to three in four stale or wrong figures on new wording. A rule that flags another year's exact value of a named fact added 7 points on set 8 with one false flag, short of its 10-point bar, so it isn't shipped ([decision record](docs/build-or-not-value-fingerprint.md)). The misses are in [`evals/numcheck_blind7_first_run.txt`](evals/numcheck_blind7_first_run.txt) and [`evals/numcheck_blind8_first_run.txt`](evals/numcheck_blind8_first_run.txt). A small local model that only says which figure each number is about lifted recall to 96% on the earlier sets, but flagged 2% of correct figures and took 3–7 seconds an answer, so it failed its preset bars and isn't shipped ([decision record](docs/build-or-not-model-figure-matching.md)). Caveat: these are synthetic answers, not production traffic. Score any labeled set with `python evals/numcheck_score.py <file.jsonl>`.
 

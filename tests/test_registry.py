@@ -15,7 +15,8 @@ def test_registry_is_well_formed():
 
 def test_lookup_never_falls_back_to_another_year():
     assert lookup(REG, "plan.elective_deferral", 2026) == 24_500
-    assert lookup(REG, "plan.elective_deferral", 2027) is None
+    assert lookup(REG, "plan.elective_deferral", 2027) == 25_500
+    assert lookup(REG, "plan.elective_deferral", 2028) is None
     assert lookup(REG, "rmd.start_age", 2031) == 73
 
 

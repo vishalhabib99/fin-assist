@@ -32,13 +32,13 @@ It prints each figure with "same as registry", "new year (was X)" or "CHANGE", r
 
 ## New year's retirement limits
 
-The IRS publishes next year's retirement-plan limits in one notice each fall (Notice 2025-67 for 2026). `scripts/retirement_notice.py` reads it:
+The IRS publishes next year's retirement-plan limits in one notice each fall (Notice 2026-66 for 2027). `scripts/retirement_notice.py` reads it:
 
 ```bash
 python scripts/retirement_notice.py n-26-XX.pdf
 ```
 
-It finds each limit by the Code section the notice cites (402(g)(1) for the 401(k) deferral, 414(v)(2)(B)(i) for the 50+ catch-up, 219(b)(5)(A) for the IRA limit, and so on), and checks each "increased from $A" against the registry's figure for the year before. Same output and rules as the tax tool. `tests/test_retirement_notice.py` holds it to Notices 2024-80 and 2025-67.
+It finds each limit by the Code section the notice cites (402(g)(1) for the 401(k) deferral, 414(v)(2)(B)(i) for the 50+ catch-up, 219(b)(5)(A) for the IRA limit, and so on), and checks each "increased from $A" (or "increases from $A") against the registry's figure for the year before. Same output and rules as the tax tool. `tests/test_retirement_notice.py` holds it to Notices 2024-80, 2025-67 and 2026-66.
 
 ## New year's Medicare figures
 

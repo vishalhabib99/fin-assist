@@ -28,7 +28,8 @@ SECTIONS = {
     "ira.limit": r"section 219\(b\)\(5\)\(A\)",
     "ira.catch_up_50_plus": r"section 219\(b\)\(5\)\(B\)\(ii\)",
 }
-_VALUE = re.compile(rf"(?:is increased from {N} to|is decreased from {N} to|remains|is) {N}")
+# "is increased from" in most years; Notice 2026-66 also says "increases from"
+_VALUE = re.compile(rf"(?:(?:is )?increase[sd]? from {N} to|(?:is )?decrease[sd]? from {N} to|remains|is) {N}")
 
 
 def figures(text: str, year: int) -> tuple[dict, dict, list[str]]:

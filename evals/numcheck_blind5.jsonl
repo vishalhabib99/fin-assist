@@ -54,7 +54,7 @@
 {"id": "f54", "answer": "2026 out-of-pocket max for HDHPs: $8,700 self-only, $17,400 family. The minimum deductible is $1,700 self-only.", "bad_figures": ["$8,700", "$17,400"], "good_figures": ["$1,700"]}
 {"id": "f55", "answer": "The 2027 401(k) deferral limit will be $25,000. Start planning your payroll deductions now.", "bad_figures": ["$25,000"], "good_figures": []}
 {"id": "f56", "answer": "Next year the IRA limit rises to $7,750, so you can add more to your Roth. This year it's $7,500.", "bad_figures": ["$7,750"], "good_figures": ["$7,500"]}
-{"id": "f57", "answer": "In 2027 you will be able to contribute $25,500 to your 401(k), plus an $8,500 catch-up if you're 50+.", "bad_figures": ["$25,500", "$8,500"], "good_figures": []}
+{"id": "f57", "answer": "In 2027 you will be able to contribute $25,500 to your 401(k), plus an $8,500 catch-up if you're 50+.", "bad_figures": [], "good_figures": ["$25,500", "$8,500"], "note": "Relabeled 2026-11-12: when this set was written no 2027 401(k) limits were published, so these were labeled bad. Notice 2026-66 set the 2027 deferral limit at $25,500 and the 50+ catch-up at $8,500, so the figures are correct. First-run log unchanged."}
 {"id": "f58", "answer": "Good news: next year's 401(k) cap stays at $24,500, so your current 8% deferral still fits.", "bad_figures": ["$24,500"], "good_figures": []}
 {"id": "f59", "answer": "For 2027 the IRA limit is $8,000. Your spouse's IRA balance of $29,000 could use it.", "bad_figures": ["$8,000"], "good_figures": []}
 {"id": "f60", "answer": "RMDs must start at age 72. Your first one is due by April 1 of the year after you turn 72.", "bad_figures": ["age 72", "72"], "good_figures": []}

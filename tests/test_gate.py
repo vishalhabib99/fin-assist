@@ -18,7 +18,8 @@ def test_stale_figure_is_fixed_and_logged():
 
 def test_wrong_figure_unpublished_year_and_advice_are_held():
     assert gate("RMDs?", "RMDs start at age 72.", 2026).outcome == "review"
-    assert gate("2027?", "The 401(k) limit for 2027 is $25,500.", 2026).outcome == "review"
+    assert gate("2028?", "The 401(k) limit for 2028 is $26,500.", 2026).outcome == "review"
+    assert gate("2027?", "The 401(k) limit for 2027 is $25,500.", 2026).outcome == "send"  # Notice 2026-66
     v = gate("Roll over?", "Most people in your situation roll it over, so that's the right move for you.", 2026)
     assert v.outcome == "review" and v.text == HOLDING_MESSAGE
 

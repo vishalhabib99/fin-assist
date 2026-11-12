@@ -3,6 +3,7 @@
   "_verified_on": "2026-09-26",
   "sources": {
     "irs_2026_limits": "https://www.irs.gov/newsroom/401k-limit-increases-to-24500-for-2026-ira-limit-increases-to-7500",
+    "irs_n_2026_66": "https://www.irs.gov/pub/irs-drop/n-26-66.pdf",
     "irs_ira_limits": "https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits",
     "irs_rmd_faq": "https://www.irs.gov/retirement-plans/retirement-plan-and-ira-required-minimum-distributions-faqs",
     "irs_rollovers": "https://www.irs.gov/retirement-plans/plan-participant-employee/rollovers-of-retirement-plan-and-ira-distributions",
@@ -10,14 +11,14 @@
     "irs_p590a": "https://www.irs.gov/publications/p590a"
   },
   "contribution_limits": {
-    "401k_403b_457_tsp_elective_deferral": {"2025": 23500, "2026": 24500, "source": "irs_2026_limits"},
-    "401k_catch_up_50_plus":               {"2025": 7500,  "2026": 8000,  "source": "irs_2026_limits"},
-    "401k_catch_up_60_to_63":              {"2025": 11250, "2026": 11250, "source": "irs_2026_limits"},
-    "ira_limit":                           {"2025": 7000,  "2026": 7500,  "source": "irs_ira_limits"},
-    "ira_limit_50_plus_total":             {"2025": 8000,  "2026": 8600,  "source": "irs_ira_limits"},
-    "ira_catch_up_50_plus":                {"2025": 1000,  "2026": 1100,  "source": "irs_2026_limits"},
-    "simple_limit":                        {"2025": 16500, "2026": 17000, "source": "irs_2026_limits"},
-    "simple_catch_up_50_plus":             {"2025": 3500,  "2026": 4000,  "source": "irs_2026_limits"},
+    "401k_403b_457_tsp_elective_deferral": {"2025": 23500, "2026": 24500, "2027": 25500, "source": "irs_2026_limits", "source_2027": "irs_n_2026_66"},
+    "401k_catch_up_50_plus":               {"2025": 7500,  "2026": 8000, "2027": 8500,  "source": "irs_2026_limits", "source_2027": "irs_n_2026_66"},
+    "401k_catch_up_60_to_63":              {"2025": 11250, "2026": 11250, "2027": 11750, "source": "irs_2026_limits", "source_2027": "irs_n_2026_66"},
+    "ira_limit":                           {"2025": 7000,  "2026": 7500, "2027": 7500,  "source": "irs_ira_limits", "source_2027": "irs_n_2026_66"},
+    "ira_limit_50_plus_total":             {"2025": 8000,  "2026": 8600, "2027": 8600,  "source": "irs_ira_limits", "source_2027": "irs_n_2026_66"},
+    "ira_catch_up_50_plus":                {"2025": 1000,  "2026": 1100, "2027": 1100,  "source": "irs_2026_limits", "source_2027": "irs_n_2026_66"},
+    "simple_limit":                        {"2025": 16500, "2026": 17000, "2027": 17500, "source": "irs_2026_limits", "source_2027": "irs_n_2026_66"},
+    "simple_catch_up_50_plus":             {"2025": 3500,  "2026": 4000, "2027": 4000,  "source": "irs_2026_limits", "source_2027": "irs_n_2026_66"},
     "_rule": "IRA contributions can't exceed the dollar limit or taxable compensation for the year, whichever is smaller (irs_ira_limits).",
     "_rule_combined": "The IRA limit is one total across all of a person's traditional and Roth IRAs (irs_ira_limits).",
     "ira_contribution_deadline": {"value": "the due date of your tax return for that year, not including extensions", "source": "irs_p590a"}
